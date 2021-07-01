@@ -1,6 +1,6 @@
 package com.company.Mains;
 
-import com.company.schedules.mySchedule;
+import com.company.schedules.taskSchedule;
 import com.company.graph.graph;
 
 import java.io.File;
@@ -11,7 +11,7 @@ public class MainDynamic {
 
         long start = System.currentTimeMillis();
 
-        mySchedule DelovieLinii = mySchedule.createScheduleFromFile(new File("tasks.json"));
+        taskSchedule DelovieLinii = taskSchedule.createScheduleFromFile(new File("tasks.json"));
 
         graph mapOfSamaraOblast = graph.getInstance();
 

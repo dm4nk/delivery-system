@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-public class Task {
+public class task {
     static private SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
 
     private String from;
@@ -24,7 +24,7 @@ public class Task {
     private double lat;
     private double len;
 
-    public Task(int from, Date fromTime, int to, Date toTime) throws wrongTaskFormatException {
+    public task(int from, Date fromTime, int to, Date toTime) throws wrongTaskFormatException {
         if(from < 0 || to < 0) throw new wrongTaskFormatException("negative points");
         if(fromTime.getTime() >= toTime.getTime()) throw new wrongTaskFormatException("from time less than to time");
         this.fromIndex = from;
@@ -33,7 +33,7 @@ public class Task {
         this.toTime = toTime;
     }
 
-    public Task(String from, Date fromTime, String to, Date toTime) throws wrongTaskFormatException {
+    public task(String from, Date fromTime, String to, Date toTime) throws wrongTaskFormatException {
         if(fromTime.getTime() >= toTime.getTime()) throw new wrongTaskFormatException("from time less than to time");
         try {
             fromIndex = Integer.parseInt(from);
@@ -49,7 +49,7 @@ public class Task {
         this.toTime = toTime;
     }
 
-    public Task(String from, Date fromTime, String to, Date toTime, double fromLat, double fromLen) throws wrongTaskFormatException {
+    public task(String from, Date fromTime, String to, Date toTime, double fromLat, double fromLen) throws wrongTaskFormatException {
         this(from, fromTime, to, toTime);
         this.lat = fromLat;
         this.len = fromLen;
@@ -85,7 +85,7 @@ public class Task {
         return from + " " + formatter.format(fromTime) + "\n" + to + " " + formatter.format(toTime);
     }
 
-    public static ArrayList<Task> readTasksToArrayList(File file) throws IOException, wrongTaskFormatException, ParseException {
+    public static ArrayList<task> readTasksToArrayList(File file) throws IOException, wrongTaskFormatException, ParseException {
         //чтобы нельзя быол ввести дату типа 97.09.2021
         formatter.setLenient(false);
 
@@ -99,7 +99,7 @@ public class Task {
 
         if(valueStr.length % 6 != 0 ) throw new wrongTaskFormatException("wrong task format");
 
-        ArrayList<Task> tasks = new ArrayList();//
+        ArrayList<task> tasks = new ArrayList();//
 
         for(int i = 0; i < valueStr.length; i+=6){
             Date dateFrom;
@@ -112,7 +112,7 @@ public class Task {
                 throw new ParseException("incorrect date format", 0);
             }
 
-            tasks.add(new Task(
+            tasks.add(new task(
                     valueStr[i],
                     dateFrom,
                     valueStr[i+3],

@@ -1,7 +1,7 @@
 package com.company.graph;
 import com.company.Exceptions.wrongGraphFormatException;
 import com.company.Exceptions.wrongTaskFormatException;
-import com.company.schedules.Task;
+import com.company.schedules.task;
 import com.company.graphReader;
 import com.company.someDijkstra.dijkstraForDynamicGraph.basicDijkstraForDynamicGraph;
 import com.opencsv.CSVReader;
@@ -100,7 +100,7 @@ public class graph  {
 
     }
 
-    public void writeBestPath(Task task) throws wrongTaskFormatException {
+    public void writeBestPath(task task) throws wrongTaskFormatException {
         Vertex fromVertex = vertices.get(task.getFrom());
         Vertex toVertex = vertices.get(task.getTo());
 
