@@ -1,8 +1,7 @@
 package com.company.Mains;
 
 import com.company.schedules.mySchedule;
-import com.company.graphs.dynamic.dynamicGraph;
-import com.company.graphs.graph;
+import com.company.graph.graph;
 
 import java.io.File;
 
@@ -14,7 +13,7 @@ public class MainDynamic {
 
         mySchedule DelovieLinii = mySchedule.createScheduleFromFile(new File("tasks.json"));
 
-        graph mapOfSamaraOblast = dynamicGraph.getInstance();
+        graph mapOfSamaraOblast = graph.getInstance();
 
         mapOfSamaraOblast.addVertex("Samara");
         mapOfSamaraOblast.addVertex("TLT");

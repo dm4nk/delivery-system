@@ -1,4 +1,4 @@
-package com.company.graphs.dynamic;
+package com.company.graph;
 
 import java.util.ArrayList;
 import java.util.List;

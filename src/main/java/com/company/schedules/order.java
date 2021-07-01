@@ -1,9 +1,8 @@
 package com.company.schedules;
 
 import com.company.Exceptions.wrongTaskFormatException;
-import com.company.graphs.dynamic.Vertex;
-import com.company.graphs.dynamic.dynamicGraph;
-import com.company.graphs.graph;
+import com.company.graph.Vertex;
+import com.company.graph.graph;
 import com.company.someDijkstra.dijkstraForDynamicGraph.basicDijkstraForDynamicGraph;
 
 import java.text.SimpleDateFormat;
@@ -23,8 +22,6 @@ public class order {
     }
 
     public Vertex calculateNearestVertex(graph graph){
-        if(!(graph instanceof dynamicGraph))
-            throw new UnsupportedOperationException("can not work with matrix graph");
 
         Map<String, Vertex> vertexMap = graph.getVertices();
         Vertex nearest = new Vertex("" , Double.MAX_VALUE, Double.MAX_VALUE);

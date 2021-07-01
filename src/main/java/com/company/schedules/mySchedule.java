@@ -1,7 +1,7 @@
 package com.company.schedules;
 
 import com.company.Exceptions.wrongTaskFormatException;
-import com.company.graphs.graph;
+import com.company.graph.graph;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -48,16 +48,15 @@ public class mySchedule {
 
         ArrayList<Task> arrayListOfTasks = new ArrayList<>();
         JSONObject temp;
-        for(int i = 0; i < tasks.size(); ++i){
-            temp = (JSONObject) tasks.get(i);
+        for (Object task : tasks) {
+            temp = (JSONObject) task;
 
             Date dateFrom;
             Date dateTo;
             try {
                 dateFrom = formatter.parse((String) temp.get("fromTime"));
                 dateTo = formatter.parse((String) temp.get("toTime"));
-            }
-            catch (ParseException e){
+            } catch (ParseException e) {
                 throw new ParseException("incorrect date format", 0);
             }
 

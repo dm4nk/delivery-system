@@ -1,15 +1,15 @@
 package com.company.someDijkstra.dijkstraForDynamicGraph;
 
 import com.company.Exceptions.wrongTaskFormatException;
-import com.company.graphs.dynamic.Edge;
-import com.company.graphs.dynamic.Vertex;
+import com.company.graph.Edge;
+import com.company.graph.Vertex;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
 public class basicDijkstraForDynamicGraph {
-    public static void computePath(Vertex sourceVertex) throws wrongTaskFormatException {
+    public static void computePath(Vertex sourceVertex) {
 
         //if(sourceVertex == null) throw new wrongTaskFormatException("no such point");
 

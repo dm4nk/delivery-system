@@ -1,4 +1,4 @@
-package com.company.graphs.dynamic;
+package com.company.graph;
 
 public class Edge {
     private double weight;

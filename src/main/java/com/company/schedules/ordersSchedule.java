@@ -1,7 +1,7 @@
 package com.company.schedules;
 
 import com.company.Exceptions.wrongTaskFormatException;
-import com.company.graphs.graph;
+import com.company.graph.graph;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ordersSchedule {
-    Map orders = new HashMap();
+    Map orders;
     ArrayList<String> orderIDs;
 
     private ordersSchedule(Map orders, ArrayList<String> orderIDs){

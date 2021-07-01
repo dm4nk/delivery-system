@@ -1,36 +1,34 @@
-package com.company.graphs.dynamic;
+package com.company.graph;
 import com.company.Exceptions.wrongGraphFormatException;
 import com.company.Exceptions.wrongTaskFormatException;
 import com.company.schedules.Task;
 import com.company.graphReader;
 import com.company.someDijkstra.dijkstraForDynamicGraph.basicDijkstraForDynamicGraph;
-import com.company.graphs.graph;
 import com.opencsv.CSVReader;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class dynamicGraph implements com.company.graphs.graph {
+public class graph  {
     private static Map<String, Vertex> vertices = new HashMap<>();
 
-    private static dynamicGraph singleInstance = null;
+    private static graph singleInstance = null;
 
     public static graph getInstance(){
         if(singleInstance == null){
-            singleInstance = new dynamicGraph();
+            singleInstance = new graph();
         }
 
         return singleInstance;
     }
 
-    private dynamicGraph(){}
+    private graph(){}
 
     public void addVertex(String name){
         vertices.put(name, new Vertex(name));
     }
 
-    @Override
     public Map<String, Vertex> getVertices() {
         return vertices;
     }
@@ -56,7 +54,6 @@ public class dynamicGraph implements com.company.graphs.graph {
         }
     }
 
-    @Override
     public void readGraphFromFile(String filename) throws IOException, wrongGraphFormatException {
 
         double[][] graph = graphReader.readGraph(filename);
@@ -70,7 +67,6 @@ public class dynamicGraph implements com.company.graphs.graph {
                     this.addEdge(graph[i][j], Double.toString(i), Double.toString(j));
     }
 
-    @Override
     public void readGraphFromFile(String nodes, String edges) throws IOException, wrongGraphFormatException {
         if(!nodes.endsWith(".csv") || !edges.endsWith(".csv"))
             throw new wrongGraphFormatException("can only read from .csv files");
@@ -94,7 +90,6 @@ public class dynamicGraph implements com.company.graphs.graph {
         }
     }
 
-    @Override
     public void writeGraph() {
         for(Vertex vertex : vertices.values())
             for (Edge edge: vertex.getEdges()){
@@ -105,7 +100,6 @@ public class dynamicGraph implements com.company.graphs.graph {
 
     }
 
-    @Override
     public void writeBestPath(Task task) throws wrongTaskFormatException {
         Vertex fromVertex = vertices.get(task.getFrom());
         Vertex toVertex = vertices.get(task.getTo());
