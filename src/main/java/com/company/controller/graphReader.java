@@ -1,10 +1,10 @@
-package com.company;
+package com.company.controller;
 
-import com.company.Exceptions.wrongGraphFormatException;
+import com.company.model.Exceptions.wrongGraphFormatException;
+import com.company.model.graph.graph;
+import com.opencsv.CSVReader;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 import static java.lang.Math.sqrt;
 
@@ -35,5 +35,28 @@ public class graphReader {
                     if(graph[i][j] == 0) graph[i][j] = Double.MAX_VALUE;
             }
         return graph;
+    }
+
+    public static void readGraph(String nodes, String edges, graph graph) throws wrongGraphFormatException, IOException {
+        if(!nodes.endsWith(".csv") || !edges.endsWith(".csv"))
+            throw new wrongGraphFormatException("can only read from .csv files");
+
+        try (CSVReader csvReader = new CSVReader(new FileReader(nodes))) {
+            String[] values;
+            while ((values = csvReader.readNext()) != null) {
+                graph.addVertex(
+                        values[0],
+                        Double.parseDouble(values[1]),
+                        Double.parseDouble(values[2])
+                );
+            }
+        }
+
+        try (CSVReader csvReader = new CSVReader(new FileReader(edges))) {
+            String[] values;
+            while ((values = csvReader.readNext()) != null) {
+               graph.addEdge(Double.parseDouble(values[3])/Double.parseDouble(values[5])*3.6, values[1], values[2]);
+            }
+        }
     }
 }

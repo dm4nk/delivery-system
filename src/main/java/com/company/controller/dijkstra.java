@@ -1,17 +1,19 @@
-package com.company.someDijkstra.dijkstraForDynamicGraph;
+package com.company.controller;
 
-import com.company.Exceptions.wrongTaskFormatException;
-import com.company.graph.Edge;
-import com.company.graph.Vertex;
+import com.company.model.Exceptions.wrongTaskFormatException;
+import com.company.model.graph.Edge;
+import com.company.model.graph.Vertex;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-public class basicDijkstraForDynamicGraph {
-    public static void computePath(Vertex sourceVertex) {
+public class dijkstra {
 
-        //if(sourceVertex == null) throw new wrongTaskFormatException("no such point");
+    //обязательно вызывается перед getShortestPathTo()
+    public static void computePath(Vertex sourceVertex) throws wrongTaskFormatException {
+
+        if(sourceVertex == null) throw new wrongTaskFormatException("no such point");
 
         sourceVertex.setMinDistance(0);
         PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
@@ -22,7 +24,6 @@ public class basicDijkstraForDynamicGraph {
 
             for (Edge edge : vertex.getEdges()) {
                 Vertex v = edge.getTargetVertex();
-//                Vertex u = edge.getStartVertex();
                 double weight = edge.getWeight();
                 double minDistance = vertex.getMinDistance() + weight;
 
@@ -39,7 +40,10 @@ public class basicDijkstraForDynamicGraph {
     //перед применением необходимо вызвать функцию compute path и указать в качестве аргумента вершину,
     //из которой хотим начать движание
     //возвращает лист вершин - оптимальный путь - в обратном порядке
-    public static List<Vertex> getShortestPathTo(Vertex targetVertex) {
+    public static List<Vertex> getShortestPathTo(Vertex targetVertex) throws wrongTaskFormatException {
+
+        if(targetVertex == null) throw new wrongTaskFormatException("no such point");
+
         List<Vertex> path = new ArrayList<>();
 
         for (Vertex vertex = targetVertex; vertex != null; vertex = vertex.getPreviousVertex()) {

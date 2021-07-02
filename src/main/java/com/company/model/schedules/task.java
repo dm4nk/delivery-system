@@ -1,6 +1,6 @@
-package com.company.schedules;
+package com.company.model.schedules;
 
-import com.company.Exceptions.wrongTaskFormatException;
+import com.company.model.Exceptions.wrongTaskFormatException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,7 +20,6 @@ public class task {
     private Date fromTime;
     private Date toTime;
 
-    //Главный вопрос: будет ли это использовано?????
     private double lat;
     private double len;
 
@@ -83,42 +82,5 @@ public class task {
 
     public String toString(){
         return from + " " + formatter.format(fromTime) + "\n" + to + " " + formatter.format(toTime);
-    }
-
-    public static ArrayList<task> readTasksToArrayList(File file) throws IOException, wrongTaskFormatException, ParseException {
-        //чтобы нельзя быол ввести дату типа 97.09.2021
-        formatter.setLenient(false);
-
-        byte[] bytes = new byte[(int) file.length()];
-        FileInputStream fis = new FileInputStream(file);
-        fis.read(bytes);
-        fis.close();
-
-        //разбиваем строку на массив строк, в каждой их которых содержится 1 число
-        String[] valueStr = new String(bytes).trim().split("\\s+");
-
-        if(valueStr.length % 6 != 0 ) throw new wrongTaskFormatException("wrong task format");
-
-        ArrayList<task> tasks = new ArrayList();//
-
-        for(int i = 0; i < valueStr.length; i+=6){
-            Date dateFrom;
-            Date dateTo;
-            try {
-                dateFrom = formatter.parse(valueStr[i + 1] + " " + valueStr[i + 2]);
-                dateTo = formatter.parse(valueStr[i + 4] + " " + valueStr[i + 5]);
-            }
-            catch (ParseException e){
-                throw new ParseException("incorrect date format", 0);
-            }
-
-            tasks.add(new task(
-                    valueStr[i],
-                    dateFrom,
-                    valueStr[i+3],
-                    dateTo)
-            );
-        }
-        return tasks;
     }
 }

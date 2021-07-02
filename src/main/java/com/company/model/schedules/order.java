@@ -1,9 +1,9 @@
-package com.company.schedules;
+package com.company.model.schedules;
 
-import com.company.Exceptions.wrongTaskFormatException;
-import com.company.graph.Vertex;
-import com.company.graph.graph;
-import com.company.someDijkstra.dijkstraForDynamicGraph.basicDijkstraForDynamicGraph;
+import com.company.model.Exceptions.wrongTaskFormatException;
+import com.company.model.graph.Vertex;
+import com.company.model.graph.graph;
+import com.company.controller.dijkstra;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,7 +47,7 @@ public class order {
 
         if(fromVertex == null || toVertex == null) throw new wrongTaskFormatException("no such points");
 
-        basicDijkstraForDynamicGraph.computePath(fromVertex);
+        dijkstra.computePath(fromVertex);
 
         if(toVertex.getMinDistance() == Double.MAX_VALUE){
             System.out.println("No such path");
@@ -55,8 +55,8 @@ public class order {
         }
         System.out.println("Order time: " + formatter.format(date));
         System.out.print("path: ");
-        basicDijkstraForDynamicGraph.printVertexListAsPath(
-                basicDijkstraForDynamicGraph.getShortestPathTo(toVertex)
+        dijkstra.printVertexListAsPath(
+                dijkstra.getShortestPathTo(toVertex)
         );
 
         System.out.println("Time required: " + toVertex.getMinDistance());

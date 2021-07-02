@@ -1,18 +1,16 @@
-package com.company.graph;
-import com.company.Exceptions.wrongGraphFormatException;
-import com.company.Exceptions.wrongTaskFormatException;
-import com.company.schedules.task;
-import com.company.graphReader;
-import com.company.someDijkstra.dijkstraForDynamicGraph.basicDijkstraForDynamicGraph;
-import com.opencsv.CSVReader;
+package com.company.model.graph;
 
-import java.io.FileReader;
+import com.company.model.Exceptions.wrongGraphFormatException;
+import com.company.model.Exceptions.wrongTaskFormatException;
+import com.company.controller.graphWriter;
+import com.company.model.schedules.task;
+import com.company.controller.graphReader;
+import com.company.controller.dijkstra;
 import java.io.IOException;
 import java.util.*;
 
 public class graph  {
-    private static Map<String, Vertex> vertices = new HashMap<>();
-
+    private Map<String, Vertex> vertices = new HashMap<>();
     private static graph singleInstance = null;
 
     public static graph getInstance(){
@@ -23,7 +21,7 @@ public class graph  {
         return singleInstance;
     }
 
-    private graph(){}
+    protected graph(){}
 
     public void addVertex(String name){
         vertices.put(name, new Vertex(name));
@@ -68,36 +66,11 @@ public class graph  {
     }
 
     public void readGraphFromFile(String nodes, String edges) throws IOException, wrongGraphFormatException {
-        if(!nodes.endsWith(".csv") || !edges.endsWith(".csv"))
-            throw new wrongGraphFormatException("can only read from .csv files");
-
-        try (CSVReader csvReader = new CSVReader(new FileReader(nodes))) {
-            String[] values;
-            while ((values = csvReader.readNext()) != null) {
-                this.addVertex(
-                        values[0],
-                        Double.parseDouble(values[1]),
-                        Double.parseDouble(values[2])
-                );
-            }
-        }
-
-        try (CSVReader csvReader = new CSVReader(new FileReader(edges))) {
-            String[] values;
-            while ((values = csvReader.readNext()) != null) {
-                this.addEdge(Double.parseDouble(values[3])/Double.parseDouble(values[5])*3.6, values[1], values[2]);
-            }
-        }
+        graphReader.readGraph(nodes, edges, this);
     }
 
     public void writeGraph() {
-        for(Vertex vertex : vertices.values())
-            for (Edge edge: vertex.getEdges()){
-                System.out.println(
-                        edge.getStartVertex().getName() + " --" + edge.getWeight() + "-> " + edge.getTargetVertex().getName()
-                );
-            }
-
+        graphWriter.writeGraph(this);
     }
 
     public void writeBestPath(task task) throws wrongTaskFormatException {
@@ -106,15 +79,15 @@ public class graph  {
 
         if(fromVertex == null || toVertex == null) throw new wrongTaskFormatException("no such points");
 
-        basicDijkstraForDynamicGraph.computePath(fromVertex);
+        dijkstra.computePath(fromVertex);
 
         if(toVertex.getMinDistance() == Double.MAX_VALUE){
             System.out.println("No such path");
             return;
         }
         System.out.print("path: ");
-        basicDijkstraForDynamicGraph.printVertexListAsPath(
-                basicDijkstraForDynamicGraph.getShortestPathTo(toVertex)
+        dijkstra.printVertexListAsPath(
+                dijkstra.getShortestPathTo(toVertex)
         );
         if(toVertex.getMinDistance() < task.timeRequired())
             System.out.println("time required: " + toVertex.getMinDistance());

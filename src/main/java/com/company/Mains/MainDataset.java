@@ -1,9 +1,10 @@
 package com.company.Mains;
 
-import com.company.Exceptions.wrongGraphFormatException;
-import com.company.Exceptions.wrongTaskFormatException;
-import com.company.graph.graph;
-import com.company.schedules.ordersSchedule;
+import com.company.controller.ordersParser;
+import com.company.model.Exceptions.wrongGraphFormatException;
+import com.company.model.Exceptions.wrongTaskFormatException;
+import com.company.model.graph.graph;
+import com.company.model.schedules.ordersSchedule;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,12 +15,15 @@ public class MainDataset {
         long start = System.currentTimeMillis();
 
         String restaurantStreetID = "711327755";
+        String path = "C:\\Users\\dimxx\\IdeaProjects\\magenta_test\\src\\main\\resources\\dataset\\";
 
-        graph.getInstance().readGraphFromFile("nodes.csv", "edges.csv");
+        graph.getInstance().readGraphFromFile(path + "nodes.csv", path + "edges.csv");
 
-        ordersSchedule orders = ordersSchedule.createOrdersFromJSONFile(new File("orders.json"));
+        ordersSchedule melbourneOrders = new ordersSchedule();
 
-        orders.writeBestPathFor(graph.getInstance(), orders.getOrder(1), restaurantStreetID);
+        ordersParser.parseTo(new File(path + "orders.json"), melbourneOrders);
+
+        melbourneOrders.writeBestPathFor(graph.getInstance(), melbourneOrders.getOrder(1), restaurantStreetID);
 
         long end = System.currentTimeMillis();
         System.out.println("\nTIME: " + (double)(end-start)/1000);

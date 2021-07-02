@@ -1,7 +1,8 @@
 package com.company.Mains;
 
-import com.company.schedules.taskSchedule;
-import com.company.graph.graph;
+import com.company.controller.tasksParser;
+import com.company.model.schedules.tasksSchedule;
+import com.company.model.graph.graph;
 
 import java.io.File;
 
@@ -10,8 +11,11 @@ public class MainDynamic {
     public static void main(String[] args) throws Exception {
 
         long start = System.currentTimeMillis();
+        String path = "C:\\Users\\dimxx\\IdeaProjects\\magenta_test\\src\\main\\resources\\other\\";
 
-        taskSchedule DelovieLinii = taskSchedule.createScheduleFromFile(new File("tasks.json"));
+        tasksSchedule DelovieLinii = new tasksSchedule();
+
+        tasksParser.parseTo(new File(path + "tasks.json"), DelovieLinii);
 
         graph mapOfSamaraOblast = graph.getInstance();
 

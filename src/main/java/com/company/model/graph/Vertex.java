@@ -1,4 +1,4 @@
-package com.company.graph;
+package com.company.model.graph;
 
 import java.util.ArrayList;
 import java.util.List;
