@@ -55,7 +55,7 @@ public class graphReader {
         try (CSVReader csvReader = new CSVReader(new FileReader(edges))) {
             String[] values;
             while ((values = csvReader.readNext()) != null) {
-               graph.addEdge(Double.parseDouble(values[3])/Double.parseDouble(values[5])*3.6, values[1], values[2]);
+               graph.addEdge(0.06*Double.parseDouble(values[3])/Double.parseDouble(values[5]), values[1], values[2]);
             }
         }
     }

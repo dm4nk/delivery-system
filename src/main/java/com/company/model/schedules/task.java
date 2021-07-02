@@ -1,16 +1,12 @@
 package com.company.model.schedules;
 
 import com.company.model.Exceptions.wrongTaskFormatException;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 
 public class task {
+    //TODO: переопределить equals() and hashCode()
     static private SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
 
     private String from;

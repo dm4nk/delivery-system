@@ -1,5 +1,7 @@
 package com.company.model.graph;
 
+import java.util.Objects;
+
 public class Edge {
     private double weight;
     private Vertex startVertex;
@@ -33,5 +35,24 @@ public class Edge {
 
     public void setTargetVertex(Vertex targetVertex) {
         this.targetVertex = targetVertex;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Edge edge = (Edge) o;
+        return Double.compare(edge.weight, weight) == 0 &&
+                startVertex.equals(edge.startVertex) &&
+                targetVertex.equals(edge.targetVertex);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(weight, startVertex.getName(), targetVertex.getName());
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 }

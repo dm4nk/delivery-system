@@ -23,6 +23,10 @@ public class graph  {
 
     protected graph(){}
 
+    public  int size(){
+        return vertices.size();
+    }
+
     public void addVertex(String name){
         vertices.put(name, new Vertex(name));
     }

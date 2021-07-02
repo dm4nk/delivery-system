@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class order {
+    //TODO: переопределить equals() and hashCode()
     Date date;
     double lat;
     double lon;

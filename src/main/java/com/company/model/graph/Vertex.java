@@ -2,6 +2,7 @@ package com.company.model.graph;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Vertex implements Comparable<Vertex>{
     private final String name;
@@ -77,5 +78,24 @@ public class Vertex implements Comparable<Vertex>{
     @Override
     public int compareTo(Vertex otherVertex) {
         return Double.compare(this.minDistance, otherVertex.minDistance);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vertex vertex = (Vertex) o;
+        return visited == vertex.visited &&
+                Double.compare(vertex.minDistance, minDistance) == 0 &&
+                Double.compare(vertex.lat, lat) == 0 &&
+                Double.compare(vertex.lon, lon) == 0 &&
+                Objects.equals(name, vertex.name) &&
+                Objects.equals(edges, vertex.edges) &&
+                Objects.equals(previousVertex, vertex.previousVertex);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, edges, lat, lon);
     }
 }
