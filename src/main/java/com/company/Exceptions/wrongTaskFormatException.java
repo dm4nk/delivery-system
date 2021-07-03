@@ -1,4 +1,4 @@
-package com.company.model.Exceptions;
+package com.company.Exceptions;
 
 public class wrongTaskFormatException extends Exception{
     public wrongTaskFormatException(String message){

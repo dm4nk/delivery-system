@@ -1,6 +1,6 @@
 package com.company.controller;
 
-import com.company.model.Exceptions.wrongGraphFormatException;
+import com.company.Exceptions.wrongGraphFormatException;
 import com.company.model.graph.graph;
 import com.opencsv.CSVReader;
 
@@ -39,7 +39,7 @@ public class graphReader {
 
     public static void readGraph(String nodes, String edges, graph graph) throws wrongGraphFormatException, IOException {
         if(!nodes.endsWith(".csv") || !edges.endsWith(".csv"))
-            throw new wrongGraphFormatException("can only read from .csv files");
+            throw new FileNotFoundException("can only read from .csv files");
 
         try (CSVReader csvReader = new CSVReader(new FileReader(nodes))) {
             String[] values;
@@ -58,5 +58,17 @@ public class graphReader {
                graph.addEdge(0.06*Double.parseDouble(values[3])/Double.parseDouble(values[5]), values[1], values[2]);
             }
         }
+    }
+
+    public static void readGraph(String filename, graph graph) throws IOException, wrongGraphFormatException {
+        double[][] matrix = graphReader.readGraph(filename);
+
+        for(int i = 0; i < matrix.length; ++i)
+            graph.addVertex(Double.toString(i));
+
+        for(int i = 0; i < matrix.length; ++i)
+            for (int j = 0; j < matrix.length; ++j)
+                if(matrix[i][j] != Double.MAX_VALUE )
+                    graph.addEdge(matrix[i][j], Double.toString(i), Double.toString(j));
     }
 }

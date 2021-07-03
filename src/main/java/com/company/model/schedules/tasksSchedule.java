@@ -1,6 +1,6 @@
 package com.company.model.schedules;
 
-import com.company.model.Exceptions.wrongTaskFormatException;
+import com.company.Exceptions.wrongTaskFormatException;
 import com.company.model.graph.graph;
 import java.util.ArrayList;
 

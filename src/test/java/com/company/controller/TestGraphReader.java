@@ -1,25 +1,30 @@
 package com.company.controller;
 
-import com.company.model.Exceptions.wrongGraphFormatException;
+import com.company.Exceptions.wrongGraphFormatException;
 import com.company.model.graph.Edge;
 import com.company.model.graph.notSingletonGraph;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class TestGraphReader {
-    String path = "C:\\Users\\dimxx\\IdeaProjects\\magenta_test\\src\\test\\resources\\";
+    String path = "src\\test\\resources\\";
     @Test
     public void testReadGraph1arg() throws IOException, wrongGraphFormatException {
-        double[][] actual = graphReader.readGraph(path + "testGraph.txt");
+        double[][] actual = graphReader.readGraph(path + "other/testGraph.txt");
         double[][] expected = {{Double.MAX_VALUE,2},{4,Double.MAX_VALUE}};
         Assert.assertArrayEquals(expected, actual);
+
+        Assert.assertThrows(IOException.class, ()->graphReader.readGraph("notExistingFile(probably)"));
+        Assert.assertThrows(wrongGraphFormatException.class, ()->graphReader.readGraph(path + "other/testNotNXNGraph.txt"));
+        Assert.assertThrows(wrongGraphFormatException.class, ()->graphReader.readGraph(path + "other/testNegativeGraph.txt"));
     }
     @Test
     public void testReadGraph3arg() throws wrongGraphFormatException, IOException {
         notSingletonGraph actual = new notSingletonGraph();
-        graphReader.readGraph(path + "testNodes.csv", path + "testEdges.csv", actual);
+        graphReader.readGraph(path + "dataset/testNodes.csv", path + "dataset/testEdges.csv", actual);
 
         notSingletonGraph expected = new notSingletonGraph();
         expected.addVertex("1", -37.8152153, 144.9749471);
@@ -41,5 +46,9 @@ public class TestGraphReader {
 
             Assert.assertEquals(expected.getVertices().get(st).hashCode(), actual.getVertices().get(st).hashCode());
         }
+
+        Assert.assertThrows(FileNotFoundException.class, ()->graphReader.readGraph(path + "dataset/testNodes.txt", path + "dataset/testEdges.csv", actual));
+        Assert.assertThrows(FileNotFoundException.class, ()->graphReader.readGraph(path + "dataset/testNodes.csv", path + "dataset/testEdges.txt", actual));
+
     }
 }

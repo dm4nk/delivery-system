@@ -1,5 +1,7 @@
 package com.company.controller;
 
+import com.company.Exceptions.wrongGraphFormatException;
+import com.company.Exceptions.wrongTaskFormatException;
 import com.company.model.schedules.order;
 import com.company.model.schedules.ordersSchedule;
 import org.json.simple.JSONArray;
@@ -14,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ordersParser {
-    public static void parseTo(File file, ordersSchedule ordersSchedule) throws IOException, org.json.simple.parser.ParseException, ParseException {
+    public static void parseTo(File file, ordersSchedule ordersSchedule) throws IOException, org.json.simple.parser.ParseException, ParseException, wrongTaskFormatException {
         if(!file.getName().endsWith(".json")) throw new FileNotFoundException(file.getName() + " is not a json file");
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);

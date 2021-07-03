@@ -1,6 +1,7 @@
 package com.company.model.schedules;
 
-import com.company.model.Exceptions.wrongTaskFormatException;
+import com.company.Exceptions.wrongGraphFormatException;
+import com.company.Exceptions.wrongTaskFormatException;
 import com.company.model.graph.graph;
 import java.util.*;
 
@@ -18,8 +19,12 @@ public class ordersSchedule {
         orderIDs = new ArrayList<>();
     }
 
-    public void addOrder(String orderID,  order order){
-        orders.put(orderID, order);
+    public int size(){
+        return orders.size();
+    }
+
+    public void addOrder(String orderID,  order order) throws wrongTaskFormatException {
+        if(orders.put(orderID, order)!= null) throw new wrongTaskFormatException("such order already exists");
         orderIDs.add(orderID);
     }
 

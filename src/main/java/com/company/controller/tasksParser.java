@@ -1,6 +1,6 @@
 package com.company.controller;
 
-import com.company.model.Exceptions.wrongTaskFormatException;
+import com.company.Exceptions.wrongTaskFormatException;
 import com.company.model.schedules.task;
 import com.company.model.schedules.tasksSchedule;
 import org.json.simple.JSONArray;

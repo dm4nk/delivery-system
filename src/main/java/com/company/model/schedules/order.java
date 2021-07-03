@@ -1,6 +1,6 @@
 package com.company.model.schedules;
 
-import com.company.model.Exceptions.wrongTaskFormatException;
+import com.company.Exceptions.wrongTaskFormatException;
 import com.company.model.graph.Vertex;
 import com.company.model.graph.graph;
 import com.company.controller.dijkstra;
@@ -20,6 +20,18 @@ public class order {
         this.date = date;
         this.lat = lat;
         this.lon = lon;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLon() {
+        return lon;
     }
 
     public Vertex calculateNearestVertex(graph graph){

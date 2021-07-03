@@ -1,7 +1,7 @@
 package com.company.controller;
 
-import com.company.model.Exceptions.wrongGraphFormatException;
-import com.company.model.Exceptions.wrongTaskFormatException;
+import com.company.Exceptions.wrongGraphFormatException;
+import com.company.Exceptions.wrongTaskFormatException;
 import com.company.model.graph.Vertex;
 import com.company.model.graph.notSingletonGraph;
 import org.junit.Assert;
@@ -30,10 +30,10 @@ public class TestDijkstra {
         dijkstra.computePath(graph.getVertices().get("1"));
 
 
-        Assert.assertEquals(0, graph.getVertices().get("1").getMinDistance(), 0.00001);
-        Assert.assertEquals(11, graph.getVertices().get("2").getMinDistance(), 0.00001);
-        Assert.assertEquals(15, graph.getVertices().get("3").getMinDistance(), 0.00001);
-        Assert.assertEquals(13, graph.getVertices().get("4").getMinDistance(), 0.00001);
+        Assert.assertEquals(0, graph.getVertices().get("1").getMinDistance(), Double.MIN_VALUE);
+        Assert.assertEquals(11, graph.getVertices().get("2").getMinDistance(), Double.MIN_VALUE);
+        Assert.assertEquals(15, graph.getVertices().get("3").getMinDistance(), Double.MIN_VALUE);
+        Assert.assertEquals(13, graph.getVertices().get("4").getMinDistance(), Double.MIN_VALUE);
     }
 
     @Test
@@ -61,5 +61,8 @@ public class TestDijkstra {
         expected.add(graph.getVertices().get("1"));
 
         Assert.assertArrayEquals(expected.toArray(), actual.toArray());
+
+        Assert.assertThrows(wrongTaskFormatException.class,()-> dijkstra.computePath(null));
+        Assert.assertThrows(wrongTaskFormatException.class,()-> dijkstra.getShortestPathTo(null));
     }
 }

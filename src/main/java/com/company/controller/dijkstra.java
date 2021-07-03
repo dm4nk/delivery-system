@@ -1,6 +1,6 @@
 package com.company.controller;
 
-import com.company.model.Exceptions.wrongTaskFormatException;
+import com.company.Exceptions.wrongTaskFormatException;
 import com.company.model.graph.Edge;
 import com.company.model.graph.Vertex;
 

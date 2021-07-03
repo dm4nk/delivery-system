@@ -1,7 +1,7 @@
 package com.company.model.graph;
 
-import com.company.model.Exceptions.wrongGraphFormatException;
-import com.company.model.Exceptions.wrongTaskFormatException;
+import com.company.Exceptions.wrongGraphFormatException;
+import com.company.Exceptions.wrongTaskFormatException;
 import com.company.controller.graphWriter;
 import com.company.model.schedules.task;
 import com.company.controller.graphReader;
@@ -27,16 +27,18 @@ public class graph  {
         return vertices.size();
     }
 
-    public void addVertex(String name){
-        vertices.put(name, new Vertex(name));
+    public void addVertex(String name) throws wrongGraphFormatException {
+
+        if(vertices.put(name, new Vertex(name)) != null) throw new wrongGraphFormatException("such point already exists");
+
     }
 
     public Map<String, Vertex> getVertices() {
         return vertices;
     }
 
-    public void addVertex(String name, double lat, double lon){
-        vertices.put(name, new Vertex(name, lat, lon));
+    public void addVertex(String name, double lat, double lon) throws wrongGraphFormatException {
+        if(vertices.put(name, new Vertex(name, lat, lon)) != null) throw new wrongGraphFormatException("such point already exists");
     }
 
     public void addEdge(double weight, String sourceVertex, String targetVertex) throws wrongGraphFormatException {
@@ -57,16 +59,7 @@ public class graph  {
     }
 
     public void readGraphFromFile(String filename) throws IOException, wrongGraphFormatException {
-
-        double[][] graph = graphReader.readGraph(filename);
-
-        for(int i = 0; i < graph.length; ++i)
-            this.addVertex(Double.toString(i));
-
-        for(int i = 0; i < graph.length; ++i)
-            for (int j = 0; j < graph.length; ++j)
-                if(graph[i][j] != Double.MAX_VALUE )
-                    this.addEdge(graph[i][j], Double.toString(i), Double.toString(j));
+        graphReader.readGraph(filename, this);
     }
 
     public void readGraphFromFile(String nodes, String edges) throws IOException, wrongGraphFormatException {

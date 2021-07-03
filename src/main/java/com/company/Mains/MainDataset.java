@@ -1,8 +1,8 @@
 package com.company.Mains;
 
 import com.company.controller.ordersParser;
-import com.company.model.Exceptions.wrongGraphFormatException;
-import com.company.model.Exceptions.wrongTaskFormatException;
+import com.company.Exceptions.wrongGraphFormatException;
+import com.company.Exceptions.wrongTaskFormatException;
 import com.company.model.graph.graph;
 import com.company.model.schedules.ordersSchedule;
 
