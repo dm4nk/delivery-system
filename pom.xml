@@ -22,23 +22,34 @@
         <version>3.8.1</version>
     </dependency>
 
+        <!-- JSON parser -->
         <dependency>
         <groupId>com.googlecode.json-simple</groupId>
         <artifactId>json-simple</artifactId>
         <version>1.1.1</version>
     </dependency>
 
+        <!-- csv parser -->
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>4.0</version>
         </dependency>
 
+        <!-- R tree -->
+        <dependency>
+            <groupId>com.github.davidmoten</groupId>
+            <artifactId>rtree</artifactId>
+            <version>0.8.7</version>
+        </dependency>
+
+        <!-- Test Dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
         </dependency>
+
     </dependencies>
 
 </project>

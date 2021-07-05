@@ -1,9 +1,9 @@
 package com.company.controller;
 
-import com.company.Exceptions.wrongGraphFormatException;
-import com.company.Exceptions.wrongTaskFormatException;
+import com.company.Exceptions.WrongGraphFormatException;
+import com.company.Exceptions.WrongTaskFormatException;
 import com.company.model.graph.Vertex;
-import com.company.model.graph.notSingletonGraph;
+import com.company.model.graph.NotSingletonGraph;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,8 +12,8 @@ import java.util.List;
 
 public class TestDijkstra {
     @Test
-    public void testComputePath() throws wrongGraphFormatException, wrongTaskFormatException {
-        notSingletonGraph graph = new notSingletonGraph();
+    public void testComputePath() throws WrongGraphFormatException, WrongTaskFormatException {
+        NotSingletonGraph graph = new NotSingletonGraph();
 
         graph.addVertex("1");
         graph.addVertex("2");
@@ -27,7 +27,7 @@ public class TestDijkstra {
         graph.addEdge(5, "3", "4");
 
 
-        dijkstra.computePath(graph.getVertices().get("1"));
+        Dijkstra.computePath(graph.getVertices().get("1"));
 
 
         Assert.assertEquals(0, graph.getVertices().get("1").getMinDistance(), Double.MIN_VALUE);
@@ -37,8 +37,8 @@ public class TestDijkstra {
     }
 
     @Test
-    public void testGetShortestPathTo() throws wrongGraphFormatException, wrongTaskFormatException {
-        notSingletonGraph graph = new notSingletonGraph();
+    public void testGetShortestPathTo() throws WrongGraphFormatException, WrongTaskFormatException {
+        NotSingletonGraph graph = new NotSingletonGraph();
 
         graph.addVertex("1");
         graph.addVertex("2");
@@ -51,8 +51,8 @@ public class TestDijkstra {
         graph.addEdge(5, "2", "3");
         graph.addEdge(16, "3", "4");
 
-        dijkstra.computePath(graph.getVertices().get("1"));
-        List<Vertex> actual = dijkstra.getShortestPathTo(graph.getVertices().get("4"));
+        Dijkstra.computePath(graph.getVertices().get("1"));
+        List<Vertex> actual = Dijkstra.getShortestPathTo(graph.getVertices().get("4"));
 
         List<Vertex> expected = new ArrayList<>();
         expected.add(graph.getVertices().get("4"));
@@ -62,7 +62,7 @@ public class TestDijkstra {
 
         Assert.assertArrayEquals(expected.toArray(), actual.toArray());
 
-        Assert.assertThrows(wrongTaskFormatException.class,()-> dijkstra.computePath(null));
-        Assert.assertThrows(wrongTaskFormatException.class,()-> dijkstra.getShortestPathTo(null));
+        Assert.assertThrows(WrongTaskFormatException.class,()-> Dijkstra.computePath(null));
+        Assert.assertThrows(WrongTaskFormatException.class,()-> Dijkstra.getShortestPathTo(null));
     }
 }

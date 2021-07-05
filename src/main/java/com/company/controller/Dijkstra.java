@@ -1,6 +1,6 @@
 package com.company.controller;
 
-import com.company.Exceptions.wrongTaskFormatException;
+import com.company.Exceptions.WrongTaskFormatException;
 import com.company.model.graph.Edge;
 import com.company.model.graph.Vertex;
 
@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-public class dijkstra {
+public class Dijkstra {
+
+    private Dijkstra(){}
 
     //обязательно вызывается перед getShortestPathTo()
-    public static void computePath(Vertex sourceVertex) throws wrongTaskFormatException {
+    public static void computePath(Vertex sourceVertex) throws WrongTaskFormatException {
 
-        if(sourceVertex == null) throw new wrongTaskFormatException("no such point");
+        if(sourceVertex == null) throw new WrongTaskFormatException("no such point");
 
         sourceVertex.setMinDistance(0);
         PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
@@ -40,9 +42,9 @@ public class dijkstra {
     //перед применением необходимо вызвать функцию compute path и указать в качестве аргумента вершину,
     //из которой хотим начать движание
     //возвращает лист вершин - оптимальный путь - в обратном порядке
-    public static List<Vertex> getShortestPathTo(Vertex targetVertex) throws wrongTaskFormatException {
+    public static List<Vertex> getShortestPathTo(Vertex targetVertex) throws WrongTaskFormatException {
 
-        if(targetVertex == null) throw new wrongTaskFormatException("no such point");
+        if(targetVertex == null) throw new WrongTaskFormatException("no such point");
 
         List<Vertex> path = new ArrayList<>();
 

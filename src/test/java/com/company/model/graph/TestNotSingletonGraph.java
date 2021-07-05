@@ -1,18 +1,18 @@
 package com.company.model.graph;
 
-import com.company.Exceptions.wrongGraphFormatException;
+import com.company.Exceptions.WrongGraphFormatException;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class TestNotSingletonGraph {
     @Test
-    public void testNotSingletonGraph() throws wrongGraphFormatException {
-        notSingletonGraph actual = new notSingletonGraph();
+    public void testNotSingletonGraph() throws WrongGraphFormatException {
+        NotSingletonGraph actual = new NotSingletonGraph();
 
         actual.addVertex("testVertexThatShouldNotExistInRealGraph");
 
-        Assert.assertNull(graph.getInstance().getVertices().getOrDefault("testVertexThatShouldNotExistInRealGraph", null));
+        Assert.assertNull(Graph.getInstance().getVertices().getOrDefault("testVertexThatShouldNotExistInRealGraph", null));
 
-        Assert.assertNotEquals(actual, graph.getInstance());
+        Assert.assertNotEquals(actual, Graph.getInstance());
     }
 }

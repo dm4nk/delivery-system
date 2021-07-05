@@ -1,8 +1,8 @@
 package com.company.controller;
 
-import com.company.Exceptions.wrongGraphFormatException;
+import com.company.Exceptions.WrongGraphFormatException;
 import com.company.model.graph.Edge;
-import com.company.model.graph.notSingletonGraph;
+import com.company.model.graph.NotSingletonGraph;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,21 +12,21 @@ import java.io.IOException;
 public class TestGraphReader {
     String path = "src\\test\\resources\\";
     @Test
-    public void testReadGraph1arg() throws IOException, wrongGraphFormatException {
-        double[][] actual = graphReader.readGraph(path + "other/testGraph.txt");
+    public void testReadGraph1arg() throws IOException, WrongGraphFormatException {
+        double[][] actual = GraphReader.readGraph(path + "other/testGraph.txt");
         double[][] expected = {{Double.MAX_VALUE,2},{4,Double.MAX_VALUE}};
         Assert.assertArrayEquals(expected, actual);
 
-        Assert.assertThrows(IOException.class, ()->graphReader.readGraph("notExistingFile(probably)"));
-        Assert.assertThrows(wrongGraphFormatException.class, ()->graphReader.readGraph(path + "other/testNotNXNGraph.txt"));
-        Assert.assertThrows(wrongGraphFormatException.class, ()->graphReader.readGraph(path + "other/testNegativeGraph.txt"));
+        Assert.assertThrows(IOException.class, ()-> GraphReader.readGraph("notExistingFile(probably)"));
+        Assert.assertThrows(WrongGraphFormatException.class, ()-> GraphReader.readGraph(path + "other/testNotNXNGraph.txt"));
+        Assert.assertThrows(WrongGraphFormatException.class, ()-> GraphReader.readGraph(path + "other/testNegativeGraph.txt"));
     }
     @Test
-    public void testReadGraph3arg() throws wrongGraphFormatException, IOException {
-        notSingletonGraph actual = new notSingletonGraph();
-        graphReader.readGraph(path + "dataset/testNodes.csv", path + "dataset/testEdges.csv", actual);
+    public void testReadGraph3arg() throws WrongGraphFormatException, IOException {
+        NotSingletonGraph actual = new NotSingletonGraph();
+        GraphReader.readGraph(path + "dataset/testNodes.csv", path + "dataset/testEdges.csv", actual);
 
-        notSingletonGraph expected = new notSingletonGraph();
+        NotSingletonGraph expected = new NotSingletonGraph();
         expected.addVertex("1", -37.8152153, 144.9749471);
         expected.addVertex("2", -37.807675, 144.9558726);
         expected.addVertex("3", -37.8070943, 144.9559785);
@@ -47,8 +47,8 @@ public class TestGraphReader {
             Assert.assertEquals(expected.getVertices().get(st).hashCode(), actual.getVertices().get(st).hashCode());
         }
 
-        Assert.assertThrows(FileNotFoundException.class, ()->graphReader.readGraph(path + "dataset/testNodes.txt", path + "dataset/testEdges.csv", actual));
-        Assert.assertThrows(FileNotFoundException.class, ()->graphReader.readGraph(path + "dataset/testNodes.csv", path + "dataset/testEdges.txt", actual));
+        Assert.assertThrows(FileNotFoundException.class, ()-> GraphReader.readGraph(path + "dataset/testNodes.txt", path + "dataset/testEdges.csv", actual));
+        Assert.assertThrows(FileNotFoundException.class, ()-> GraphReader.readGraph(path + "dataset/testNodes.csv", path + "dataset/testEdges.txt", actual));
 
     }
 }

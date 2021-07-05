@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Vertex implements Comparable<Vertex>{
+public class Vertex implements Comparable<Vertex> {
     private final String name;
     private List<Edge> edges;
     private boolean visited;
@@ -20,7 +20,7 @@ public class Vertex implements Comparable<Vertex>{
         this.lon = -1;
     }
 
-    public Vertex(String name, double lat, double lon) {
+    public Vertex(String name, double lon, double lat) {
         this.name = name;
         this.edges = new ArrayList<>();
         this.lat = lat;

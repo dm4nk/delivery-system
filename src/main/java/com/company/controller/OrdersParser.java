@@ -1,9 +1,8 @@
 package com.company.controller;
 
-import com.company.Exceptions.wrongGraphFormatException;
-import com.company.Exceptions.wrongTaskFormatException;
-import com.company.model.schedules.order;
-import com.company.model.schedules.ordersSchedule;
+import com.company.Exceptions.WrongTaskFormatException;
+import com.company.model.schedules.Order;
+import com.company.model.schedules.OrdersSchedule;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,8 +14,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class ordersParser {
-    public static void parseTo(File file, ordersSchedule ordersSchedule) throws IOException, org.json.simple.parser.ParseException, ParseException, wrongTaskFormatException {
+public class OrdersParser {
+    public static void parseTo(File file, OrdersSchedule ordersSchedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
         if(!file.getName().endsWith(".json")) throw new FileNotFoundException(file.getName() + " is not a json file");
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
@@ -46,7 +45,7 @@ public class ordersParser {
 
             ordersSchedule.addOrder(
                     (String) temp.get("id"),
-                    new order(
+                    new Order(
                             date,
                             Double.parseDouble((String) temp.get("lat")),
                             Double.parseDouble((String) temp.get("lon"))

@@ -1,11 +1,11 @@
 package com.company.model.schedules;
 
-import com.company.Exceptions.wrongTaskFormatException;
+import com.company.Exceptions.WrongTaskFormatException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-public class task {
+public class Task {
     //TODO: переопределить equals() and hashCode()
     static private SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
 
@@ -19,17 +19,17 @@ public class task {
     private double lat;
     private double len;
 
-    public task(int from, Date fromTime, int to, Date toTime) throws wrongTaskFormatException {
-        if(from < 0 || to < 0) throw new wrongTaskFormatException("negative points");
-        if(fromTime.getTime() >= toTime.getTime()) throw new wrongTaskFormatException("from time less than to time");
+    public Task(int from, Date fromTime, int to, Date toTime) throws WrongTaskFormatException {
+        if(from < 0 || to < 0) throw new WrongTaskFormatException("negative points");
+        if(fromTime.getTime() >= toTime.getTime()) throw new WrongTaskFormatException("from time less than to time");
         this.fromIndex = from;
         this.toIndex = to;
         this.fromTime = fromTime;
         this.toTime = toTime;
     }
 
-    public task(String from, Date fromTime, String to, Date toTime) throws wrongTaskFormatException {
-        if(fromTime.getTime() >= toTime.getTime()) throw new wrongTaskFormatException("from time less than to time");
+    public Task(String from, Date fromTime, String to, Date toTime) throws WrongTaskFormatException {
+        if(fromTime.getTime() >= toTime.getTime()) throw new WrongTaskFormatException("from time less than to time");
         try {
             fromIndex = Integer.parseInt(from);
             toIndex = Integer.parseInt(to);
@@ -44,7 +44,7 @@ public class task {
         this.toTime = toTime;
     }
 
-    public task(String from, Date fromTime, String to, Date toTime, double fromLat, double fromLen) throws wrongTaskFormatException {
+    public Task(String from, Date fromTime, String to, Date toTime, double fromLat, double fromLen) throws WrongTaskFormatException {
         this(from, fromTime, to, toTime);
         this.lat = fromLat;
         this.len = fromLen;
@@ -76,7 +76,28 @@ public class task {
                 );
     }
 
+    @Override
     public String toString(){
         return from + " " + formatter.format(fromTime) + "\n" + to + " " + formatter.format(toTime);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return fromIndex == task.fromIndex &&
+                toIndex == task.toIndex &&
+                Double.compare(task.lat, lat) == 0 &&
+                Double.compare(task.len, len) == 0 &&
+                from.equals(task.from) &&
+                to.equals(task.to) &&
+                fromTime.equals(task.fromTime) &&
+                toTime.equals(task.toTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(from, to, fromIndex, toIndex, fromTime, toTime, lat, len);
     }
 }

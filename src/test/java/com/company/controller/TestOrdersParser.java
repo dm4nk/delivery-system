@@ -1,8 +1,7 @@
 package com.company.controller;
 
-import com.company.Exceptions.wrongGraphFormatException;
-import com.company.Exceptions.wrongTaskFormatException;
-import com.company.model.schedules.ordersSchedule;
+import com.company.Exceptions.WrongTaskFormatException;
+import com.company.model.schedules.OrdersSchedule;
 import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,14 +13,14 @@ import java.util.Locale;
 
 public class TestOrdersParser {
     @Test
-    public void testParseTo() throws ParseException, java.text.ParseException, IOException, wrongTaskFormatException {
+    public void testParseTo() throws ParseException, java.text.ParseException, IOException, WrongTaskFormatException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);
         String path = "src\\test\\resources\\dataset\\";
 
-        ordersSchedule actual = new ordersSchedule();
+        OrdersSchedule actual = new OrdersSchedule();
 
-        ordersParser.parseTo(new File(path + "testOrders.json"), actual);
+        OrdersParser.parseTo(new File(path + "testOrders.json"), actual);
 
         Assert.assertEquals(2, actual.size());
 

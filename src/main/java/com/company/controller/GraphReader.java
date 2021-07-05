@@ -1,16 +1,16 @@
 package com.company.controller;
 
-import com.company.Exceptions.wrongGraphFormatException;
-import com.company.model.graph.graph;
+import com.company.Exceptions.WrongGraphFormatException;
+import com.company.model.graph.Graph;
 import com.opencsv.CSVReader;
 
 import java.io.*;
 
 import static java.lang.Math.sqrt;
 
-public class graphReader {
+public class GraphReader {
 
-    public static double[][]readGraph(String filename) throws IOException, wrongGraphFormatException {
+    public static double[][]readGraph(String filename) throws IOException, WrongGraphFormatException {
         //позволяет считать числа, не зная их количество
         File file = new File(filename);
         byte[] bytes = new byte[(int) file.length()];
@@ -24,20 +24,20 @@ public class graphReader {
         //проверка на размер графа, должен быть n*n
         int graphSize = (int) sqrt( valueStr.length );
         if( sqrt( valueStr.length ) != graphSize || graphSize < 2){
-            throw new wrongGraphFormatException("wrong graph size:" + graphSize);
+            throw new WrongGraphFormatException("wrong Graph size:" + graphSize);
         }
 
         double[][] graph = new double[graphSize][graphSize];
         for (int i = 0; i < graphSize; ++i)
             for (int j = 0; j < graphSize; ++j) {
                 if ((graph[i][j] = Integer.parseInt(valueStr[i * graphSize + j])) < 0)//получаем доступ к i j элементу в строке...
-                    throw new wrongGraphFormatException("negative value in graph");
+                    throw new WrongGraphFormatException("negative value in Graph");
                     if(graph[i][j] == 0) graph[i][j] = Double.MAX_VALUE;
             }
         return graph;
     }
 
-    public static void readGraph(String nodes, String edges, graph graph) throws wrongGraphFormatException, IOException {
+    public static void readGraph(String nodes, String edges, Graph graph) throws WrongGraphFormatException, IOException {
         if(!nodes.endsWith(".csv") || !edges.endsWith(".csv"))
             throw new FileNotFoundException("can only read from .csv files");
 
@@ -60,8 +60,8 @@ public class graphReader {
         }
     }
 
-    public static void readGraph(String filename, graph graph) throws IOException, wrongGraphFormatException {
-        double[][] matrix = graphReader.readGraph(filename);
+    public static void readGraph(String filename, Graph graph) throws IOException, WrongGraphFormatException {
+        double[][] matrix = GraphReader.readGraph(filename);
 
         for(int i = 0; i < matrix.length; ++i)
             graph.addVertex(Double.toString(i));

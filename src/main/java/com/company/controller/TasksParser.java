@@ -1,8 +1,8 @@
 package com.company.controller;
 
-import com.company.Exceptions.wrongTaskFormatException;
-import com.company.model.schedules.task;
-import com.company.model.schedules.tasksSchedule;
+import com.company.Exceptions.WrongTaskFormatException;
+import com.company.model.schedules.Task;
+import com.company.model.schedules.TasksSchedule;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -16,8 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class tasksParser {
-    public static void parseTo(File file, tasksSchedule tasksSchedule) throws IOException, org.json.simple.parser.ParseException, ParseException, wrongTaskFormatException {
+public class TasksParser {
+    public static void parseTo(File file, TasksSchedule tasksSchedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
         if(!file.getName().endsWith(".json")) throw new FileNotFoundException("can not work with files except txt and json");
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
@@ -48,7 +48,7 @@ public class tasksParser {
             }
 
             tasksSchedule.addTask(
-                    new task(
+                    new Task(
                             (String) temp.get("from"),
                             dateFrom,
                             (String) temp.get("to"),
