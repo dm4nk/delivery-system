@@ -111,4 +111,12 @@ public class Graph {
     public List<Vertex> writeBestPath(Order order, String[] restaurantStreetIDs) throws WrongTaskFormatException {
         return order.writePathAndTime(this, restaurantStreetIDs);
     }
+
+    public <T> List<Vertex> write2PathsAndTime(Order order, T fromStreetIdentifier) throws WrongTaskFormatException {
+        return order.write2PathsAndTime(this, fromStreetIdentifier);
+    }
+
+    public void visualize(){
+        tree.visualize(1920, 1080).save("target/mytree.png");;
+    }
 }

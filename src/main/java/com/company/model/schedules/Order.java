@@ -79,15 +79,17 @@ public class Order {
         if (toVertex == null) throw new WrongTaskFormatException("destination is more than 200 meters away from delivery zone");
 
         Vertex tmpVertex;
-        Vertex fromVertex = new Vertex("rofl");
-        fromVertex.setMinDistance(Double.MAX_VALUE);
+
+        String fromStr = "";
+        Double minPath = Double.MAX_VALUE;
 
         for(String s: fromStreetIdentifiers) {
             tmpVertex = graph.getVertices().get(s);
             Dijkstra.computePath(tmpVertex);
-
-            if(tmpVertex.getMinDistance() <= fromVertex.getMinDistance())
-                fromVertex = tmpVertex;
+            if(toVertex.getMinDistance() <= minPath) {
+                fromStr = tmpVertex.getName();
+                minPath = toVertex.getMinDistance();
+            }
 
             for(Vertex v: graph.getVertices().values()){
                 v.setMinDistance(Double.MAX_VALUE);
@@ -95,6 +97,7 @@ public class Order {
                 v.setVisited(false);
             }
         }
+        Vertex fromVertex = graph.getVertices().get(fromStr);
         Dijkstra.computePath(fromVertex);
 
         if(fromVertex.getMinDistance() == Double.MAX_VALUE) throw new WrongTaskFormatException("no such points");
@@ -121,10 +124,6 @@ public class Order {
             v.setVisited(false);
         }
         return path;
-    }
-
-    private <T> void mem(){
-
     }
 
     public <T> List<Vertex> write2PathsAndTime(Graph graph, T fromStreetIdentifier) throws WrongTaskFormatException {

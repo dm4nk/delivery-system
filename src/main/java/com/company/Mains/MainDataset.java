@@ -16,19 +16,18 @@ public class MainDataset {
     public static void main(String[] args) throws IOException, WrongGraphFormatException, ParseException, WrongTaskFormatException, org.json.simple.parser.ParseException {
         long start = System.currentTimeMillis();
 
-        String path = "C:\\Users\\dimxx\\IdeaProjects\\magenta_test\\src\\main\\resources\\dataset\\";
+        String path = "src\\main\\resources\\dataset\\";
         Graph.getInstance().readGraphFromFile(path + "nodes.csv", path + "edges.csv");
 
         Vertex NS = Dijkstra.calculateNearestVertex(Graph.getInstance(), -37.7738026, 144.9836466);
         Vertex TP = Dijkstra.calculateNearestVertex(Graph.getInstance(), -37.8618349, 144.905716);
         Vertex BK = Dijkstra.calculateNearestVertex(Graph.getInstance(), -37.8158343, 145.04645);
-
         String[] restaurantStreetIDs = new String[]{NS.getName(), TP.getName(), BK.getName()};
 
         OrdersSchedule melbourneOrders = new OrdersSchedule();
         OrdersParser.parseTo(new File(path + "orders.json"), melbourneOrders);
 
-        melbourneOrders.write2BestPathsFor(Graph.getInstance(), melbourneOrders.getOrder(1), restaurantStreetIDs);
+        melbourneOrders.write2BestPathsFor(Graph.getInstance(), melbourneOrders.getOrder(5), restaurantStreetIDs);
 
         long end = System.currentTimeMillis();
         System.out.println("\nTIME: " + (double)(end-start)/1000);

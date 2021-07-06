@@ -10,14 +10,15 @@ public class Vertex implements Comparable<Vertex> {
     private boolean visited;
     private Vertex previousVertex;
     private double minDistance = Double.MAX_VALUE;
+
     private final double lat;
     private final double lon;
 
     public Vertex(String name) {
         this.name = name;
         this.edges = new ArrayList<>();
-        this.lat = -1;
-        this.lon = -1;
+        this.lat = 180;
+        this.lon = 180;
     }
 
     public Vertex(String name, double lon, double lat) {

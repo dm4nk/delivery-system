@@ -13,10 +13,10 @@
       "lon": "144.9794147"
     },
     {
-      "id": "same street as restaurant",
-      "date": "08-02-2018 09:10:59",
-      "lat": "-37.807675",
-      "lon": "144.9558726"
+      "id": "same street as restaurant (BK)",
+      "date": "08-02-2018 11:10:59",
+      "lat": "-37.8158343",
+      "lon": "145.04645"
     },
     {
       "id": "too far away from map",
@@ -25,10 +25,16 @@
       "lon": "160.9558726"
     },
     {
-      "id": "test in BK",
+      "id": "far from delivery zone, but in city",
       "date": "08-02-2018 11:10:59",
-      "lat": "-37.8158343",
-      "lon": "145.04645"
+      "lat": "-37.8588349",
+      "lon": "144.905716"
+    },
+    {
+      "id": "near rest (NS)",
+      "date": "08-02-2018 12:10:00",
+      "lat": "-37.8051496",
+      "lon": "144.961486"
     }
   ]
 }

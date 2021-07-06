@@ -6,7 +6,6 @@ import java.util.*;
 
 
 public class Task {
-    //TODO: переопределить equals() and hashCode()
     static private SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
 
     private String from;
