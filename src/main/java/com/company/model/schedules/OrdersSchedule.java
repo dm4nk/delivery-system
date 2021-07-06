@@ -1,7 +1,9 @@
 package com.company.model.schedules;
 
 import com.company.Exceptions.WrongTaskFormatException;
+import com.company.controller.Dijkstra;
 import com.company.model.graph.Graph;
+import com.company.model.graph.Vertex;
 
 import java.util.*;
 
@@ -28,8 +30,20 @@ public class OrdersSchedule {
         orderIDs.add(orderID);
     }
 
-    public void writeBestPathFor(Graph graph, Order order, String restaurantStreetID) throws WrongTaskFormatException {
-        order.writePathAndTime(graph, restaurantStreetID);
+    public List<Vertex> writeBestPathFor(Graph graph, Order order, String restaurantStreetID) throws WrongTaskFormatException {
+        return order.writePathAndTime(graph, restaurantStreetID);
+    }
+
+    public List<Vertex> writeBestPathFor(Graph graph, Order order, String[] restaurantStreetIDs) throws WrongTaskFormatException {
+        return order.writePathAndTime(graph, restaurantStreetIDs);
+    }
+
+    public List<Vertex> write2BestPathsFor(Graph graph, Order order, String restaurantStreetID) throws WrongTaskFormatException {
+        return order.write2PathsAndTime(graph, restaurantStreetID);
+    }
+
+    public List<Vertex> write2BestPathsFor(Graph graph, Order order, String[] restaurantStreetIDs) throws WrongTaskFormatException {
+        return order.write2PathsAndTime(graph, restaurantStreetIDs);
     }
 
     public Order getOrder(String orderID){

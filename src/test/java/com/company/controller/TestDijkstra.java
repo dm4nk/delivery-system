@@ -65,4 +65,6 @@ public class TestDijkstra {
         Assert.assertThrows(WrongTaskFormatException.class,()-> Dijkstra.computePath(null));
         Assert.assertThrows(WrongTaskFormatException.class,()-> Dijkstra.getShortestPathTo(null));
     }
+
+    //TODO: тест для calculateNearestPath()
 }

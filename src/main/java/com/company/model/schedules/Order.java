@@ -1,12 +1,10 @@
 package com.company.model.schedules;
 
 import com.company.Exceptions.WrongTaskFormatException;
+import com.company.model.graph.Edge;
 import com.company.model.graph.Vertex;
 import com.company.model.graph.Graph;
 import com.company.controller.Dijkstra;
-import com.github.davidmoten.rtree.Entry;
-import com.github.davidmoten.rtree.geometry.Geometries;
-import com.github.davidmoten.rtree.geometry.Point;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -35,50 +33,133 @@ public class Order {
     }
 
     public Vertex calculateNearestVertex(Graph graph){
-        List<Entry<String, Point>> list = graph.getTree()
-                .search(Geometries.pointGeographic(lon, lat), 0.002).toList()
-                .toBlocking()
-                .single();
-
-        if(list.size() == 0) return null;
-
-        Entry<String, Point> nearest = list.get(0);
-        for(Entry<String, Point> temp: list){
-            if(
-                    Math.pow(temp.geometry().y()-lat,  2) + Math.pow(temp.geometry().x()-lon, 2) <
-                            Math.pow(nearest.geometry().y()-lat,  2) + Math.pow(nearest.geometry().x()-lon, 2)
-            )
-                nearest = temp;
-        }
-
-        return graph.getVertices().get(nearest.value());
+        return Dijkstra.calculateNearestVertex(graph, lon, lat);
     }
 
-    public void writePathAndTime(Graph graph, String fromStreetIdentifier) throws WrongTaskFormatException {
-
+    public List<Vertex> writePathAndTime(Graph graph, String fromStreetIdentifier) throws WrongTaskFormatException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);
+        List<Vertex> path;
 
-        Vertex fromVertex = calculateNearestVertex(graph);
-        Vertex toVertex = graph.getVertices().get(fromStreetIdentifier);
+        Vertex fromVertex = graph.getVertices().get(fromStreetIdentifier);
+        Vertex toVertex = calculateNearestVertex(graph);
 
-        if(fromVertex == null) throw new WrongTaskFormatException("destination is more than 200 meters away from delivery zone");
-        if(toVertex == null) throw new WrongTaskFormatException("no such points");
+        if(fromVertex == null) throw new WrongTaskFormatException("no such points");
+        if(toVertex == null) throw new WrongTaskFormatException("destination is more than 200 meters away from delivery zone");
         Dijkstra.computePath(fromVertex);
 
         if(toVertex.getMinDistance() == Double.MAX_VALUE){
             System.out.println("No such path");
-            return;
+            return new ArrayList<>();
         }
         System.out.println("Order time: " + formatter.format(date));
         System.out.print("path: ");
+        path = Dijkstra.getShortestPathTo(toVertex);
         Dijkstra.printVertexListAsPath(
-                Dijkstra.getShortestPathTo(toVertex)
+                path
         );
 
         System.out.println("Time required: " + toVertex.getMinDistance());
 
         System.out.println("Approximate delivery time:" + formatter.format(date.getTime() + toVertex.getMinDistance()*60000));
+
+        for(Vertex v: graph.getVertices().values()){
+            v.setMinDistance(Double.MAX_VALUE);
+            v.setPreviousVertex(null);
+        }
+        return path;
+    }
+
+    public List<Vertex> writePathAndTime(Graph graph, String[] fromStreetIdentifiers) throws WrongTaskFormatException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
+        formatter.setLenient(false);
+        Vertex toVertex = calculateNearestVertex(graph);
+        List<Vertex> path;
+
+        if (toVertex == null) throw new WrongTaskFormatException("destination is more than 200 meters away from delivery zone");
+
+        Vertex tmpVertex;
+        Vertex fromVertex = new Vertex("rofl");
+        fromVertex.setMinDistance(Double.MAX_VALUE);
+
+        for(String s: fromStreetIdentifiers) {
+            tmpVertex = graph.getVertices().get(s);
+            Dijkstra.computePath(tmpVertex);
+
+            if(tmpVertex.getMinDistance() <= fromVertex.getMinDistance())
+                fromVertex = tmpVertex;
+
+            for(Vertex v: graph.getVertices().values()){
+                v.setMinDistance(Double.MAX_VALUE);
+                v.setPreviousVertex(null);
+                v.setVisited(false);
+            }
+        }
+        Dijkstra.computePath(fromVertex);
+
+        if(fromVertex.getMinDistance() == Double.MAX_VALUE) throw new WrongTaskFormatException("no such points");
+
+        if(toVertex.getMinDistance() == Double.MAX_VALUE){
+            System.out.println("No such path");
+            return new ArrayList<>();
+        }
+        System.out.println("Order time: " + formatter.format(date));
+        System.out.print("path: ");
+
+        path = Dijkstra.getShortestPathTo(toVertex);
+        Dijkstra.printVertexListAsPath(
+                path
+        );
+
+        System.out.println("Time required: " + toVertex.getMinDistance());
+
+        System.out.println("Approximate delivery time:" + formatter.format(date.getTime() + toVertex.getMinDistance()*60000));
+
+        for(Vertex v: graph.getVertices().values()){
+            v.setMinDistance(Double.MAX_VALUE);
+            v.setPreviousVertex(null);
+            v.setVisited(false);
+        }
+        return path;
+    }
+
+    private <T> void mem(){
+
+    }
+
+    public <T> List<Vertex> write2PathsAndTime(Graph graph, T fromStreetIdentifier) throws WrongTaskFormatException {
+        List<Vertex> first;
+        if(fromStreetIdentifier instanceof String || fromStreetIdentifier instanceof String[]);
+            else throw new IllegalArgumentException("second arg must be either String, or String[]");
+        try {
+            first = writePathAndTime(graph, (String) fromStreetIdentifier);
+        }
+        catch (Exception e){
+            first = writePathAndTime(graph, (String[]) fromStreetIdentifier);
+            if(((String[]) fromStreetIdentifier).length == 0) throw new IllegalArgumentException("Empty string");
+        }
+
+        if(first.size() <=10) return first;
+
+        List<Edge> temp;
+        List<Vertex> second;
+        for(int i = 1; i < first.size(); ++i){
+            temp = first.get(i).getEdges();
+            first.get(i).setEdges(new ArrayList<>());
+            System.out.println();
+            try {
+                second = writePathAndTime(graph, (String) fromStreetIdentifier);
+            }
+            catch (Exception e){
+                second = writePathAndTime(graph, (String[]) fromStreetIdentifier);
+            }
+
+            first.get(i).setEdges(temp);
+            if(second.size() != 0){
+                return second;
+            }
+        }
+        return first;
     }
 
     @Override

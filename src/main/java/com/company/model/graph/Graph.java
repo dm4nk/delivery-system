@@ -3,6 +3,8 @@ package com.company.model.graph;
 import com.company.Exceptions.WrongGraphFormatException;
 import com.company.Exceptions.WrongTaskFormatException;
 import com.company.controller.GraphWriter;
+import com.company.model.schedules.Order;
+import com.company.model.schedules.OrdersSchedule;
 import com.company.model.schedules.Task;
 import com.company.controller.GraphReader;
 import com.company.controller.Dijkstra;
@@ -22,7 +24,6 @@ public class Graph {
         if(singleInstance == null){
             singleInstance = new Graph();
         }
-
         return singleInstance;
     }
 
@@ -101,5 +102,13 @@ public class Graph {
             System.out.println("NOT enough time! time required: " +
                     task.timeRequired() + toVertex.getMinDistance()
             );
+    }
+
+    public List<Vertex> writeBestPath(Order order, String restaurantStreetID) throws WrongTaskFormatException {
+        return order.writePathAndTime(this, restaurantStreetID);
+    }
+
+    public List<Vertex> writeBestPath(Order order, String[] restaurantStreetIDs) throws WrongTaskFormatException {
+        return order.writePathAndTime(this, restaurantStreetIDs);
     }
 }

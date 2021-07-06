@@ -25,11 +25,11 @@ public class TestOrdersParser {
         Assert.assertEquals(2, actual.size());
 
         Assert.assertEquals(formatter.parse("09-8-2018 15:16:03"), actual.getOrder("1").getDate());
-        Assert.assertEquals(-37.8007208, actual.getOrder("1").getLat(), Double.MIN_VALUE);
-        Assert.assertEquals(144.959719, actual.getOrder("1").getLon(), Double.MIN_VALUE);
+        Assert.assertEquals(144.959719, actual.getOrder("1").getLat(), Double.MIN_VALUE);
+        Assert.assertEquals(-37.8007208, actual.getOrder("1").getLon(), Double.MIN_VALUE);
 
         Assert.assertEquals(formatter.parse("08-02-2018 09:10:59"), actual.getOrder("2").getDate());
-        Assert.assertEquals(-37.8207999, actual.getOrder("2").getLat(), Double.MIN_VALUE);
-        Assert.assertEquals(144.9794147, actual.getOrder("2").getLon(), Double.MIN_VALUE);
+        Assert.assertEquals(144.9794147, actual.getOrder("2").getLat(), Double.MIN_VALUE);
+        Assert.assertEquals(-37.8207999, actual.getOrder("2").getLon(), Double.MIN_VALUE);
     }
 }
