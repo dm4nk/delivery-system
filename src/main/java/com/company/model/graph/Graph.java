@@ -4,7 +4,6 @@ import com.company.Exceptions.WrongGraphFormatException;
 import com.company.Exceptions.WrongTaskFormatException;
 import com.company.controller.GraphWriter;
 import com.company.model.schedules.Order;
-import com.company.model.schedules.OrdersSchedule;
 import com.company.model.schedules.Task;
 import com.company.controller.GraphReader;
 import com.company.controller.Dijkstra;
@@ -18,6 +17,7 @@ import java.util.*;
 public class Graph {
     private Map<String, Vertex> vertices = new HashMap<>();
     private RTree<String, Point> tree = RTree.star().maxChildren(4).create();
+
     private static Graph singleInstance = null;
 
     public static Graph getInstance(){
@@ -32,6 +32,8 @@ public class Graph {
     public  int size(){
         return vertices.size();
     }
+
+    //TODO: сделать граф мапой просто по идентификатору String и бакетом Vertex
 
     public void addVertex(String name) throws WrongGraphFormatException {
         if(vertices.put(name, new Vertex(name)) != null) throw new WrongGraphFormatException("such point already exists");
@@ -117,6 +119,6 @@ public class Graph {
     }
 
     public void visualize(){
-        tree.visualize(1920, 1080).save("target/mytree.png");;
+        tree.visualize(1920, 1080).save("target/mytree.png");
     }
 }

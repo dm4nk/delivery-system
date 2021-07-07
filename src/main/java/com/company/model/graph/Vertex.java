@@ -1,18 +1,19 @@
 package com.company.model.graph;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Vertex implements Comparable<Vertex> {
     private final String name;
-    private List<Edge> edges;
+    private List<Edge> edges;//TODO: через это тоже можно сделать рекуррентный вывод графа
     private boolean visited;
-    private Vertex previousVertex;
+    private Vertex previousVertex;//TODO: через эту штуку можно сделать рекурретный вывод графа в дейкстру
     private double minDistance = Double.MAX_VALUE;
 
     private final double lat;
     private final double lon;
+
+    //это должно отвратительно работать, если юудет больше 1 графа
+    static PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
 
     public Vertex(String name) {
         this.name = name;
@@ -74,6 +75,46 @@ public class Vertex implements Comparable<Vertex> {
 
     public double getLon(){
         return lon;
+    }
+
+    private void poll(){
+        double minDistance;
+
+        for (Edge edge : getEdges()) {
+            Vertex v = edge.getTargetVertex();
+            minDistance = getMinDistance() + edge.getWeight();
+
+            if (minDistance < v.getMinDistance()) {
+                priorityQueue.remove(this);
+                v.setPreviousVertex(this);
+                v.setMinDistance(minDistance);
+                priorityQueue.add(v);
+            }
+        }
+    }
+
+    public void computeMinPaths(){
+        setMinDistance(0);
+        priorityQueue.add(this);
+        while (!priorityQueue.isEmpty()) {
+            priorityQueue.poll().poll();
+        }
+    }
+
+    public Iterator<Vertex> iterator(Vertex target){
+        return new Iterator<Vertex>() {
+            Vertex next = target;
+            @Override
+            public boolean hasNext() {
+                return next.previousVertex != null;
+            }
+
+            @Override
+            public Vertex next() {
+                next = next.previousVertex;
+                return next;
+            }
+        };
     }
 
     @Override

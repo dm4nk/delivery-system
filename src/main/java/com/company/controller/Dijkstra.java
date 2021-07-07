@@ -1,7 +1,6 @@
 package com.company.controller;
 
 import com.company.Exceptions.WrongTaskFormatException;
-import com.company.model.graph.Edge;
 import com.company.model.graph.Graph;
 import com.company.model.graph.Vertex;
 import com.github.davidmoten.rtree.Entry;
@@ -9,52 +8,37 @@ import com.github.davidmoten.rtree.geometry.Geometries;
 import com.github.davidmoten.rtree.geometry.Point;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.PriorityQueue;
 
 public class Dijkstra {
 
     private Dijkstra(){}
 
-    //обязательно вызывается перед getShortestPathTo()
+    /**
+     * обязательно вызывается перед getShortestPathTo()
+     */
     public static void computePath(Vertex sourceVertex) throws WrongTaskFormatException {
-
         if(sourceVertex == null) throw new WrongTaskFormatException("no such point");
 
-        sourceVertex.setMinDistance(0);
-        PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
-        priorityQueue.add(sourceVertex);
-
-        while (!priorityQueue.isEmpty()) {
-            Vertex vertex = priorityQueue.poll();
-
-            for (Edge edge : vertex.getEdges()) {
-                Vertex v = edge.getTargetVertex();
-                double weight = edge.getWeight();
-                double minDistance = vertex.getMinDistance() + weight;
-
-                if (minDistance < v.getMinDistance()) {
-                    priorityQueue.remove(vertex);
-                    v.setPreviousVertex(vertex);
-                    v.setMinDistance(minDistance);
-                    priorityQueue.add(v);
-                }
-            }
-        }
+        sourceVertex.computeMinPaths();
     }
 
-    //перед применением необходимо вызвать функцию compute path и указать в качестве аргумента вершину,
-    //из которой хотим начать движание
-    //возвращает лист вершин - оптимальный путь - в обратном порядке
+    /**
+     * перед применением необходимо вызвать функцию compute path и указать в качестве аргумента вершину,
+     * из которой хотим начать движание
+     * возвращает лист вершин - оптимальный путь - в обратном порядке
+     */
     public static List<Vertex> getShortestPathTo(Vertex targetVertex) throws WrongTaskFormatException {
 
         if(targetVertex == null) throw new WrongTaskFormatException("no such point");
 
         List<Vertex> path = new ArrayList<>();
 
-        for (Vertex vertex = targetVertex; vertex != null; vertex = vertex.getPreviousVertex()) {
-            //System.out.println(vertex.getName());
-            path.add(vertex);
+        path.add(targetVertex);
+        Iterator<Vertex> it= targetVertex.iterator(targetVertex);
+        while(it.hasNext()){
+            path.add(it.next());
         }
 
         return path;
