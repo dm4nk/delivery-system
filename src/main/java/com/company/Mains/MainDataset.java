@@ -27,8 +27,6 @@ public class MainDataset {
         OrdersSchedule melbourneOrders = new OrdersSchedule();
         OrdersParser.parseTo(new File(path + "orders.json"), melbourneOrders);
 
-        //System.out.println(melbourneOrders.getOrder(0).calculateNearestVertex(Graph.getInstance()).getName());
-
         melbourneOrders.write2BestPathsFor(Graph.getInstance(), melbourneOrders.getOrder(0), restaurantStreetIDs);
 
         long end = System.currentTimeMillis();
