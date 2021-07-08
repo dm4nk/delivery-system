@@ -5,6 +5,8 @@ import com.company.model.graph.Vertex;
 import com.company.model.graph.Graph;
 
 public class GraphWriter {
+    private GraphWriter(){}
+
     public static void writeGraph(Graph graph){
 //        for(Vertex vertex : graph.getVertices().values())
 //            for (Edge edge: vertex.getEdges()){

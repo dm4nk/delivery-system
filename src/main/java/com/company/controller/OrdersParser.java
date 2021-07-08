@@ -14,9 +14,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class OrdersParser {
-    public static void parseTo(File file, OrdersSchedule ordersSchedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
+public class OrdersParser implements Parser {
+
+    public void parseTo(File file, Object schedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
+        if(!(schedule instanceof OrdersSchedule)) throw new IllegalArgumentException("schedule must be instance of OrdersSchedule");
         if(!file.getName().endsWith(".json")) throw new FileNotFoundException(file.getName() + " is not a json file");
+
+        OrdersSchedule ordersSchedule = (OrdersSchedule) schedule;
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);

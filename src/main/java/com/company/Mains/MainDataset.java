@@ -4,6 +4,7 @@ import com.company.controller.Dijkstra;
 import com.company.controller.OrdersParser;
 import com.company.Exceptions.WrongGraphFormatException;
 import com.company.Exceptions.WrongTaskFormatException;
+import com.company.controller.Parser;
 import com.company.model.graph.Graph;
 import com.company.model.graph.Vertex;
 import com.company.model.schedules.OrdersSchedule;
@@ -25,7 +26,9 @@ public class MainDataset {
         String[] restaurantStreetIDs = new String[]{NS.getName(), TP.getName(), BK.getName()};
 
         OrdersSchedule melbourneOrders = new OrdersSchedule();
-        OrdersParser.parseTo(new File(path + "orders.json"), melbourneOrders);
+
+        Parser parser = new OrdersParser();
+        parser.parseTo(new File(path + "orders.json"), melbourneOrders);
 
         melbourneOrders.write2BestPathsFor(Graph.getInstance(), melbourneOrders.getOrder(0), restaurantStreetIDs);
 

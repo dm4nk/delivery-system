@@ -10,6 +10,8 @@ import static java.lang.Math.sqrt;
 
 public class GraphReader {
 
+    private GraphReader(){}
+
     public static double[][]readGraph(String filename) throws IOException, WrongGraphFormatException {
         //позволяет считать числа, не зная их количество
         File file = new File(filename);

@@ -20,7 +20,8 @@ public class TestOrdersParser {
 
         OrdersSchedule actual = new OrdersSchedule();
 
-        OrdersParser.parseTo(new File(path + "testOrders.json"), actual);
+        Parser parser = new OrdersParser();
+        parser.parseTo(new File(path + "testOrders.json"), actual);
 
         Assert.assertEquals(2, actual.size());
 

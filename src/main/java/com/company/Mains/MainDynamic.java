@@ -1,7 +1,9 @@
 package com.company.Mains;
 
+import com.company.controller.Parser;
 import com.company.controller.TasksParser;
 import com.company.model.graph.Graph;
+import com.company.model.schedules.Task;
 import com.company.model.schedules.TasksSchedule;
 
 import java.io.File;
@@ -15,7 +17,8 @@ public class MainDynamic {
 
         TasksSchedule DelovieLinii = new TasksSchedule();
 
-        TasksParser.parseTo(new File(path + "tasks.json"), DelovieLinii);
+        Parser parser = new TasksParser();
+        parser.parseTo(new File(path + "tasks.json"), DelovieLinii);
 
         Graph mapOfSamaraOblast = Graph.getInstance();
 

@@ -16,10 +16,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class TasksParser {
-    public static void parseTo(File file, TasksSchedule tasksSchedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
-        if(!file.getName().endsWith(".json")) throw new FileNotFoundException("can not work with files except txt and json");
+public class TasksParser implements Parser {
 
+    public void parseTo(File file, Object schedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
+        if(!(schedule instanceof TasksSchedule)) throw new IllegalArgumentException("schedule must be instance of TasksSchedule");
+        if(!file.getName().endsWith(".json")) throw new FileNotFoundException("can not work with files except txt and json");
+        TasksSchedule tasksSchedule = (TasksSchedule) schedule;
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);
 
