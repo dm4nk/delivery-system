@@ -10,6 +10,7 @@ import com.github.davidmoten.rtree.geometry.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class Dijkstra {
 
@@ -17,6 +18,7 @@ public class Dijkstra {
 
     /**
      * обязательно вызывается перед getShortestPathTo()
+     * @param sourceVertex - откуда хотим идти
      */
     public static void computePath(Vertex sourceVertex) throws WrongTaskFormatException {
         if(sourceVertex == null) throw new WrongTaskFormatException("no such point");
@@ -28,6 +30,7 @@ public class Dijkstra {
      * перед применением необходимо вызвать функцию compute path и указать в качестве аргумента вершину,
      * из которой хотим начать движание
      * возвращает лист вершин - оптимальный путь - в обратном порядке
+     * @param targetVertex - куда хотим придти
      */
     public static List<Vertex> getShortestPathTo(Vertex targetVertex) throws WrongTaskFormatException {
 
@@ -36,7 +39,7 @@ public class Dijkstra {
         List<Vertex> path = new ArrayList<>();
 
         path.add(targetVertex);
-        Iterator<Vertex> it= targetVertex.iterator(targetVertex);
+        Iterator<Vertex> it= targetVertex.prevIterator(targetVertex);
         while(it.hasNext()){
             path.add(it.next());
         }
@@ -45,20 +48,15 @@ public class Dijkstra {
     }
 
     public static Vertex calculateNearestVertex(Graph graph, double lon, double lat){
-        List<Entry<String, Point>> list = graph.getTree()
-                .search(Geometries.pointGeographic(lon, lat), 0.002).toList()
-                .toBlocking()
-                .single();
-
-        if(list.size() == 0) return null;
-
-        Entry<String, Point> nearest = list.get(0);
-        for(Entry<String, Point> temp: list){
-            if(
-                    Math.pow(temp.geometry().y()-lat,  2) + Math.pow(temp.geometry().x()-lon, 2) <
-                            Math.pow(nearest.geometry().y()-lat,  2) + Math.pow(nearest.geometry().x()-lon, 2)
-            )
-                nearest = temp;
+        //todo: 4
+        Entry<String, Point> nearest;
+        try {
+            nearest = graph.getTree()
+                    .nearest(Geometries.pointGeographic(lon, lat), 0.002, 1)
+                    .toBlocking()
+                    .single();
+        } catch (NoSuchElementException e) {
+            return null;
         }
 
         return graph.getVertices().get(nearest.value());

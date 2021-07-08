@@ -4,15 +4,17 @@ import java.util.*;
 
 public class Vertex implements Comparable<Vertex> {
     private final String name;
-    private List<Edge> edges;//TODO: через это тоже можно сделать рекуррентный вывод графа
+    private List<Edge> edges;
     private boolean visited;
-    private Vertex previousVertex;//TODO: через эту штуку можно сделать рекурретный вывод графа в дейкстру
+    private Vertex previousVertex;
     private double minDistance = Double.MAX_VALUE;
 
     private final double lat;
     private final double lon;
 
-    //это должно отвратительно работать, если юудет больше 1 графа
+    /**
+     * это должно отвратительно работать, если будет больше 1 графа
+     */
     static PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
 
     public Vertex(String name) {
@@ -77,6 +79,7 @@ public class Vertex implements Comparable<Vertex> {
         return lon;
     }
 
+    //todo: 3
     private void poll(){
         double minDistance;
 
@@ -100,8 +103,8 @@ public class Vertex implements Comparable<Vertex> {
             priorityQueue.poll().poll();
         }
     }
-
-    public Iterator<Vertex> iterator(Vertex target){
+    //todo: 2
+    public Iterator<Vertex> prevIterator(Vertex target){
         return new Iterator<Vertex>() {
             Vertex next = target;
             @Override
@@ -115,6 +118,21 @@ public class Vertex implements Comparable<Vertex> {
                 return next;
             }
         };
+    }
+
+    /**
+     * никогда не вызывать этот метод
+     * ломает previousVertex
+     */
+    public void printGraph(){
+        for(Edge edge: this.getEdges()){
+            if(edge.getTargetVertex() == previousVertex) continue;
+            System.out.println(
+                        edge.getStartVertex().getName() + " --" + edge.getWeight() + "-> " + edge.getTargetVertex().getName()
+                );
+            edge.getTargetVertex().setPreviousVertex(this);
+            edge.getTargetVertex().printGraph();
+        }
     }
 
     @Override

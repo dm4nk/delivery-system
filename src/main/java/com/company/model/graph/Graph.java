@@ -33,11 +33,9 @@ public class Graph {
         return vertices.size();
     }
 
-    //TODO: сделать граф мапой просто по идентификатору String и бакетом Vertex
-
     public void addVertex(String name) throws WrongGraphFormatException {
         if(vertices.put(name, new Vertex(name)) != null) throw new WrongGraphFormatException("such point already exists");
-        tree = tree.add(name, Geometries.pointGeographic(180, 180));//TODO: затести эту хуйню
+        tree = tree.add(name, Geometries.pointGeographic(180, 180));
     }
 
     public Map<String, Vertex> getVertices() {
