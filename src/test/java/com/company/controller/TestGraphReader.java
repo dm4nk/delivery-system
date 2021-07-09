@@ -27,9 +27,9 @@ public class TestGraphReader {
         GraphReader.readGraph(path + "dataset/testNodes.csv", path + "dataset/testEdges.csv", actual);
 
         NotSingletonGraph expected = new NotSingletonGraph();
-        expected.addVertex("1", -37.8152153, 144.9749471);
-        expected.addVertex("2", -37.807675, 144.9558726);
-        expected.addVertex("3", -37.8070943, 144.9559785);
+        expected.addVertex("1", 144.9749471, -37.8152153);
+        expected.addVertex("2", 144.9558726, -37.807675);
+        expected.addVertex("3", 144.9559785, -37.8070943);
         expected.addEdge(0.06*58/15,"1", "2");
         expected.addEdge(0.06*15/20,"1", "3");
 

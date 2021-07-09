@@ -20,9 +20,9 @@ public class MainDataset {
         String path = "src\\main\\resources\\dataset\\";
         Graph.getInstance().readGraphFromFile(path + "nodes.csv", path + "edges.csv");
 
-        Vertex NS = Dijkstra.calculateNearestVertex(Graph.getInstance(), -37.7738026, 144.9836466);
-        Vertex TP = Dijkstra.calculateNearestVertex(Graph.getInstance(), -37.8618349, 144.905716);
-        Vertex BK = Dijkstra.calculateNearestVertex(Graph.getInstance(), -37.8158343, 145.04645);
+        Vertex NS = Dijkstra.calculateNearestVertex(Graph.getInstance(),  144.9836466, -37.7738026);
+        Vertex TP = Dijkstra.calculateNearestVertex(Graph.getInstance(),144.905716, -37.8618349);
+        Vertex BK = Dijkstra.calculateNearestVertex(Graph.getInstance(), 145.04645, -37.8158343);
         String[] restaurantStreetIDs = new String[]{NS.getName(), TP.getName(), BK.getName()};
 
         OrdersSchedule melbourneOrders = new OrdersSchedule();

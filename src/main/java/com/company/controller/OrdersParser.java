@@ -16,6 +16,7 @@ import java.util.*;
 
 public class OrdersParser implements Parser {
 
+    @Override
     public void parseTo(File file, Object schedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
         if(!(schedule instanceof OrdersSchedule)) throw new IllegalArgumentException("schedule must be instance of OrdersSchedule");
         if(!file.getName().endsWith(".json")) throw new FileNotFoundException(file.getName() + " is not a json file");
@@ -51,8 +52,8 @@ public class OrdersParser implements Parser {
                     (String) temp.get("id"),
                     new Order(
                             date,
-                            Double.parseDouble((String) temp.get("lat")),
-                            Double.parseDouble((String) temp.get("lon"))
+                            (Double) temp.get("lon"),
+                            (Double) temp.get("lat")
                     )
             );
         }

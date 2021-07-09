@@ -15,7 +15,7 @@ public class Vertex implements Comparable<Vertex> {
     /**
      * это должно отвратительно работать, если будет больше 1 графа
      */
-    static PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
+    //static PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
 
     public Vertex(String name) {
         this.name = name;
@@ -79,30 +79,29 @@ public class Vertex implements Comparable<Vertex> {
         return lon;
     }
 
-    //todo: 3
-    private void poll(){
-        double minDistance;
+    public void computeMinPaths(){
+        setMinDistance(0);
+        PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
+        priorityQueue.add(this);
 
-        for (Edge edge : getEdges()) {
-            Vertex v = edge.getTargetVertex();
-            minDistance = getMinDistance() + edge.getWeight();
+        while (!priorityQueue.isEmpty()) {
+            Vertex vertex = priorityQueue.poll();
 
-            if (minDistance < v.getMinDistance()) {
-                priorityQueue.remove(this);
-                v.setPreviousVertex(this);
-                v.setMinDistance(minDistance);
-                priorityQueue.add(v);
+            for (Edge edge : vertex.getEdges()) {
+                Vertex v = edge.getTargetVertex();
+                double weight = edge.getWeight();
+                double minDistance = vertex.getMinDistance() + weight;
+
+                if (minDistance < v.getMinDistance()) {
+                    priorityQueue.remove(vertex);
+                    v.setPreviousVertex(vertex);
+                    v.setMinDistance(minDistance);
+                    priorityQueue.add(v);
+                }
             }
         }
     }
 
-    public void computeMinPaths(){
-        setMinDistance(0);
-        priorityQueue.add(this);
-        while (!priorityQueue.isEmpty()) {
-            priorityQueue.poll().poll();
-        }
-    }
     //todo: 2
     public Iterator<Vertex> prevIterator(Vertex target){
         return new Iterator<Vertex>() {

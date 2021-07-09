@@ -51,6 +51,17 @@ public class Graph {
         tree = tree.add(name, Geometries.pointGeographic(lon, lat));
     }
 
+    public void removeVertex(String name){
+        if(!vertices.containsKey(name)) throw new NoSuchElementException("no vertex with such name");
+        Vertex removed = vertices.get(name);
+        for (Vertex v: vertices.values())
+            v.getEdges().removeIf(e -> e.getTargetVertex() == removed);
+
+        tree = tree.delete(name, Geometries.pointGeographic(removed.getLon(), removed.getLat()));
+
+        vertices.remove(name);
+    }
+
     public void addEdge(double weight, String sourceVertex, String targetVertex) throws WrongGraphFormatException {
         if(sourceVertex.equals(targetVertex)) throw new WrongGraphFormatException("source vertex equals to target vertex");
         if(weight<0)throw  new WrongGraphFormatException("negative weight");
@@ -66,6 +77,18 @@ public class Graph {
         catch (NullPointerException e){
             throw new WrongGraphFormatException("no such points");
         }
+    }
+
+    public void removeEdge(String sourceVertex, String targetVertex) {
+        Vertex target = vertices.getOrDefault(targetVertex, null);
+        Vertex source = vertices.getOrDefault(sourceVertex, null);
+        if(target == null || source == null) throw new NoSuchElementException("no vertex with such name");
+
+        for(Edge removed : source.getEdges()){
+            if(removed.getTargetVertex() == target) source.getEdges().remove(removed);
+            return;
+        }
+
     }
 
     public void readGraphFromFile(String filename) throws IOException, WrongGraphFormatException {

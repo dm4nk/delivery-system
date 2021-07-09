@@ -18,6 +18,7 @@ import java.util.Locale;
 
 public class TasksParser implements Parser {
 
+    @Override
     public void parseTo(File file, Object schedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
         if(!(schedule instanceof TasksSchedule)) throw new IllegalArgumentException("schedule must be instance of TasksSchedule");
         if(!file.getName().endsWith(".json")) throw new FileNotFoundException("can not work with files except txt and json");

@@ -48,8 +48,8 @@ public class GraphReader {
             while ((values = csvReader.readNext()) != null) {
                 graph.addVertex(
                         values[0],
-                        Double.parseDouble(values[1]),
-                        Double.parseDouble(values[2])
+                        Double.parseDouble(values[2]),
+                        Double.parseDouble(values[1])
                 );
             }
         }
