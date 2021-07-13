@@ -1,13 +1,13 @@
 package com.company.model.schedules;
 
 import com.company.Exceptions.WrongTaskFormatException;
-import com.company.controller.Dijkstra;
 import com.company.model.graph.Graph;
 import com.company.model.graph.Vertex;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class OrdersSchedule {
+public class OrdersSchedule implements Schedule, Serializable {
     Map orders;
     ArrayList<String> orderIDs;
 

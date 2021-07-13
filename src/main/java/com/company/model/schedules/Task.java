@@ -1,11 +1,13 @@
 package com.company.model.schedules;
 
 import com.company.Exceptions.WrongTaskFormatException;
+
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-public class Task {
+public class Task implements Serializable {
     static private SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
 
     private String from;

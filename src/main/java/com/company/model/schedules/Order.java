@@ -6,10 +6,11 @@ import com.company.model.graph.Vertex;
 import com.company.model.graph.Graph;
 import com.company.controller.Dijkstra;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Order {
+public class Order implements Serializable {
     Date date;
     double lat;
     double lon;

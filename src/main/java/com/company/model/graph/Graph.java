@@ -10,7 +10,6 @@ import com.company.controller.Dijkstra;
 import com.github.davidmoten.rtree.RTree;
 import com.github.davidmoten.rtree.geometry.Geometries;
 import com.github.davidmoten.rtree.geometry.Point;
-
 import java.io.IOException;
 import java.util.*;
 
@@ -54,8 +53,12 @@ public class Graph {
     public void removeVertex(String name){
         if(!vertices.containsKey(name)) throw new NoSuchElementException("no vertex with such name");
         Vertex removed = vertices.get(name);
-        for (Vertex v: vertices.values())
-            v.getEdges().removeIf(e -> e.getTargetVertex() == removed);
+//        for (Vertex v: vertices.values())
+//            v.getEdges().removeIf(e -> e.getTargetVertex() == removed);
+
+        vertices.values()
+                .stream()
+                .forEach(v -> v.getEdges().removeIf(e -> e.getTargetVertex() == removed));
 
         tree = tree.delete(name, Geometries.pointGeographic(removed.getLon(), removed.getLat()));
 

@@ -14,8 +14,5 @@ public class GraphWriter {
                         edge.getStartVertex().getName() + " --" + edge.getWeight() + "-> " + edge.getTargetVertex().getName()
                 );
             }
-        //todo: 1
-        //graph.getVertices().get("1449431623").printGraph();
-
     }
 }

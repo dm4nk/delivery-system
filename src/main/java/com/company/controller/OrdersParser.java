@@ -3,6 +3,7 @@ package com.company.controller;
 import com.company.Exceptions.WrongTaskFormatException;
 import com.company.model.schedules.Order;
 import com.company.model.schedules.OrdersSchedule;
+import com.company.model.schedules.Schedule;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,7 +18,7 @@ import java.util.*;
 public class OrdersParser implements Parser {
 
     @Override
-    public void parseTo(File file, Object schedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
+    public<T extends Schedule> void parseTo(File file, T schedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
         if(!(schedule instanceof OrdersSchedule)) throw new IllegalArgumentException("schedule must be instance of OrdersSchedule");
         if(!file.getName().endsWith(".json")) throw new FileNotFoundException(file.getName() + " is not a json file");
 

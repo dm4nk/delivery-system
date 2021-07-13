@@ -12,11 +12,6 @@ public class Vertex implements Comparable<Vertex> {
     private final double lat;
     private final double lon;
 
-    /**
-     * это должно отвратительно работать, если будет больше 1 графа
-     */
-    //static PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
-
     public Vertex(String name) {
         this.name = name;
         this.edges = new ArrayList<>();
@@ -117,21 +112,6 @@ public class Vertex implements Comparable<Vertex> {
                 return next;
             }
         };
-    }
-
-    /**
-     * никогда не вызывать этот метод
-     * ломает previousVertex
-     */
-    public void printGraph(){
-        for(Edge edge: this.getEdges()){
-            if(edge.getTargetVertex() == previousVertex) continue;
-            System.out.println(
-                        edge.getStartVertex().getName() + " --" + edge.getWeight() + "-> " + edge.getTargetVertex().getName()
-                );
-            edge.getTargetVertex().setPreviousVertex(this);
-            edge.getTargetVertex().printGraph();
-        }
     }
 
     @Override

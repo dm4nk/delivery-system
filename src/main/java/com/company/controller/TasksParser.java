@@ -1,6 +1,7 @@
 package com.company.controller;
 
 import com.company.Exceptions.WrongTaskFormatException;
+import com.company.model.schedules.Schedule;
 import com.company.model.schedules.Task;
 import com.company.model.schedules.TasksSchedule;
 import org.json.simple.JSONArray;
@@ -19,7 +20,7 @@ import java.util.Locale;
 public class TasksParser implements Parser {
 
     @Override
-    public void parseTo(File file, Object schedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
+    public <T extends Schedule> void parseTo(File file, T schedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
         if(!(schedule instanceof TasksSchedule)) throw new IllegalArgumentException("schedule must be instance of TasksSchedule");
         if(!file.getName().endsWith(".json")) throw new FileNotFoundException("can not work with files except txt and json");
         TasksSchedule tasksSchedule = (TasksSchedule) schedule;

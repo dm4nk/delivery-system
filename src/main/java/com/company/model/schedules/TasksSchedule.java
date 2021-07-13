@@ -3,9 +3,10 @@ package com.company.model.schedules;
 import com.company.Exceptions.WrongTaskFormatException;
 import com.company.model.graph.Graph;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TasksSchedule {
+public class TasksSchedule implements Schedule, Serializable {
     private ArrayList<Task> tasks;
 
     public TasksSchedule(ArrayList<Task> tasks){

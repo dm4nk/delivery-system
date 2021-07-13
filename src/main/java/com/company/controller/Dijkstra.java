@@ -48,7 +48,6 @@ public class Dijkstra {
     }
 
     public static Vertex calculateNearestVertex(Graph graph, double lon, double lat){
-        //todo: 4
         Entry<String, Point> nearest;
         try {
             nearest = graph.getTree()
