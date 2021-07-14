@@ -79,13 +79,14 @@ public class Vertex implements Comparable<Vertex> {
         PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
         priorityQueue.add(this);
 
+
+        double minDistance;
         while (!priorityQueue.isEmpty()) {
             Vertex vertex = priorityQueue.poll();
 
             for (Edge edge : vertex.getEdges()) {
                 Vertex v = edge.getTargetVertex();
-                double weight = edge.getWeight();
-                double minDistance = vertex.getMinDistance() + weight;
+                minDistance = vertex.getMinDistance() + edge.getWeight();
 
                 if (minDistance < v.getMinDistance()) {
                     priorityQueue.remove(vertex);
@@ -112,6 +113,11 @@ public class Vertex implements Comparable<Vertex> {
                 return next;
             }
         };
+    }
+
+    @Override
+    public String toString(){
+        return name;
     }
 
     @Override

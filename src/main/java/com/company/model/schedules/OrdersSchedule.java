@@ -30,20 +30,22 @@ public class OrdersSchedule implements Schedule, Serializable {
         orderIDs.add(orderID);
     }
 
-    public List<Vertex> writeBestPathFor(Graph graph, Order order, String restaurantStreetID) throws WrongTaskFormatException {
-        return order.writePathAndTime(graph, restaurantStreetID);
+    public List<Vertex> writeBestPathFor(Graph graph, Order order, Vertex fromRestaurant) throws WrongTaskFormatException {
+        return order.writePathAndTime(graph, fromRestaurant);
     }
 
-    public List<Vertex> writeBestPathFor(Graph graph, Order order, String[] restaurantStreetIDs) throws WrongTaskFormatException {
-        return order.writePathAndTime(graph, restaurantStreetIDs);
+    public List<Vertex> writeBestPathFor(Graph graph, Order order, List<Vertex> fromRestaurants) throws WrongTaskFormatException {
+        return order.writePathAndTime(graph, fromRestaurants);
     }
 
-    public List<Vertex> write2BestPathsFor(Graph graph, Order order, String restaurantStreetID) throws WrongTaskFormatException {
-        return order.write2PathsAndTime(graph, restaurantStreetID);
+    public List<Vertex> write2BestPathsFor(Graph graph, Order order, Vertex fromRestaurant) throws WrongTaskFormatException {
+        List vert = new ArrayList<Vertex>(1);
+        vert.add(fromRestaurant);
+        return order.write2PathsAndTime(graph, vert);
     }
 
-    public List<Vertex> write2BestPathsFor(Graph graph, Order order, String[] restaurantStreetIDs) throws WrongTaskFormatException {
-        return order.write2PathsAndTime(graph, restaurantStreetIDs);
+    public List<Vertex> write2BestPathsFor(Graph graph, Order order, List<Vertex> fromRestaurants) throws WrongTaskFormatException {
+        return order.write2PathsAndTime(graph, fromRestaurants);
     }
 
     public Order getOrder(String orderID){

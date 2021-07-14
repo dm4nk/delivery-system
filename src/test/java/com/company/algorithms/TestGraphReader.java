@@ -1,4 +1,4 @@
-package com.company.controller;
+package com.company.algorithms;
 
 import com.company.Exceptions.WrongGraphFormatException;
 import com.company.model.graph.Edge;

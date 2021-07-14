@@ -1,4 +1,4 @@
-package com.company.controller;
+package com.company.algorithms;
 
 import com.company.model.graph.Edge;
 import com.company.model.graph.Vertex;

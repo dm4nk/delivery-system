@@ -4,7 +4,7 @@ import com.company.Exceptions.WrongTaskFormatException;
 import com.company.model.graph.Edge;
 import com.company.model.graph.Vertex;
 import com.company.model.graph.Graph;
-import com.company.controller.Dijkstra;
+import com.company.algorithms.Dijkstra;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -34,15 +34,15 @@ public class Order implements Serializable {
     }
 
     public Vertex calculateNearestVertex(Graph graph){
-        return Dijkstra.calculateNearestVertex(graph, lon, lat);
+        return Dijkstra.calculateNearestVertexFromLatLon(graph, lon, lat);
     }
 
-    public List<Vertex> writePathAndTime(Graph graph, String fromStreetIdentifier) throws WrongTaskFormatException {
+    public List<Vertex> writePathAndTime(Graph graph, Vertex fromVertex) throws WrongTaskFormatException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);
         List<Vertex> path;
 
-        Vertex fromVertex = graph.getVertices().get(fromStreetIdentifier);
+        //Vertex fromVertex = graph.getVertices().get(fromStreetIdentifier);
         Vertex toVertex = calculateNearestVertex(graph);
 
         if(fromVertex == null) throw new WrongTaskFormatException("no such points");
@@ -71,7 +71,7 @@ public class Order implements Serializable {
         return path;
     }
 
-    public List<Vertex> writePathAndTime(Graph graph, String[] fromStreetIdentifiers) throws WrongTaskFormatException {
+    public List<Vertex> writePathAndTime(Graph graph, List<Vertex> fromVertexes) throws WrongTaskFormatException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);
         Vertex toVertex = calculateNearestVertex(graph);
@@ -84,11 +84,11 @@ public class Order implements Serializable {
         String fromStr = "";
         Double minPath = Double.MAX_VALUE;
 
-        for(String s: fromStreetIdentifiers) {
-            tmpVertex = graph.getVertices().get(s);
-            Dijkstra.computePath(tmpVertex);
+        for(Vertex tmp: fromVertexes) {
+            //tmpVertex = graph.getVertices().get(s);
+            Dijkstra.computePath(tmp);
             if(toVertex.getMinDistance() <= minPath) {
-                fromStr = tmpVertex.getName();
+                fromStr = tmp.getName();
                 minPath = toVertex.getMinDistance();
             }
 
@@ -127,19 +127,10 @@ public class Order implements Serializable {
         return path;
     }
 
-    public <T> List<Vertex> write2PathsAndTime(Graph graph, T fromStreetIdentifier) throws WrongTaskFormatException {
-        List<Vertex> first;
-        if(fromStreetIdentifier instanceof String || fromStreetIdentifier instanceof String[]);
-            else throw new IllegalArgumentException("second arg must be either String, or String[]");
-        try {
-            first = writePathAndTime(graph, (String) fromStreetIdentifier);
-        }
-        catch (Exception e){
-            first = writePathAndTime(graph, (String[]) fromStreetIdentifier);
-            if(((String[]) fromStreetIdentifier).length == 0) throw new IllegalArgumentException("Empty string");
-        }
-
-        if(first.size() <=10) return first;
+    public List<Vertex> write2PathsAndTime(Graph graph, List<Vertex> vertices) throws WrongTaskFormatException {
+        if(vertices.size() == 0) throw new WrongTaskFormatException("list is empty");
+        List<Vertex> first = writePathAndTime(graph, vertices);
+        if(first.size() <=10 || vertices.size() == 1) return first;
 
         List<Edge> temp;
         List<Vertex> second;
@@ -147,13 +138,7 @@ public class Order implements Serializable {
             temp = first.get(i).getEdges();
             first.get(i).setEdges(new ArrayList<>());
             System.out.println();
-            try {
-                second = writePathAndTime(graph, (String) fromStreetIdentifier);
-            }
-            catch (Exception e){
-                second = writePathAndTime(graph, (String[]) fromStreetIdentifier);
-            }
-
+            second = writePathAndTime(graph, vertices);
             first.get(i).setEdges(temp);
             if(second.size() != 0){
                 return second;

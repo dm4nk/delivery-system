@@ -1,10 +1,9 @@
-package com.company.controller;
+package com.company.algorithms;
 
 import com.company.Exceptions.WrongGraphFormatException;
 import com.company.Exceptions.WrongTaskFormatException;
 import com.company.model.graph.Vertex;
 import com.company.model.graph.NotSingletonGraph;
-import com.company.model.schedules.Order;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -74,9 +73,9 @@ public class TestDijkstra {
         graph.addVertex("1", 53.253709, 50.209983);
         graph.addVertex("2", 53.256407, 50.212732);
 
-        Vertex actual = Dijkstra.calculateNearestVertex(graph, 53.252608, 50.210996);
+        Vertex actual = Dijkstra.calculateNearestVertexFromLatLon(graph, 53.252608, 50.210996);
 
         Assert.assertEquals("1", actual.getName());
-        Assert.assertNull(Dijkstra.calculateNearestVertex(graph, 53.253554, 50.200895));
+        Assert.assertNull(Dijkstra.calculateNearestVertexFromLatLon(graph, 53.253554, 50.200895));
     }
 }

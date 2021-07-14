@@ -1,4 +1,4 @@
-package com.company.controller;
+package com.company.algorithms;
 
 import com.company.Exceptions.WrongTaskFormatException;
 import com.company.model.graph.Graph;
@@ -7,10 +7,7 @@ import com.github.davidmoten.rtree.Entry;
 import com.github.davidmoten.rtree.geometry.Geometries;
 import com.github.davidmoten.rtree.geometry.Point;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class Dijkstra {
 
@@ -28,9 +25,8 @@ public class Dijkstra {
 
     /**
      * перед применением необходимо вызвать функцию compute path и указать в качестве аргумента вершину,
-     * из которой хотим начать движание
-     * возвращает лист вершин - оптимальный путь - в обратном порядке
      * @param targetVertex - куда хотим придти
+     * @return кратчейший путь в обратном порядке
      */
     public static List<Vertex> getShortestPathTo(Vertex targetVertex) throws WrongTaskFormatException {
 
@@ -39,6 +35,7 @@ public class Dijkstra {
         List<Vertex> path = new ArrayList<>();
 
         path.add(targetVertex);
+
         Iterator<Vertex> it= targetVertex.prevIterator(targetVertex);
         while(it.hasNext()){
             path.add(it.next());
@@ -47,7 +44,11 @@ public class Dijkstra {
         return path;
     }
 
-    public static Vertex calculateNearestVertex(Graph graph, double lon, double lat){
+    /**
+     * Возвращает ближайшую точку в графе к указанным координатам
+     * @return null, если точка находится дальше 200 метров от карты
+     */
+    public static Vertex calculateNearestVertexFromLatLon(Graph graph, double lon, double lat){
         Entry<String, Point> nearest;
         try {
             nearest = graph.getTree()
@@ -61,15 +62,20 @@ public class Dijkstra {
         return graph.getVertices().get(nearest.value());
     }
 
+    /**
+     * @param vertices - результат работы метода getShortestPathTo(),чтобы красиво вывести путь в консоль
+     */
     public static void printVertexListAsPath(List<Vertex> vertices){
         if(vertices == null) {
             System.out.println("no such path: no routes to destination point");
             return;
         }
+        ListIterator it = vertices.listIterator(vertices.size()-1);
 
-        for (int i = vertices.size(); --i > 0;) {
-            System.out.print(vertices.get(i).getName() + " -> ");
-        }
-        System.out.println(vertices.get(0).getName());
+        System.out.print(vertices.get(vertices.size()-1));
+        while (it.hasPrevious())
+            System.out.print(" -> "+ it.previous().toString());
+
+        System.out.println();
     }
 }

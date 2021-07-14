@@ -1,4 +1,4 @@
-package com.company.controller;
+package com.company.algorithms;
 
 import com.company.Exceptions.WrongTaskFormatException;
 import com.company.model.schedules.Schedule;

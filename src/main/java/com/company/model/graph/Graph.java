@@ -2,11 +2,11 @@ package com.company.model.graph;
 
 import com.company.Exceptions.WrongGraphFormatException;
 import com.company.Exceptions.WrongTaskFormatException;
-import com.company.controller.GraphWriter;
+import com.company.algorithms.GraphWriter;
 import com.company.model.schedules.Order;
 import com.company.model.schedules.Task;
-import com.company.controller.GraphReader;
-import com.company.controller.Dijkstra;
+import com.company.algorithms.GraphReader;
+import com.company.algorithms.Dijkstra;
 import com.github.davidmoten.rtree.RTree;
 import com.github.davidmoten.rtree.geometry.Geometries;
 import com.github.davidmoten.rtree.geometry.Point;
@@ -50,6 +50,10 @@ public class Graph {
         tree = tree.add(name, Geometries.pointGeographic(lon, lat));
     }
 
+    public Vertex getVertex(String id){
+        return vertices.getOrDefault(id, null);
+    }
+
     public void removeVertex(String name){
         if(!vertices.containsKey(name)) throw new NoSuchElementException("no vertex with such name");
         Vertex removed = vertices.get(name);
@@ -57,7 +61,6 @@ public class Graph {
 //            v.getEdges().removeIf(e -> e.getTargetVertex() == removed);
 
         vertices.values()
-                .stream()
                 .forEach(v -> v.getEdges().removeIf(e -> e.getTargetVertex() == removed));
 
         tree = tree.delete(name, Geometries.pointGeographic(removed.getLon(), removed.getLat()));
@@ -130,16 +133,16 @@ public class Graph {
             );
     }
 
-    public List<Vertex> writeBestPath(Order order, String restaurantStreetID) throws WrongTaskFormatException {
-        return order.writePathAndTime(this, restaurantStreetID);
+    public List<Vertex> writeBestPath(Order order, Vertex fromVertex) throws WrongTaskFormatException {
+        return order.writePathAndTime(this, fromVertex);
     }
 
-    public List<Vertex> writeBestPath(Order order, String[] restaurantStreetIDs) throws WrongTaskFormatException {
-        return order.writePathAndTime(this, restaurantStreetIDs);
+    public List<Vertex> writeBestPath(Order order, List<Vertex> fromVertex) throws WrongTaskFormatException {
+        return order.writePathAndTime(this, fromVertex);
     }
 
-    public <T> List<Vertex> write2PathsAndTime(Order order, T fromStreetIdentifier) throws WrongTaskFormatException {
-        return order.write2PathsAndTime(this, fromStreetIdentifier);
+    public List<Vertex> write2PathsAndTime(Order order, List<Vertex> fromVertices) throws WrongTaskFormatException {
+        return order.write2PathsAndTime(this,fromVertices);
     }
 
     public void visualize(){
