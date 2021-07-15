@@ -81,24 +81,4 @@ public class Task implements Serializable {
     public String toString(){
         return from + " " + formatter.format(fromTime) + "\n" + to + " " + formatter.format(toTime);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return fromIndex == task.fromIndex &&
-                toIndex == task.toIndex &&
-                Double.compare(task.lat, lat) == 0 &&
-                Double.compare(task.len, len) == 0 &&
-                from.equals(task.from) &&
-                to.equals(task.to) &&
-                fromTime.equals(task.fromTime) &&
-                toTime.equals(task.toTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(from, to, fromIndex, toIndex, fromTime, toTime, lat, len);
-    }
 }

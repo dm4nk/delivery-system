@@ -41,10 +41,10 @@ public class TestGraphReader {
             for(int i = 0;  i < expected.getVertices().get(st).getEdges().size(); ++i){
                 Edge actualEdge = actual.getVertices().get(st).getEdges().get(i);
                 Edge expectedEdge = expected.getVertices().get(st).getEdges().get(i);
-                Assert.assertEquals(expectedEdge.hashCode(), actualEdge.hashCode());
+                Assert.assertTrue(expectedEdge.equals(actualEdge));
             }
 
-            Assert.assertEquals(expected.getVertices().get(st).hashCode(), actual.getVertices().get(st).hashCode());
+            Assert.assertTrue(expected.getVertices().get(st).equals(actual.getVertices().get(st)));
         }
 
         Assert.assertThrows(FileNotFoundException.class, ()-> GraphReader.readGraph(path + "dataset/testNodes.txt", path + "dataset/testEdges.csv", actual));

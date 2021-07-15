@@ -52,6 +52,7 @@ public class OrdersParser implements Parser {
             ordersSchedule.addOrder(
                     (String) temp.get("id"),
                     new Order(
+                            (String) temp.get("id"),
                             date,
                             (Double) temp.get("lon"),
                             (Double) temp.get("lat")

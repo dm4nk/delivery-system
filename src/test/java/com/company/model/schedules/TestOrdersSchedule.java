@@ -8,8 +8,8 @@ public class TestOrdersSchedule {
     @Test
     public void testAddOrder() throws WrongTaskFormatException {
         OrdersSchedule actual = new OrdersSchedule();
-        actual.addOrder("1", new Order(null, -1, -1));
+        actual.addOrder("1", new Order("1",null, -1, -1));
 
-        Assert.assertThrows(WrongTaskFormatException.class, ()->actual.addOrder("1", new Order(null, -4, -10)));
+        Assert.assertThrows(WrongTaskFormatException.class, ()->actual.addOrder("1", new Order("1", null, -4, -10)));
     }
 }

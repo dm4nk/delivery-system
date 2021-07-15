@@ -74,6 +74,10 @@ public class Vertex implements Comparable<Vertex> {
         return lon;
     }
 
+    public double getDistanceTo(Vertex vertex){
+        return Math.sqrt(Math.pow((lon - vertex.getLon()), 2) + Math.pow((lat - vertex.getLat()), 2));
+    }
+
     public void computeMinPaths(){
         setMinDistance(0);
         PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
@@ -98,7 +102,6 @@ public class Vertex implements Comparable<Vertex> {
         }
     }
 
-    //todo: 2
     public Iterator<Vertex> prevIterator(Vertex target){
         return new Iterator<Vertex>() {
             Vertex next = target;
@@ -137,10 +140,5 @@ public class Vertex implements Comparable<Vertex> {
                 Objects.equals(name, vertex.name) &&
                 Objects.equals(edges, vertex.edges) &&
                 Objects.equals(previousVertex, vertex.previousVertex);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, edges, lat, lon);
     }
 }

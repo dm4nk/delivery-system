@@ -43,13 +43,8 @@ public class Edge {
         if (o == null || getClass() != o.getClass()) return false;
         Edge edge = (Edge) o;
         return Double.compare(edge.weight, weight) == 0 &&
-                startVertex.equals(edge.startVertex) &&
-                targetVertex.equals(edge.targetVertex);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(weight, startVertex.getName(), targetVertex.getName());
+                startVertex.getName().equals(edge.startVertex.getName()) &&
+                targetVertex.getName().equals(edge.targetVertex.getName());
     }
 
     public void setWeight(double weight) {

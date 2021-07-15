@@ -31,11 +31,11 @@ public class OrdersSchedule implements Schedule, Serializable {
     }
 
     public List<Vertex> writeBestPathFor(Graph graph, Order order, Vertex fromRestaurant) throws WrongTaskFormatException {
-        return order.writePathAndTime(graph, fromRestaurant);
+        return order.writeBestPath(graph, fromRestaurant);
     }
 
     public List<Vertex> writeBestPathFor(Graph graph, Order order, List<Vertex> fromRestaurants) throws WrongTaskFormatException {
-        return order.writePathAndTime(graph, fromRestaurants);
+        return order.writeBestPath(graph, fromRestaurants);
     }
 
     public List<Vertex> write2BestPathsFor(Graph graph, Order order, Vertex fromRestaurant) throws WrongTaskFormatException {
