@@ -1,8 +1,8 @@
 package com.company.algorithms;
 
-import com.company.Exceptions.WrongTaskFormatException;
+import com.company.Exceptions.WrongOrderFormatException;
 import com.company.model.schedules.Order;
-import com.company.model.schedules.OrdersSchedule;
+import com.company.model.schedules.raw.OrdersSchedule;
 import com.company.model.schedules.Schedule;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,11 +18,8 @@ import java.util.*;
 public class OrdersParser implements Parser {
 
     @Override
-    public<T extends Schedule> void parseTo(File file, T schedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongTaskFormatException {
-        if(!(schedule instanceof OrdersSchedule)) throw new IllegalArgumentException("schedule must be instance of OrdersSchedule");
+    public<T extends Schedule> void parseTo(File file, T schedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongOrderFormatException {
         if(!file.getName().endsWith(".json")) throw new FileNotFoundException(file.getName() + " is not a json file");
-
-        OrdersSchedule ordersSchedule = (OrdersSchedule) schedule;
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);
@@ -49,8 +46,7 @@ public class OrdersParser implements Parser {
                 throw new ParseException("incorrect date format", 0);
             }
 
-            ordersSchedule.addOrder(
-                    (String) temp.get("id"),
+            schedule.addOrder(
                     new Order(
                             (String) temp.get("id"),
                             date,

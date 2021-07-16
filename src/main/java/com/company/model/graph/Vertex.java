@@ -26,6 +26,12 @@ public class Vertex implements Comparable<Vertex> {
         this.lon = lon;
     }
 
+    public void validate(){
+        minDistance = Double.MAX_VALUE;
+        previousVertex = null;
+        visited = false;
+    }
+
     public void addNeighbour(Edge edge) {
         this.edges.add(edge);
     }
@@ -82,7 +88,6 @@ public class Vertex implements Comparable<Vertex> {
         setMinDistance(0);
         PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
         priorityQueue.add(this);
-
 
         double minDistance;
         while (!priorityQueue.isEmpty()) {

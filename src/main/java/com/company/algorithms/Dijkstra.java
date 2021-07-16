@@ -1,6 +1,6 @@
 package com.company.algorithms;
 
-import com.company.Exceptions.WrongTaskFormatException;
+import com.company.Exceptions.WrongOrderFormatException;
 import com.company.model.graph.Graph;
 import com.company.model.graph.Vertex;
 import com.github.davidmoten.rtree.Entry;
@@ -17,8 +17,8 @@ public class Dijkstra {
      * обязательно вызывается перед getShortestPathTo()
      * @param sourceVertex - откуда хотим идти
      */
-    public static void computePath(Vertex sourceVertex) throws WrongTaskFormatException {
-        if(sourceVertex == null) throw new WrongTaskFormatException("no such point");
+    public static void computePath(Vertex sourceVertex) throws WrongOrderFormatException {
+        if(sourceVertex == null) throw new WrongOrderFormatException("no such point");
 
         sourceVertex.computeMinPaths();
     }
@@ -28,9 +28,9 @@ public class Dijkstra {
      * @param targetVertex - куда хотим придти
      * @return кратчейший путь в обратном порядке
      */
-    public static List<Vertex> getShortestPathTo(Vertex targetVertex) throws WrongTaskFormatException {
+    public static List<Vertex> getShortestPathTo(Vertex targetVertex) throws WrongOrderFormatException {
 
-        if(targetVertex == null) throw new WrongTaskFormatException("no such point");
+        if(targetVertex == null) throw new WrongOrderFormatException("no such point");
 
         List<Vertex> path = new ArrayList<>();
 

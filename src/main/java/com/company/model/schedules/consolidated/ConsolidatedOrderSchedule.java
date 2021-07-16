@@ -1,29 +1,25 @@
 package com.company.model.schedules.consolidated;
 
+import com.company.Exceptions.WrongOrderFormatException;
 import com.company.model.graph.Graph;
+import com.company.model.graph.Vertex;
+import com.company.model.schedules.Schedule;
 import com.company.model.schedules.Order;
-import com.company.model.schedules.OrdersSchedule;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.util.*;
 
-public class ConsolidatedOrderSchedule {
-    private List<Route> routes;
-
-    public ConsolidatedOrderSchedule(OrdersSchedule ordersSchedule){
-        routes = new ArrayList<>();
-        for(int i = 0; i < ordersSchedule.size(); ++i) {
-            addAsConsolidated(ordersSchedule.getOrder(i));
-        }
-    }
+public class ConsolidatedOrderSchedule implements Schedule {
+    private Queue<Route> routes;
 
     public ConsolidatedOrderSchedule(){
-        routes = new ArrayList<>();
+        routes = new LinkedList<>();
     }
 
-    public void addAsConsolidated(Order order){
+    @Override
+    public void addOrder(Order order){
         boolean isAdded = false;
-        order.setStreet(Graph.getInstance());//////////ujdyj
+        order.setStreet(Graph.getInstance());//todo: перенести это в конструктор ордеров и переписать всю прогу под это
         for(Route r : routes){
             if(r.add(order)){
                 isAdded = true;
@@ -37,10 +33,25 @@ public class ConsolidatedOrderSchedule {
         }
     }
 
+    @Override
+    public void removeOrder(){
+        routes.remove();//todo: test this
+    }
+
     public void writeOrders(){
         routes.forEach(r -> {
             r.writeRoute();
             System.out.println();
         });
+    }
+
+    public List<List<Vertex>> writeConsolidatedPaths(Graph graph, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
+        List<List<Vertex>> consolidatedPaths = new ArrayList<>();
+
+        while(!routes.isEmpty()){
+            System.out.println("\nRoute: ");
+            consolidatedPaths.add(routes.poll().writeBestPath(graph, fromVertices));
+        }
+        return consolidatedPaths;
     }
 }

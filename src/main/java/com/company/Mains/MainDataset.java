@@ -3,11 +3,11 @@ package com.company.Mains;
 import com.company.algorithms.Dijkstra;
 import com.company.algorithms.OrdersParser;
 import com.company.Exceptions.WrongGraphFormatException;
-import com.company.Exceptions.WrongTaskFormatException;
+import com.company.Exceptions.WrongOrderFormatException;
 import com.company.algorithms.Parser;
 import com.company.model.graph.Graph;
 import com.company.model.graph.Vertex;
-import com.company.model.schedules.OrdersSchedule;
+import com.company.model.schedules.raw.OrdersSchedule;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainDataset {
-    public static void main(String[] args) throws IOException, WrongGraphFormatException, ParseException, WrongTaskFormatException, org.json.simple.parser.ParseException {
+    public static void main(String[] args) throws IOException, WrongGraphFormatException, ParseException, WrongOrderFormatException, org.json.simple.parser.ParseException {
 
         String path = "src\\main\\resources\\dataset\\";
         Graph.getInstance().readGraphFromFile(path + "nodes.csv", path + "edges.csv");
@@ -36,6 +36,6 @@ public class MainDataset {
         Parser parser = new OrdersParser();
         parser.parseTo(new File(path + "orders.json"), melbourneOrders);
 
-        melbourneOrders.write2BestPathsFor(Graph.getInstance(), melbourneOrders.getOrder(0), restaurants);
+        melbourneOrders.write2BestPathsFor(Graph.getInstance(), melbourneOrders.getOrder("ORDA07176"), restaurants);
     }
 }

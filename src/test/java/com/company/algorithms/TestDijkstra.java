@@ -1,7 +1,7 @@
 package com.company.algorithms;
 
 import com.company.Exceptions.WrongGraphFormatException;
-import com.company.Exceptions.WrongTaskFormatException;
+import com.company.Exceptions.WrongOrderFormatException;
 import com.company.model.graph.Vertex;
 import com.company.model.graph.NotSingletonGraph;
 import org.junit.Assert;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class TestDijkstra {
     @Test
-    public void testComputePath() throws WrongGraphFormatException, WrongTaskFormatException {
+    public void testComputePath() throws WrongGraphFormatException, WrongOrderFormatException {
         NotSingletonGraph graph = new NotSingletonGraph();
 
         graph.addVertex("1");
@@ -37,7 +37,7 @@ public class TestDijkstra {
     }
 
     @Test
-    public void testGetShortestPathTo() throws WrongGraphFormatException, WrongTaskFormatException {
+    public void testGetShortestPathTo() throws WrongGraphFormatException, WrongOrderFormatException {
         NotSingletonGraph graph = new NotSingletonGraph();
 
         graph.addVertex("1");
@@ -62,8 +62,8 @@ public class TestDijkstra {
 
         Assert.assertArrayEquals(expected.toArray(), actual.toArray());
 
-        Assert.assertThrows(WrongTaskFormatException.class,()-> Dijkstra.computePath(null));
-        Assert.assertThrows(WrongTaskFormatException.class,()-> Dijkstra.getShortestPathTo(null));
+        Assert.assertThrows(WrongOrderFormatException.class,()-> Dijkstra.computePath(null));
+        Assert.assertThrows(WrongOrderFormatException.class,()-> Dijkstra.getShortestPathTo(null));
     }
 
     @Test

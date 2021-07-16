@@ -1,7 +1,7 @@
 package com.company.algorithms;
 
-import com.company.Exceptions.WrongTaskFormatException;
-import com.company.model.schedules.OrdersSchedule;
+import com.company.Exceptions.WrongOrderFormatException;
+import com.company.model.schedules.raw.OrdersSchedule;
 import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import java.util.Locale;
 
 public class TestOrdersParser {
     @Test
-    public void testParseTo() throws ParseException, java.text.ParseException, IOException, WrongTaskFormatException {
+    public void testParseTo() throws ParseException, java.text.ParseException, IOException, WrongOrderFormatException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);
         String path = "src\\test\\resources\\dataset\\";
@@ -25,11 +25,11 @@ public class TestOrdersParser {
 
         Assert.assertEquals(2, actual.size());
 
-        Assert.assertEquals(formatter.parse("09-8-2018 15:16:03"), actual.getOrder("1").getDate());
+        Assert.assertEquals(formatter.parse("09-8-2018 15:16:03"), actual.getOrder("1").getDispatchTime());
         Assert.assertEquals(-37.8007208, actual.getOrder("1").getLat(), Double.MIN_VALUE);
         Assert.assertEquals(144.959719, actual.getOrder("1").getLon(), Double.MIN_VALUE);
 
-        Assert.assertEquals(formatter.parse("08-02-2018 09:10:59"), actual.getOrder("2").getDate());
+        Assert.assertEquals(formatter.parse("08-02-2018 09:10:59"), actual.getOrder("2").getDispatchTime());
         Assert.assertEquals(-37.8207999, actual.getOrder("2").getLat(), Double.MIN_VALUE);
         Assert.assertEquals(144.9794147, actual.getOrder("2").getLon(), Double.MIN_VALUE);
     }

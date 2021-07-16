@@ -1,16 +1,16 @@
 package com.company.model.graph;
 
 import com.company.Exceptions.WrongGraphFormatException;
-import com.company.Exceptions.WrongTaskFormatException;
+import com.company.Exceptions.WrongOrderFormatException;
 import com.company.algorithms.GraphWriter;
 import com.company.model.schedules.Order;
-import com.company.model.schedules.Task;
 import com.company.algorithms.GraphReader;
 import com.company.algorithms.Dijkstra;
 import com.github.davidmoten.rtree.RTree;
 import com.github.davidmoten.rtree.geometry.Geometries;
 import com.github.davidmoten.rtree.geometry.Point;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -108,45 +108,21 @@ public class Graph {
         GraphWriter.writeGraph(this);
     }
 
-    public void writeBestPath(Task task) throws WrongTaskFormatException {
-        Vertex fromVertex = vertices.get(task.getFrom());
-        Vertex toVertex = vertices.get(task.getTo());
-
-        if(fromVertex == null || toVertex == null) throw new WrongTaskFormatException("no such points");
-
-        Dijkstra.computePath(fromVertex);
-
-        if(toVertex.getMinDistance() == Double.MAX_VALUE){
-            System.out.println("No such path");
-            return;
-        }
-        System.out.print("path: ");
-        Dijkstra.printVertexListAsPath(
-                Dijkstra.getShortestPathTo(toVertex)
-        );
-        if(toVertex.getMinDistance() < task.timeRequired())
-            System.out.println("time required: " + toVertex.getMinDistance());
-        else
-            System.out.println("NOT enough time! time required: " +
-                    task.timeRequired() + toVertex.getMinDistance()
-            );
-    }
-
-    public List<Vertex> writeBestPath(Order order, Vertex fromVertex) throws WrongTaskFormatException {
+    public List<Vertex> writeBestPath(Order order, Vertex fromVertex) throws WrongOrderFormatException, ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);
         List<Vertex> path;
         Vertex toVertex = order.calculateNearestVertex(this);
 
-        if(fromVertex == null) throw new WrongTaskFormatException("no such points");
-        if(toVertex == null) throw new WrongTaskFormatException("destination is more than 200 meters away from delivery zone");
+        if(fromVertex == null) throw new WrongOrderFormatException("no such points");
+        if(toVertex == null) throw new WrongOrderFormatException("destination is more than 200 meters away from delivery zone");
         Dijkstra.computePath(fromVertex);
 
         if(toVertex.getMinDistance() == Double.MAX_VALUE){
             System.out.println("No such path");
             return new ArrayList<>();
         }
-        System.out.println("Order time: " + formatter.format(order.getDate()));
+        System.out.println("Dispatch time: " + formatter.format(order.getDispatchTime()));
         System.out.print("path: ");
         path = Dijkstra.getShortestPathTo(toVertex);
         Dijkstra.printVertexListAsPath(
@@ -155,25 +131,25 @@ public class Graph {
 
         System.out.println("Time required: " + toVertex.getMinDistance());
 
-        System.out.println("Approximate delivery time:" + formatter.format(order.getDate().getTime() + toVertex.getMinDistance()*60000));
+        order.setArrivalTime(formatter.parse(formatter.format(order.getDispatchTime().getTime() + toVertex.getMinDistance()*60000)));
+        System.out.println("Approximate delivery time: " + formatter.format(order.getArrivalTime()));
 
         for(Vertex v: this.getVertices().values()){
-            v.setMinDistance(Double.MAX_VALUE);
-            v.setPreviousVertex(null);
+            v.validate();
         }
         return path;
     }
 
-    public List<Vertex> writeBestPath(Order order, List<Vertex> fromVertices) throws WrongTaskFormatException {
+    public List<Vertex> writeBestPath(Order order, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);
         Vertex toVertex = order.calculateNearestVertex(this);
         List<Vertex> path;
 
-        if (toVertex == null) throw new WrongTaskFormatException("destination is more than 200 meters away from delivery zone");
+        if (toVertex == null) throw new WrongOrderFormatException("destination is more than 200 meters away from delivery zone");
 
         String fromStr = "";
-        Double minPath = Double.MAX_VALUE;
+        double minPath = Double.MAX_VALUE;
 
         for(Vertex tmp: fromVertices) {
             Dijkstra.computePath(tmp);
@@ -183,22 +159,20 @@ public class Graph {
             }
 
             for(Vertex v: getVertices().values()){
-                v.setMinDistance(Double.MAX_VALUE);
-                v.setPreviousVertex(null);
-                v.setVisited(false);
+                v.validate();
             }
         }
 
         Vertex fromVertex = getVertices().get(fromStr);
         Dijkstra.computePath(fromVertex);
 
-        if(fromVertex.getMinDistance() == Double.MAX_VALUE) throw new WrongTaskFormatException("no such points");
+        if(fromVertex.getMinDistance() == Double.MAX_VALUE) throw new WrongOrderFormatException("no such points");
 
         if(toVertex.getMinDistance() == Double.MAX_VALUE){
             System.out.println("No such path");
             return new ArrayList<>();
         }
-        System.out.println("Order time: " + formatter.format(order.getDate()));
+        System.out.println("Dispatch time: " + formatter.format(order.getDispatchTime()));
         System.out.print("path: ");
 
         path = Dijkstra.getShortestPathTo(toVertex);
@@ -208,18 +182,17 @@ public class Graph {
 
         System.out.println("Time required: " + toVertex.getMinDistance());
 
-        System.out.println("Approximate delivery time:" + formatter.format(order.getDate().getTime() + toVertex.getMinDistance()*60000));
+        order.setArrivalTime(formatter.parse(formatter.format(order.getDispatchTime().getTime() + toVertex.getMinDistance()*60000)));
+        System.out.println("Approximate delivery time: " + formatter.format(order.getArrivalTime()));
 
         for(Vertex v: getVertices().values()){
-            v.setMinDistance(Double.MAX_VALUE);
-            v.setPreviousVertex(null);
-            v.setVisited(false);
+            v.validate();
         }
         return path;
     }
 
-    public List<Vertex> write2PathsAndTime(Order order, List<Vertex> fromVertices) throws WrongTaskFormatException {
-        if(fromVertices.size() == 0) throw new WrongTaskFormatException("list is empty");
+    public List<Vertex> write2PathsAndTime(Order order, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
+        if(fromVertices.size() == 0) throw new WrongOrderFormatException("list is empty");
         List<Vertex> first = writeBestPath(order, fromVertices);
         if(first.size() <=10 || vertices.size() == 1) return first;
 
