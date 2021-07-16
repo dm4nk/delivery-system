@@ -19,7 +19,7 @@ public class ConsolidatedOrderSchedule implements Schedule {
     @Override
     public void addOrder(Order order){
         boolean isAdded = false;
-        order.setStreet(Graph.getInstance());//todo: перенести это в конструктор ордеров и переписать всю прогу под это
+        //order.setStreet(Graph.getInstance());//todo: перенести это в конструктор ордеров и переписать всю прогу под это
         for(Route r : routes){
             if(r.add(order)){
                 isAdded = true;
@@ -33,9 +33,12 @@ public class ConsolidatedOrderSchedule implements Schedule {
         }
     }
 
-    @Override
-    public void removeOrder(){
-        routes.remove();//todo: test this
+    public void removeRoute(){
+        routes.remove();
+    }
+
+    public Route pollRoute(){
+        return routes.poll();
     }
 
     public void writeOrders(){

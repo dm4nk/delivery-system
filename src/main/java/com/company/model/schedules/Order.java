@@ -67,6 +67,10 @@ public class Order implements Serializable {
         return lon;
     }
 
+    public double getDistanceTo(Order order){
+        return Math.sqrt(Math.pow((lon - order.getLon()), 2) + Math.pow((lat - order.getLat()), 2));
+    }
+
     public Vertex calculateNearestVertex(Graph graph){
         return Dijkstra.calculateNearestVertexFromLatLon(graph, lon, lat);
     }
