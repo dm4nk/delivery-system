@@ -8,6 +8,8 @@ import com.company.algorithms.Parser;
 import com.company.model.graph.Graph;
 import com.company.model.graph.Vertex;
 import com.company.model.schedules.Schedule;
+import com.company.model.schedules.ScheduleFactory;
+import com.company.model.schedules.ScheduleType;
 import com.company.model.schedules.raw.OrdersSchedule;
 import com.company.model.schedules.consolidated.ConsolidatedOrderSchedule;
 import org.json.simple.parser.ParseException;
@@ -32,10 +34,15 @@ public class MainTemp {
         restaurants.add(TP);
         restaurants.add(BK);
 
-        ConsolidatedOrderSchedule schedule = new ConsolidatedOrderSchedule();
-        Parser parser = new OrdersParser();
-        parser.parseTo(new File(path + "other\\consOrders.json"), schedule);
+        //ConsolidatedOrderSchedule schedule = new ConsolidatedOrderSchedule();
+        ScheduleFactory factory = new ScheduleFactory();
+        factory.setFactoryType(ScheduleType.CONSOLIDATED);
+        Schedule schedule = factory.createSchedule();
 
-        schedule.writeConsolidatedPaths(Graph.getInstance(), restaurants);
+        Parser parser = new OrdersParser();
+        parser.parseTo(new File(path + "dataset\\consOrders.json"), schedule);
+
+        //schedule.writeConsolidatedPaths(Graph.getInstance(), restaurants);
+        schedule.writePaths(Graph.getInstance(), restaurants);
     }
 }

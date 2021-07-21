@@ -20,9 +20,9 @@ public class TestConsolidatedOrderSchedule {
         Parser parser = new OrdersParser();
         parser.parseTo(new File(path + "other\\TestConsOrders.json"), actual);
 
-        Assert.assertEquals(3, actual.pollRoute().size());
-        Assert.assertEquals(1, actual.pollRoute().size());
-        Assert.assertEquals(1, actual.pollRoute().size());
-        Assert.assertEquals(2, actual.pollRoute().size());
+        Assert.assertEquals(3, actual.getRoute(0).size());
+        Assert.assertEquals(1, actual.getRoute(1).size());
+        Assert.assertEquals(1, actual.getRoute(2).size());
+        Assert.assertEquals(2, actual.getRoute(3).size());
     }
 }

@@ -34,6 +34,14 @@ public class OrdersSchedule implements Schedule, Serializable {
         orderIDs.add(order.getId());
     }
 
+    @Override
+    public void writePaths(Graph graph, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
+        for(Order o : orders.values()) {
+            System.out.println("\nOrder: ");
+            write2BestPathsFor(graph, o, fromVertices);
+        }
+    }
+
     public List<Vertex> writeBestPathFor(Graph graph, Order order, Vertex fromRestaurant) throws WrongOrderFormatException, ParseException {
         return order.writeBestPath(graph, fromRestaurant);
     }
