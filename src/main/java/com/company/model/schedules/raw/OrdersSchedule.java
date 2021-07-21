@@ -12,7 +12,7 @@ import java.util.*;
 
 public class OrdersSchedule implements Schedule, Serializable {
     Map<String, Order> orders;
-    Queue<String> orderIDs;
+    List<String> orderIDs;
 
     public OrdersSchedule(Map<String, Order> orders, LinkedList<String> orderIDs){
         this.orders = orders;
@@ -62,5 +62,9 @@ public class OrdersSchedule implements Schedule, Serializable {
 
     public Order getOrder(String orderID){
         return orders.get(orderID);
+    }
+
+    public Order getOrder(int index){
+        return orders.get(orderIDs.get(index));
     }
 }

@@ -5,6 +5,7 @@ import com.company.model.graph.Graph;
 import com.company.model.graph.Vertex;
 import com.company.model.schedules.Schedule;
 import com.company.model.schedules.Order;
+import com.company.model.schedules.raw.OrdersSchedule;
 
 import java.text.ParseException;
 import java.util.*;
@@ -16,9 +17,16 @@ public class ConsolidatedOrderSchedule implements Schedule {
         routes = new LinkedList<>();
     }
 
+    public ConsolidatedOrderSchedule(OrdersSchedule ordersSchedule){
+        routes = new LinkedList<>();
+        for(int i = 0; i < ordersSchedule.size(); ++i){
+            addOrder(ordersSchedule.getOrder(i));
+        }
+    }
+
     //todo: отдельный консолидатор
 
-    //todo: класс, который создает рут
+    //todo: класс, который создает рут бля а зачем можно же конструктор сделать?
 
     //find root. get root галочка
     //покрасивее оформить addOrder() галочка

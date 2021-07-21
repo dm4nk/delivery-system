@@ -29,7 +29,7 @@ public class Route {
         return true;
     }
 
-    public Order getOrder(int i){
+    public Order getRoute(int i){
         return route.get(i);
     }
 
