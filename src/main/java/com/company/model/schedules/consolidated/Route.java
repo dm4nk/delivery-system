@@ -29,11 +29,8 @@ public class Route {
         return true;
     }
 
-    public double calculateDistanceToLastOrder(Graph graph, Order order){
-        route.get(route.size()-1).getVertex().computeMinPaths();
-        double res = order.getVertex().getMinDistance();
-        graph.validate();
-        return res;
+    public double calculateDistanceToLastOrder(Order order){
+        return route.get(route.size()-1).getDistanceTo(order);
     }
 
     public Order getOrder(int i){
@@ -60,8 +57,9 @@ public class Route {
             route.get(i).setVertex(graph);
             System.out.println();
             route.get(i).setDispatchTime(route.get(i-1).getArrivalTime());
-            path.addAll( route.get(i).writeBestPath(graph, fromStreet));
+            path.addAll(route.get(i).writeBestPath(graph, fromStreet));
             fromStreet = route.get(i).getVertex();
+            route.get(i).setVertex(graph);
         }
 
         route = null;

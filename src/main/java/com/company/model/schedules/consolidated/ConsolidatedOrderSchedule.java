@@ -27,18 +27,17 @@ public class ConsolidatedOrderSchedule implements Schedule {
     @Override
     public void addOrder(Graph graph, Order order) throws WrongOrderFormatException {
         order.setVertex(graph);
-
         double minDistance = Double.MAX_VALUE;
         Route minDistanceRoot = null;
         for (Route r : routes) {
-            if (r.calculateDistanceToLastOrder(graph, order) < minDistance) {
-                minDistance = r.calculateDistanceToLastOrder(graph, order);
+            if (r.calculateDistanceToLastOrder(order) < minDistance) {
+                minDistance = r.calculateDistanceToLastOrder(order);
                 minDistanceRoot = r;
             }
         }
 
         if(minDistanceRoot == null) routes.add(new Route(order));
-        else if(minDistance < 15 && minDistanceRoot.add(order));
+        else if(minDistance < 0.05 && minDistanceRoot.add(order));//в пределах 5 км
         else routes.add(new Route(order));
     }
 

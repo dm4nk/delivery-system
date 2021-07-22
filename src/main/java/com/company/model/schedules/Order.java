@@ -14,7 +14,6 @@ public class Order implements Serializable {
     private Date arrivalTime;
     private final double lat;
     private final double lon;
-
     private Vertex street = null;
 
     public Order(String id, Date dispatchTime, double lon, double lat){

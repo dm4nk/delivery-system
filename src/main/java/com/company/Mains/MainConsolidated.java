@@ -15,10 +15,12 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainConsolidated {
     public static void main(String[] args) throws WrongGraphFormatException, IOException, ParseException, java.text.ParseException, WrongOrderFormatException {
+        Date sart = new Date();
 
         String path = "src\\main\\resources\\";
         Graph.getInstance().readGraphFromFile(path + "dataset\\nodes.csv", path + "dataset\\edges.csv");
@@ -40,5 +42,8 @@ public class MainConsolidated {
         parser.parseTo(new File(path + "dataset\\consOrders.json"), schedule, Graph.getInstance());
 
         schedule.writePaths(Graph.getInstance(), restaurants);
+
+        Date end = new Date();
+        System.out.println("\nTIME: " + (end.getTime() - sart.getTime())/1000d);
     }
 }

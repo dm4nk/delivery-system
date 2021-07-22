@@ -128,12 +128,14 @@ public class Graph {
         if(toVertex == null) throw new WrongOrderFormatException("destination is more than 200 meters away from delivery zone");
         Dijkstra.computePath(fromVertex);
 
+        System.out.println(order.getId() + ": ");
+
         if(toVertex.getMinDistance() == Double.MAX_VALUE){
             System.out.println("No such path");
             return new ArrayList<>();
         }
         System.out.println("Dispatch time: " + formatter.format(order.getDispatchTime()));
-        System.out.print("path: ");
+        System.out.print("Path: ");
         path = Dijkstra.getShortestPathTo(toVertex);
         Dijkstra.printVertexListAsPath(
                 path
@@ -156,6 +158,8 @@ public class Graph {
         List<Vertex> path;
 
         if (toVertex == null) throw new WrongOrderFormatException("destination is more than 200 meters away from delivery zone");
+
+        System.out.println(order.getId() + ": ");
 
         String fromStr = "";
         double minPath = Double.MAX_VALUE;
@@ -180,7 +184,7 @@ public class Graph {
             return new ArrayList<>();
         }
         System.out.println("Dispatch time: " + formatter.format(order.getDispatchTime()));
-        System.out.print("path: ");
+        System.out.print("Path: ");
 
         path = Dijkstra.getShortestPathTo(toVertex);
         Dijkstra.printVertexListAsPath(
