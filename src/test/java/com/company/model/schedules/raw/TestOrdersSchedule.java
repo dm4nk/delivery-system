@@ -1,17 +1,23 @@
 package com.company.model.schedules.raw;
 
+import com.company.Exceptions.WrongGraphFormatException;
 import com.company.Exceptions.WrongOrderFormatException;
+import com.company.model.graph.NotSingletonGraph;
 import com.company.model.schedules.Order;
-import com.company.model.schedules.raw.OrdersSchedule;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class TestOrdersSchedule {
     @Test
-    public void testAddOrder() throws WrongOrderFormatException {
+    public void testAddOrder() throws WrongOrderFormatException, WrongGraphFormatException {
         OrdersSchedule actual = new OrdersSchedule();
-        actual.addOrder(new Order("1",null, -1, -1));
+        NotSingletonGraph graph = new NotSingletonGraph();
+        graph.addVertex("1", -1, -1);
+        graph.addVertex("2", -4, -10);
 
-        Assert.assertThrows(WrongOrderFormatException.class, ()->actual.addOrder(new Order("1", null, -4, -10)));
+        actual.addOrder(graph, new Order("1",null, -1, -1));
+
+        Assert.assertThrows(WrongOrderFormatException.class, ()->actual.addOrder(graph, new Order("1", null, -4, -10)));
+        Assert.assertThrows(WrongOrderFormatException.class, ()->actual.addOrder(graph, new Order("2", null, -4, -100)));
     }
 }

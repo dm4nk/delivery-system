@@ -17,30 +17,29 @@ public class ConsolidatedOrderSchedule implements Schedule {
         routes = new LinkedList<>();
     }
 
-    public ConsolidatedOrderSchedule(OrdersSchedule ordersSchedule){
+    public ConsolidatedOrderSchedule(Graph graph, OrdersSchedule ordersSchedule) throws WrongOrderFormatException {
         routes = new LinkedList<>();
         for(int i = 0; i < ordersSchedule.size(); ++i){
-            addOrder(ordersSchedule.getOrder(i));
+            addOrder(graph, ordersSchedule.getOrder(i));
         }
     }
 
-    //todo: отдельный консолидатор
-
-    //todo: класс, который создает рут бля а зачем можно же конструктор сделать?
-
-    //find root. get root галочка
-    //покрасивее оформить addOrder() галочка
-    //фабрика, которая создает consOrders в зависимости от параметра галочка
-
     @Override
-    public void addOrder(Order order){
-        //order.setStreet(Graph.getInstance());//todo: перенести это в конструктор ордеров и переписать всю прогу под это
-        for(Route r : routes)
-            if(r.add(order)) return;
+    public void addOrder(Graph graph, Order order) throws WrongOrderFormatException {
+        order.setVertex(graph);
 
-        Route tmp = new Route();
-        tmp.add(order);
-        routes.add(tmp);
+        double minDistance = Double.MAX_VALUE;
+        Route minDistanceRoot = null;
+        for (Route r : routes) {
+            if (r.calculateDistanceToLastOrder(graph, order) < minDistance) {
+                minDistance = r.calculateDistanceToLastOrder(graph, order);
+                minDistanceRoot = r;
+            }
+        }
+
+        if(minDistanceRoot == null) routes.add(new Route(order));
+        else if(minDistance < 15 && minDistanceRoot.add(order));
+        else routes.add(new Route(order));
     }
 
     @Override

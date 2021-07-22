@@ -32,15 +32,20 @@ public class Order implements Serializable {
         return street != null;
     }
 
-    public Vertex getStreet() {
+    public Vertex getVertex() {
         return street;
     }
 
     /**
-     * выставляет нужно значение поля street
+     * выставляет точку, на которую нужно привести заказ
      */
-    public void setStreet(Graph graph){
+    public void setVertex(Graph graph) throws WrongOrderFormatException {
         street = calculateNearestVertex(graph);
+        if(street == null) throw new WrongOrderFormatException("Order is more than 200 meters away from delivery zone");
+    }
+
+    public double timeRequired(){
+        return (arrivalTime.getTime() - dispatchTime.getTime())/(double)60000;
     }
 
     public Date getDispatchTime() {
@@ -71,7 +76,7 @@ public class Order implements Serializable {
         return Math.sqrt(Math.pow((lon - order.getLon()), 2) + Math.pow((lat - order.getLat()), 2));
     }
 
-    public Vertex calculateNearestVertex(Graph graph){
+    private Vertex calculateNearestVertex(Graph graph){
         return Dijkstra.calculateNearestVertexFromLatLon(graph, lon, lat);
     }
 

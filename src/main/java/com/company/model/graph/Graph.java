@@ -108,11 +108,21 @@ public class Graph {
         GraphWriter.writeGraph(this);
     }
 
+    /**
+     * нужно вызывать после любой работы с графом по вычислению путей.
+     * Выставлет поля в Vertex по умолчанию
+     */
+    public void validate(){
+        for(Vertex v: vertices.values())
+            v.validate();
+    }
+
     public List<Vertex> writeBestPath(Order order, Vertex fromVertex) throws WrongOrderFormatException, ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);
         List<Vertex> path;
-        Vertex toVertex = order.calculateNearestVertex(this);
+        //Vertex toVertex = order.calculateNearestVertex(this);
+        Vertex toVertex = order.getVertex();
 
         if(fromVertex == null) throw new WrongOrderFormatException("no such points");
         if(toVertex == null) throw new WrongOrderFormatException("destination is more than 200 meters away from delivery zone");
@@ -134,16 +144,15 @@ public class Graph {
         order.setArrivalTime(formatter.parse(formatter.format(order.getDispatchTime().getTime() + toVertex.getMinDistance()*60000)));
         System.out.println("Approximate delivery time: " + formatter.format(order.getArrivalTime()));
 
-        for(Vertex v: this.getVertices().values()){
-            v.validate();
-        }
+        validate();
         return path;
     }
 
     public List<Vertex> writeBestPath(Order order, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);
-        Vertex toVertex = order.calculateNearestVertex(this);
+        //Vertex toVertex = order.calculateNearestVertex(this);
+        Vertex toVertex = order.getVertex();
         List<Vertex> path;
 
         if (toVertex == null) throw new WrongOrderFormatException("destination is more than 200 meters away from delivery zone");
@@ -158,9 +167,7 @@ public class Graph {
                 minPath = toVertex.getMinDistance();
             }
 
-            for(Vertex v: getVertices().values()){
-                v.validate();
-            }
+            validate();
         }
 
         Vertex fromVertex = getVertices().get(fromStr);
@@ -185,9 +192,7 @@ public class Graph {
         order.setArrivalTime(formatter.parse(formatter.format(order.getDispatchTime().getTime() + toVertex.getMinDistance()*60000)));
         System.out.println("Approximate delivery time: " + formatter.format(order.getArrivalTime()));
 
-        for(Vertex v: getVertices().values()){
-            v.validate();
-        }
+        validate();
         return path;
     }
 

@@ -1,8 +1,11 @@
 package com.company.model.schedules.consolidated;
 
+import com.company.Exceptions.WrongGraphFormatException;
 import com.company.Exceptions.WrongOrderFormatException;
 import com.company.algorithms.OrdersParser;
 import com.company.algorithms.Parser;
+import com.company.model.graph.Graph;
+import com.company.model.graph.NotSingletonGraph;
 import com.company.model.schedules.Order;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,12 +16,30 @@ import java.text.ParseException;
 
 public class TestConsolidatedOrderSchedule {
     @Test
-    public void testConsolidationOrAddOrder() throws WrongOrderFormatException, ParseException, org.json.simple.parser.ParseException, IOException {
+    public void testConsolidationOrAddOrder() throws WrongOrderFormatException, ParseException, org.json.simple.parser.ParseException, IOException, WrongGraphFormatException {
         String path = "src\\test\\resources\\";
+        NotSingletonGraph graph = new NotSingletonGraph();
+        graph.addVertex("0", 0, 0);
+        graph.addVertex("1", 0.0001, 0.0001);
+        graph.addVertex("2", 0.0002, 0.0002);
+        graph.addVertex("3", 0.0003, 0.0003);
+        graph.addVertex("4", 1, 1);
+        graph.addVertex("5", 2, 2);
+        graph.addVertex("6", 2.0001, 2.0001);
+
+        graph.addEdge(5, "0", "1");
+        graph.addEdge(5, "0", "2");
+        graph.addEdge(5, "0", "3");
+        graph.addEdge(5, "1", "2");
+        graph.addEdge(1, "2", "3");
+
+        graph.addEdge(10000, "3", "4");
+        graph.addEdge(10000, "4", "5");
+        graph.addEdge(5, "5", "6");
 
         ConsolidatedOrderSchedule actual = new ConsolidatedOrderSchedule();
         Parser parser = new OrdersParser();
-        parser.parseTo(new File(path + "other\\TestConsOrders.json"), actual);
+        parser.parseTo(new File(path + "dataset\\TestConsOrders.json"), actual, graph);
 
         Assert.assertEquals(3, actual.getRoute(0).size());
         Assert.assertEquals(1, actual.getRoute(1).size());

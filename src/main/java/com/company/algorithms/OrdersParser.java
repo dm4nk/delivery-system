@@ -1,8 +1,8 @@
 package com.company.algorithms;
 
 import com.company.Exceptions.WrongOrderFormatException;
+import com.company.model.graph.Graph;
 import com.company.model.schedules.Order;
-import com.company.model.schedules.raw.OrdersSchedule;
 import com.company.model.schedules.Schedule;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,7 +18,7 @@ import java.util.*;
 public class OrdersParser implements Parser {
 
     @Override
-    public<T extends Schedule> void parseTo(File file, T schedule) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongOrderFormatException {
+    public<T extends Schedule> void parseTo(File file, T schedule, Graph graph) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongOrderFormatException {
         if(!file.getName().endsWith(".json")) throw new FileNotFoundException(file.getName() + " is not a json file");
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
@@ -47,6 +47,7 @@ public class OrdersParser implements Parser {
             }
 
             schedule.addOrder(
+                    graph,
                     new Order(
                             (String) temp.get("id"),
                             date,

@@ -29,7 +29,8 @@ public class OrdersSchedule implements Schedule, Serializable {
     }
 
     @Override
-    public void addOrder(Order order) throws WrongOrderFormatException {
+    public void addOrder(Graph graph, Order order) throws WrongOrderFormatException {
+        order.setVertex(graph);
         if(orders.put(order.getId(), order)!= null) throw new WrongOrderFormatException("such Order already exists");
         orderIDs.add(order.getId());
     }

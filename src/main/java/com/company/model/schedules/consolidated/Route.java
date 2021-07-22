@@ -13,23 +13,30 @@ import java.util.List;
 public class Route {
     private List<Order> route;
 
-    Route(){
+    Route(Order order){
         route = new LinkedList<>();
+        route.add(order);
     }
 
+    /**
+     * @param order - заказ, который нужно добаить
+     * @return true, если можно добавить заказ к этому Route (не больше 3 заказов)
+     */
     public boolean add(Order order){
-        if(route.size() == 0 ){
-            route.add(order);
-            return true;
-        }
         if(route.size() == 3) return false;
-        if(route.get(route.size()-1).getDistanceTo(order) > 0.005) return false;
 
         route.add(order);
         return true;
     }
 
-    public Order getRoute(int i){
+    public double calculateDistanceToLastOrder(Graph graph, Order order){
+        route.get(route.size()-1).getVertex().computeMinPaths();
+        double res = order.getVertex().getMinDistance();
+        graph.validate();
+        return res;
+    }
+
+    public Order getOrder(int i){
         return route.get(i);
     }
 
@@ -44,17 +51,17 @@ public class Route {
     }
 
     public List<Vertex> writeBestPath(Graph graph, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
-        route.get(0).setStreet(graph);
+        route.get(0).setVertex(graph);
         List<Vertex> path = new ArrayList<>(route.get(0).writeBestPath(graph, fromVertices));
 
-        Vertex fromStreet = route.get(0).getStreet();
+        Vertex fromStreet = route.get(0).getVertex();
 
         for(int i = 1; i < route.size(); ++i){
-            route.get(i).setStreet(graph);
+            route.get(i).setVertex(graph);
             System.out.println();
             route.get(i).setDispatchTime(route.get(i-1).getArrivalTime());
             path.addAll( route.get(i).writeBestPath(graph, fromStreet));
-            fromStreet = route.get(i).getStreet();
+            fromStreet = route.get(i).getVertex();
         }
 
         route = null;

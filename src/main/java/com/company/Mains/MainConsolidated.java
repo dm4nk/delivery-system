@@ -10,8 +10,6 @@ import com.company.model.graph.Vertex;
 import com.company.model.schedules.Schedule;
 import com.company.model.schedules.ScheduleFactory;
 import com.company.model.schedules.ScheduleType;
-import com.company.model.schedules.raw.OrdersSchedule;
-import com.company.model.schedules.consolidated.ConsolidatedOrderSchedule;
 import org.json.simple.parser.ParseException;
 
 import java.io.File;
@@ -19,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainTemp {
+public class MainConsolidated {
     public static void main(String[] args) throws WrongGraphFormatException, IOException, ParseException, java.text.ParseException, WrongOrderFormatException {
 
         String path = "src\\main\\resources\\";
@@ -34,15 +32,13 @@ public class MainTemp {
         restaurants.add(TP);
         restaurants.add(BK);
 
-        //ConsolidatedOrderSchedule schedule = new ConsolidatedOrderSchedule();
         ScheduleFactory factory = new ScheduleFactory();
         factory.setFactoryType(ScheduleType.CONSOLIDATED);
         Schedule schedule = factory.createSchedule();
 
         Parser parser = new OrdersParser();
-        parser.parseTo(new File(path + "dataset\\consOrders.json"), schedule);
+        parser.parseTo(new File(path + "dataset\\consOrders.json"), schedule, Graph.getInstance());
 
-        //schedule.writeConsolidatedPaths(Graph.getInstance(), restaurants);
         schedule.writePaths(Graph.getInstance(), restaurants);
     }
 }

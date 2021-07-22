@@ -1,6 +1,9 @@
 package com.company.algorithms;
 
+import com.company.Exceptions.WrongGraphFormatException;
 import com.company.Exceptions.WrongOrderFormatException;
+import com.company.model.graph.Graph;
+import com.company.model.graph.NotSingletonGraph;
 import com.company.model.schedules.raw.OrdersSchedule;
 import org.json.simple.parser.ParseException;
 import org.junit.Assert;
@@ -13,15 +16,20 @@ import java.util.Locale;
 
 public class TestOrdersParser {
     @Test
-    public void testParseTo() throws ParseException, java.text.ParseException, IOException, WrongOrderFormatException {
+    public void testParseTo() throws ParseException, java.text.ParseException, IOException, WrongOrderFormatException, WrongGraphFormatException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
         formatter.setLenient(false);
         String path = "src\\test\\resources\\dataset\\";
 
+        //////////////////////////////////////////
+        NotSingletonGraph graph = new NotSingletonGraph();
+        graph.addVertex("1", 144.959719, -37.8007208);
+        graph.addVertex("2", 144.9794147, -37.8207999);
+
         OrdersSchedule actual = new OrdersSchedule();
 
         Parser parser = new OrdersParser();
-        parser.parseTo(new File(path + "testOrders.json"), actual);
+        parser.parseTo(new File(path + "testOrders.json"), actual, graph);
 
         Assert.assertEquals(2, actual.size());
 

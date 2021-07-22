@@ -7,6 +7,9 @@ import com.company.Exceptions.WrongOrderFormatException;
 import com.company.algorithms.Parser;
 import com.company.model.graph.Graph;
 import com.company.model.graph.Vertex;
+import com.company.model.schedules.Schedule;
+import com.company.model.schedules.ScheduleFactory;
+import com.company.model.schedules.ScheduleType;
 import com.company.model.schedules.raw.OrdersSchedule;
 
 import java.io.File;
@@ -31,11 +34,13 @@ public class MainDataset {
         restaurants.add(TP);
         restaurants.add(BK);
 
-        OrdersSchedule melbourneOrders = new OrdersSchedule();
+        ScheduleFactory factory = new ScheduleFactory();
+        factory.setFactoryType(ScheduleType.CONSISTENT);
+        Schedule melbourneOrders = factory.createSchedule();
 
         Parser parser = new OrdersParser();
-        parser.parseTo(new File(path + "orders.json"), melbourneOrders);
+        parser.parseTo(new File(path + "consOrders.json"), melbourneOrders, Graph.getInstance());
 
-        melbourneOrders.write2BestPathsFor(Graph.getInstance(), melbourneOrders.getOrder("ORDA07176"), restaurants);
+        melbourneOrders.writePaths(Graph.getInstance(), restaurants);
     }
 }
