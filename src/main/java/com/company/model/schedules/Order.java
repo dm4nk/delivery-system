@@ -38,7 +38,7 @@ public class Order implements Serializable {
     /**
      * выставляет точку, на которую нужно привести заказ
      */
-    public void setVertex(Graph graph) throws WrongOrderFormatException {
+    public void setNearestVertex(Graph graph) throws WrongOrderFormatException {
         street = calculateNearestVertex(graph);
         if(street == null) throw new WrongOrderFormatException("Order is more than 200 meters away from delivery zone");
     }

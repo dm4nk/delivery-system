@@ -15,18 +15,19 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class TestOrdersParser {
+    public static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
+
+    static {formatter.setLenient(false);}
+
     @Test
     public void testParseTo() throws ParseException, java.text.ParseException, IOException, WrongOrderFormatException, WrongGraphFormatException {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
-        formatter.setLenient(false);
         String path = "src\\test\\resources\\dataset\\";
 
-        //////////////////////////////////////////
-        NotSingletonGraph graph = new NotSingletonGraph();
+        NotSingletonGraph graph = NotSingletonGraph.create();
         graph.addVertex("1", 144.959719, -37.8007208);
         graph.addVertex("2", 144.9794147, -37.8207999);
 
-        OrdersSchedule actual = new OrdersSchedule();
+        OrdersSchedule actual = OrdersSchedule.create();
 
         Parser parser = new OrdersParser();
         parser.parseTo(new File(path + "testOrders.json"), actual, graph);

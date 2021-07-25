@@ -23,10 +23,10 @@ public class TestGraphReader {
     }
     @Test
     public void testReadGraph3arg() throws WrongGraphFormatException, IOException {
-        NotSingletonGraph actual = new NotSingletonGraph();
+        NotSingletonGraph actual = NotSingletonGraph.create();
         GraphReader.readGraph(path + "dataset/testNodes.csv", path + "dataset/testEdges.csv", actual);
 
-        NotSingletonGraph expected = new NotSingletonGraph();
+        NotSingletonGraph expected = NotSingletonGraph.create();
         expected.addVertex("1", 144.9749471, -37.8152153);
         expected.addVertex("2", 144.9558726, -37.807675);
         expected.addVertex("3", 144.9559785, -37.8070943);

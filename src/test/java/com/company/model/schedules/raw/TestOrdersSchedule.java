@@ -10,8 +10,8 @@ import org.junit.Test;
 public class TestOrdersSchedule {
     @Test
     public void testAddOrder() throws WrongOrderFormatException, WrongGraphFormatException {
-        OrdersSchedule actual = new OrdersSchedule();
-        NotSingletonGraph graph = new NotSingletonGraph();
+        OrdersSchedule actual = OrdersSchedule.create();
+        NotSingletonGraph graph = NotSingletonGraph.create();
         graph.addVertex("1", -1, -1);
         graph.addVertex("2", -4, -10);
 

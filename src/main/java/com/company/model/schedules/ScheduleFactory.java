@@ -12,9 +12,9 @@ public class ScheduleFactory {
 
     public Schedule createSchedule(){
         switch (factoryType){
-            case CONSISTENT: return new OrdersSchedule();
-            case CONSOLIDATED: return new ConsolidatedOrderSchedule();
+            case CONSISTENT: return OrdersSchedule.create();
+            case CONSOLIDATED: return ConsolidatedOrderSchedule.create();
+            default: return null;//in case of errors
         }
-        return null;//in case of errors
     }
 }

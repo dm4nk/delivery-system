@@ -20,7 +20,7 @@ import java.util.List;
 
 public class MainConsolidated {
     public static void main(String[] args) throws WrongGraphFormatException, IOException, ParseException, java.text.ParseException, WrongOrderFormatException {
-        Date sart = new Date();
+        Date start = new Date();
 
         String path = "src\\main\\resources\\";
         Graph.getInstance().readGraphFromFile(path + "dataset\\nodes.csv", path + "dataset\\edges.csv");
@@ -44,6 +44,6 @@ public class MainConsolidated {
         schedule.writePaths(Graph.getInstance(), restaurants);
 
         Date end = new Date();
-        System.out.println("\nTIME: " + (end.getTime() - sart.getTime())/1000d);
+        System.out.println("\nTIME: " + (end.getTime() - start.getTime())/1000d);
     }
 }

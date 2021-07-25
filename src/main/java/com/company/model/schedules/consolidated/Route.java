@@ -13,9 +13,13 @@ import java.util.List;
 public class Route {
     private List<Order> route;
 
-    Route(Order order){
+    private Route(Order order){
         route = new LinkedList<>();
         route.add(order);
+    }
+
+    public static Route create(Order order){
+        return new Route(order);
     }
 
     /**
@@ -48,21 +52,20 @@ public class Route {
     }
 
     public List<Vertex> writeBestPath(Graph graph, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
-        route.get(0).setVertex(graph);
+        route.get(0).setNearestVertex(graph);
         List<Vertex> path = new ArrayList<>(route.get(0).writeBestPath(graph, fromVertices));
 
         Vertex fromStreet = route.get(0).getVertex();
 
         for(int i = 1; i < route.size(); ++i){
-            route.get(i).setVertex(graph);
+            route.get(i).setNearestVertex(graph);
             System.out.println();
             route.get(i).setDispatchTime(route.get(i-1).getArrivalTime());
             path.addAll(route.get(i).writeBestPath(graph, fromStreet));
             fromStreet = route.get(i).getVertex();
-            route.get(i).setVertex(graph);
+            route.get(i).setNearestVertex(graph);
         }
 
-        route = null;
         return path;
     }
 }

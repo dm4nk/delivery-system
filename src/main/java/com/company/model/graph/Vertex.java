@@ -8,22 +8,26 @@ public class Vertex implements Comparable<Vertex> {
     private boolean visited;
     private Vertex previousVertex;
     private double minDistance = Double.MAX_VALUE;
-
     private final double lat;
     private final double lon;
 
-    public Vertex(String name) {
-        this.name = name;
-        this.edges = new ArrayList<>();
-        this.lat = 180;
-        this.lon = 180;
-    }
-
-    public Vertex(String name, double lon, double lat) {
+    private Vertex(String name, double lon, double lat) {
         this.name = name;
         this.edges = new ArrayList<>();
         this.lat = lat;
         this.lon = lon;
+    }
+
+    private Vertex(String name) {
+        this(name, 180, 180);
+    }
+
+    public static Vertex create(String name, double lon, double lat){
+        return new Vertex(name, lon, lat);
+    }
+
+    public static Vertex create(String name){
+        return new Vertex(name);
     }
 
     public void validate(){

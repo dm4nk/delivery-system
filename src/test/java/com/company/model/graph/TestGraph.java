@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 public class TestGraph {
     @Test
     public void testAddVertex() throws WrongGraphFormatException {
-        NotSingletonGraph actual = new NotSingletonGraph();
+        NotSingletonGraph actual = NotSingletonGraph.create();
         actual.addVertex("1");
         actual.addVertex("2");
 
@@ -18,7 +18,7 @@ public class TestGraph {
     }
     @Test
     public void testRemoveVertex() throws WrongGraphFormatException {
-        NotSingletonGraph actual = new NotSingletonGraph();
+        NotSingletonGraph actual = NotSingletonGraph.create();
         actual.addVertex("1", 1, 1);
         actual.addVertex("2", 1, 1);
         actual.addVertex("3", 1, 1);
@@ -35,7 +35,7 @@ public class TestGraph {
     }
     @Test
     public void testAddEdge() throws WrongGraphFormatException {
-        NotSingletonGraph actual = new NotSingletonGraph();
+        NotSingletonGraph actual = NotSingletonGraph.create();
         actual.addVertex("1");
         actual.addVertex("2");
 
@@ -45,7 +45,7 @@ public class TestGraph {
     }
     @Test
     public void testRemoveEdge() throws WrongGraphFormatException {
-        NotSingletonGraph actual = new NotSingletonGraph();
+        NotSingletonGraph actual = NotSingletonGraph.create();
         actual.addVertex("1");
         actual.addVertex("2");
         actual.addVertex("3");

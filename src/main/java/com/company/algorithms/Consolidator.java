@@ -7,6 +7,6 @@ import com.company.model.schedules.raw.OrdersSchedule;
 
 public class Consolidator {
     public static ConsolidatedOrderSchedule consolidate(Graph graph, OrdersSchedule schedule) throws WrongOrderFormatException {
-        return new ConsolidatedOrderSchedule(graph, schedule);
+        return ConsolidatedOrderSchedule.createAndConsolidate(graph, schedule);
     }
 }

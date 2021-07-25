@@ -7,7 +7,7 @@ import org.junit.Test;
 public class TestNotSingletonGraph {
     @Test
     public void testNotSingletonGraph() throws WrongGraphFormatException {
-        NotSingletonGraph actual = new NotSingletonGraph();
+        NotSingletonGraph actual = NotSingletonGraph.create();
 
         actual.addVertex("testVertexThatShouldNotExistInRealGraph");
 

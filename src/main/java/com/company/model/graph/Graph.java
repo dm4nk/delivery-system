@@ -6,19 +6,24 @@ import com.company.algorithms.GraphWriter;
 import com.company.model.schedules.Order;
 import com.company.algorithms.GraphReader;
 import com.company.algorithms.Dijkstra;
-import com.github.davidmoten.rtree.RTree;
-import com.github.davidmoten.rtree.geometry.Geometries;
-import com.github.davidmoten.rtree.geometry.Point;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Graph {
-    private Map<String, Vertex> vertices = new HashMap<>();
-    private RTree<String, Point> tree = RTree.star().maxChildren(4).create();
+    private final Map<String, Vertex> vertices;
+    private final RTreeAdapter tree;
+    private final static SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
+    private final static int MILLISECONDS_IN_MINUTE = 60_000;
 
     private static Graph singleInstance = null;
+
+    protected Graph(){
+        vertices = new HashMap<>();
+        tree = RTreeAdapter.create();
+        formatter.setLenient(false);
+    }
 
     public static Graph getInstance(){
         if(singleInstance == null){
@@ -27,28 +32,26 @@ public class Graph {
         return singleInstance;
     }
 
-    protected Graph(){}
-
     public  int size(){
         return vertices.size();
-    }
-
-    public void addVertex(String name) throws WrongGraphFormatException {
-        if(vertices.put(name, new Vertex(name)) != null) throw new WrongGraphFormatException("such point already exists");
-        tree = tree.add(name, Geometries.pointGeographic(180, 180));
     }
 
     public Map<String, Vertex> getVertices() {
         return vertices;
     }
 
-    public RTree<String, Point> getTree(){
+    public RTreeAdapter getTree(){
         return tree;
+    }
+
+    public void addVertex(String name) throws WrongGraphFormatException {
+        if(vertices.put(name, new Vertex(name)) != null) throw new WrongGraphFormatException("such point already exists");
+        tree.add(name, 180, 180);
     }
 
     public void addVertex(String name, double lon, double lat) throws WrongGraphFormatException {
         if(vertices.put(name, new Vertex(name, lon, lat)) != null) throw new WrongGraphFormatException("such point already exists");
-        tree = tree.add(name, Geometries.pointGeographic(lon, lat));
+        tree.add(name, lon, lat);
     }
 
     public Vertex getVertex(String id){
@@ -58,12 +61,8 @@ public class Graph {
     public void removeVertex(String name){
         if(!vertices.containsKey(name)) throw new NoSuchElementException("no vertex with such name");
         Vertex removed = vertices.get(name);
-
-        vertices.values()
-                .forEach(v -> v.getEdges().removeIf(e -> e.getTargetVertex() == removed));
-
-        tree = tree.delete(name, Geometries.pointGeographic(removed.getLon(), removed.getLat()));
-
+        vertices.values().forEach(v -> v.getEdges().removeIf(e -> e.getTargetVertex() == removed));
+        tree.remove(name, removed.getLon(),removed.getLat());
         vertices.remove(name);
     }
 
@@ -88,12 +87,7 @@ public class Graph {
         Vertex target = vertices.getOrDefault(targetVertex, null);
         Vertex source = vertices.getOrDefault(sourceVertex, null);
         if(target == null || source == null) throw new NoSuchElementException("no vertex with such name");
-
-        for(Edge removed : source.getEdges()){
-            if(removed.getTargetVertex() == target) source.getEdges().remove(removed);
-            return;
-        }
-
+        source.getEdges().removeIf(removed -> removed.getTargetVertex() == target);
     }
 
     public void readGraphFromFile(String filename) throws IOException, WrongGraphFormatException {
@@ -117,11 +111,31 @@ public class Graph {
             v.validate();
     }
 
+    private String parseDateToString(Date date){
+        return formatter.format(date);
+    }
+
+    private Date parseMillisecondsToDate(long mills) throws ParseException {
+        return formatter.parse(formatter.format(mills));
+    }
+
+    private Vertex getBestVertexToStartFrom(Vertex toVertex, List<Vertex> fromVertices) throws WrongOrderFormatException {
+        String fromStr = "";
+        double minPath = Double.MAX_VALUE;
+
+        for(Vertex tmp: fromVertices) {
+            Dijkstra.computePath(tmp);
+            if(toVertex.getMinDistance() <= minPath) {
+                fromStr = tmp.getName();
+                minPath = toVertex.getMinDistance();
+            }
+            validate();
+        }
+
+        return vertices.getOrDefault(fromStr, null);
+    }
+
     public List<Vertex> writeBestPath(Order order, Vertex fromVertex) throws WrongOrderFormatException, ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
-        formatter.setLenient(false);
-        List<Vertex> path;
-        //Vertex toVertex = order.calculateNearestVertex(this);
         Vertex toVertex = order.getVertex();
 
         if(fromVertex == null) throw new WrongOrderFormatException("no such points");
@@ -132,95 +146,59 @@ public class Graph {
 
         if(toVertex.getMinDistance() == Double.MAX_VALUE){
             System.out.println("No such path");
-            return new ArrayList<>();
+            return null;
         }
-        System.out.println("Dispatch time: " + formatter.format(order.getDispatchTime()));
+
+        System.out.println("Dispatch time: " + parseDateToString(order.getDispatchTime()));
         System.out.print("Path: ");
-        path = Dijkstra.getShortestPathTo(toVertex);
-        Dijkstra.printVertexListAsPath(
-                path
-        );
+
+        List<Vertex> path = Dijkstra.getShortestPathTo(toVertex);
+        Dijkstra.printVertexListAsPath(path);
 
         System.out.println("Time required: " + toVertex.getMinDistance());
 
-        order.setArrivalTime(formatter.parse(formatter.format(order.getDispatchTime().getTime() + toVertex.getMinDistance()*60000)));
-        System.out.println("Approximate delivery time: " + formatter.format(order.getArrivalTime()));
+        order.setArrivalTime(parseMillisecondsToDate(
+                order.getDispatchTime().getTime() + (long) toVertex.getMinDistance() * MILLISECONDS_IN_MINUTE)
+        );
+        System.out.println("Approximate delivery time: " + parseDateToString(order.getArrivalTime()));
 
         validate();
         return path;
     }
 
     public List<Vertex> writeBestPath(Order order, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
-        formatter.setLenient(false);
-        //Vertex toVertex = order.calculateNearestVertex(this);
+        if(fromVertices.size() == 0) throw new WrongOrderFormatException("list is empty");
         Vertex toVertex = order.getVertex();
-        List<Vertex> path;
-
         if (toVertex == null) throw new WrongOrderFormatException("destination is more than 200 meters away from delivery zone");
-
-        System.out.println(order.getId() + ": ");
-
-        String fromStr = "";
-        double minPath = Double.MAX_VALUE;
-
-        for(Vertex tmp: fromVertices) {
-            Dijkstra.computePath(tmp);
-            if(toVertex.getMinDistance() <= minPath) {
-                fromStr = tmp.getName();
-                minPath = toVertex.getMinDistance();
-            }
-
-            validate();
-        }
-
-        Vertex fromVertex = getVertices().get(fromStr);
-        Dijkstra.computePath(fromVertex);
-
-        if(fromVertex.getMinDistance() == Double.MAX_VALUE) throw new WrongOrderFormatException("no such points");
-
-        if(toVertex.getMinDistance() == Double.MAX_VALUE){
+        Vertex fromVertex = getBestVertexToStartFrom(toVertex, fromVertices);
+        if(fromVertex == null) {
             System.out.println("No such path");
-            return new ArrayList<>();
+            return null;
         }
-        System.out.println("Dispatch time: " + formatter.format(order.getDispatchTime()));
-        System.out.print("Path: ");
-
-        path = Dijkstra.getShortestPathTo(toVertex);
-        Dijkstra.printVertexListAsPath(
-                path
-        );
-
-        System.out.println("Time required: " + toVertex.getMinDistance());
-
-        order.setArrivalTime(formatter.parse(formatter.format(order.getDispatchTime().getTime() + toVertex.getMinDistance()*60000)));
-        System.out.println("Approximate delivery time: " + formatter.format(order.getArrivalTime()));
-
-        validate();
-        return path;
+        return writeBestPath(order, fromVertex);
     }
 
     public List<Vertex> write2PathsAndTime(Order order, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
         if(fromVertices.size() == 0) throw new WrongOrderFormatException("list is empty");
-        List<Vertex> first = writeBestPath(order, fromVertices);
-        if(first.size() <=10 || vertices.size() == 1) return first;
+        List<Vertex> firstPath = writeBestPath(order, fromVertices);
+        if(firstPath == null ||firstPath.size() <=10) return firstPath;
 
         List<Edge> temp;
-        List<Vertex> second;
-        for(int i = 1; i < first.size(); ++i){
-            temp = first.get(i).getEdges();
-            first.get(i).setEdges(new ArrayList<>());
+        List<Vertex> secondPath;
+        for(int i = 1; i < firstPath.size(); ++i){
             System.out.println();
-            second = writeBestPath(order, fromVertices);
-            first.get(i).setEdges(temp);
-            if(second.size() != 0){
-                return second;
-            }
+
+            temp = firstPath.get(i).getEdges();
+            firstPath.get(i).setEdges(new ArrayList<>());
+            secondPath = writeBestPath(order, fromVertices);
+            firstPath.get(i).setEdges(temp);
+
+            if(secondPath != null) return secondPath;
         }
-        return first;
+        return firstPath;
     }
 
     public void visualize(){
-        tree.visualize(1920, 1080).save("target/mytree.png");
+        tree.visualize("target/tree.png");
     }
 }

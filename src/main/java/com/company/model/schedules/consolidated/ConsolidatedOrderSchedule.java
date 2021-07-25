@@ -12,21 +12,28 @@ import java.util.*;
 
 public class ConsolidatedOrderSchedule implements Schedule {
     private List<Route> routes;
+    private static final double MAX_DISTANCE_FOR_CONSOLIDATION = 0.05;//5 km
 
-    public ConsolidatedOrderSchedule(){
+    private ConsolidatedOrderSchedule(){
         routes = new LinkedList<>();
     }
 
-    public ConsolidatedOrderSchedule(Graph graph, OrdersSchedule ordersSchedule) throws WrongOrderFormatException {
+    private ConsolidatedOrderSchedule(Graph graph, OrdersSchedule ordersSchedule) throws WrongOrderFormatException {
         routes = new LinkedList<>();
         for(int i = 0; i < ordersSchedule.size(); ++i){
             addOrder(graph, ordersSchedule.getOrder(i));
         }
     }
 
-    @Override
-    public void addOrder(Graph graph, Order order) throws WrongOrderFormatException {
-        order.setVertex(graph);
+    public static ConsolidatedOrderSchedule create(){
+        return new ConsolidatedOrderSchedule();
+    }
+
+    public static ConsolidatedOrderSchedule createAndConsolidate(Graph graph, OrdersSchedule ordersSchedule) throws WrongOrderFormatException {
+        return new ConsolidatedOrderSchedule(graph, ordersSchedule);
+    }
+
+    private Route findMostSuitableRoot(Order order){
         double minDistance = Double.MAX_VALUE;
         Route minDistanceRoot = null;
         for (Route r : routes) {
@@ -36,14 +43,8 @@ public class ConsolidatedOrderSchedule implements Schedule {
             }
         }
 
-        if(minDistanceRoot == null) routes.add(new Route(order));
-        else if(minDistance < 0.05 && minDistanceRoot.add(order));//в пределах 5 км
-        else routes.add(new Route(order));
-    }
-
-    @Override
-    public void writePaths(Graph graph, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
-        writeConsolidatedPaths(graph, fromVertices);
+        if(minDistance > MAX_DISTANCE_FOR_CONSOLIDATION) return null;
+        return minDistanceRoot;
     }
 
     public Route getRoute(int index){
@@ -61,16 +62,22 @@ public class ConsolidatedOrderSchedule implements Schedule {
         });
     }
 
-    public List<List<Vertex>> writeConsolidatedPaths(Graph graph, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
-        List<List<Vertex>> consolidatedPaths = new ArrayList<>();
+    public List<Vertex> writeConsolidatedPath(Graph graph, Route route, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
+        return route.writeBestPath(graph, fromVertices);
+    }
 
+    @Override
+    public void addOrder(Graph graph, Order order) throws WrongOrderFormatException {
+        order.setNearestVertex(graph);
+        Route minDistanceRoot = findMostSuitableRoot(order);
+        if(minDistanceRoot == null || !minDistanceRoot.add(order)) routes.add(Route.create(order));
+    }
+
+    @Override
+    public void writePaths(Graph graph, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
         for(Route r: routes){
             System.out.println("\nRoute: ");
-            consolidatedPaths.add(r.writeBestPath(graph, fromVertices));
+            writeConsolidatedPath(graph, r, fromVertices);
         }
-
-        routes.removeAll(routes);
-
-        return consolidatedPaths;
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 public class TestDijkstra {
     @Test
     public void testComputePath() throws WrongGraphFormatException, WrongOrderFormatException {
-        NotSingletonGraph graph = new NotSingletonGraph();
+        NotSingletonGraph graph = NotSingletonGraph.create();
 
         graph.addVertex("1");
         graph.addVertex("2");
@@ -38,7 +38,7 @@ public class TestDijkstra {
 
     @Test
     public void testGetShortestPathTo() throws WrongGraphFormatException, WrongOrderFormatException {
-        NotSingletonGraph graph = new NotSingletonGraph();
+        NotSingletonGraph graph = NotSingletonGraph.create();
 
         graph.addVertex("1");
         graph.addVertex("2");
@@ -68,7 +68,7 @@ public class TestDijkstra {
 
     @Test
     public void testCalculateNearestVertex() throws WrongGraphFormatException {
-        NotSingletonGraph graph = new NotSingletonGraph();
+        NotSingletonGraph graph = NotSingletonGraph.create();
 
         graph.addVertex("1", 53.253709, 50.209983);
         graph.addVertex("2", 53.256407, 50.212732);

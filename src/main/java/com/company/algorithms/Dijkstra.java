@@ -3,9 +3,6 @@ package com.company.algorithms;
 import com.company.Exceptions.WrongOrderFormatException;
 import com.company.model.graph.Graph;
 import com.company.model.graph.Vertex;
-import com.github.davidmoten.rtree.Entry;
-import com.github.davidmoten.rtree.geometry.Geometries;
-import com.github.davidmoten.rtree.geometry.Point;
 
 import java.util.*;
 
@@ -49,17 +46,8 @@ public class Dijkstra {
      * @return null, если точка находится дальше 200 метров от карты
      */
     public static Vertex calculateNearestVertexFromLatLon(Graph graph, double lon, double lat){
-        Entry<String, Point> nearest;
-        try {
-            nearest = graph.getTree()
-                    .nearest(Geometries.pointGeographic(lon, lat), 0.002, 1)
-                    .toBlocking()
-                    .single();
-        } catch (NoSuchElementException e) {
-            return null;
-        }
-
-        return graph.getVertices().get(nearest.value());
+        String nearestVertexName = graph.getTree().getNearestVertexName(lon, lat);
+        return graph.getVertices().get(nearestVertexName);
     }
 
     /**
@@ -70,7 +58,7 @@ public class Dijkstra {
             System.out.println("no such path: no routes to destination point");
             return;
         }
-        ListIterator it = vertices.listIterator(vertices.size()-1);
+        ListIterator<Vertex> it = vertices.listIterator(vertices.size()-1);
 
         System.out.print(vertices.get(vertices.size()-1));
         while (it.hasPrevious())

@@ -14,23 +14,52 @@ public class OrdersSchedule implements Schedule, Serializable {
     Map<String, Order> orders;
     List<String> orderIDs;
 
-    public OrdersSchedule(Map<String, Order> orders, LinkedList<String> orderIDs){
+    private OrdersSchedule(Map<String, Order> orders, LinkedList<String> orderIDs){
         this.orders = orders;
         this.orderIDs = orderIDs;
     }
 
-    public OrdersSchedule(){
-        orders = new HashMap<>();
-        orderIDs = new LinkedList<>();
+    public static OrdersSchedule create(Map<String, Order> orders, LinkedList<String> orderIDs){
+        return new OrdersSchedule(orders, orderIDs);
+    }
+
+    public static OrdersSchedule create(){
+        return new OrdersSchedule(new HashMap<>(), new LinkedList<>());
     }
 
     public int size(){
         return orders.size();
     }
 
+    public List<Vertex> writeBestPathFor(Graph graph, Order order, Vertex fromRestaurant) throws WrongOrderFormatException, ParseException {
+        return graph.writeBestPath(order, fromRestaurant);
+    }
+
+    public List<Vertex> writeBestPathFor(Graph graph, Order order, List<Vertex> fromRestaurants) throws WrongOrderFormatException, ParseException {
+        return graph.writeBestPath(order, fromRestaurants);
+    }
+
+    public List<Vertex> write2BestPathsFor(Graph graph, Order order, Vertex fromRestaurant) throws WrongOrderFormatException, ParseException {
+        List<Vertex> vert = new ArrayList<>(1);
+        vert.add(fromRestaurant);
+        return graph.write2PathsAndTime(order, vert);
+    }
+
+    public List<Vertex> write2BestPathsFor(Graph graph, Order order, List<Vertex> fromRestaurants) throws WrongOrderFormatException, ParseException {
+        return graph.write2PathsAndTime(order, fromRestaurants);
+    }
+
+    public Order getOrder(String orderID){
+        return orders.get(orderID);
+    }
+
+    public Order getOrder(int index){
+        return orders.get(orderIDs.get(index));
+    }
+
     @Override
     public void addOrder(Graph graph, Order order) throws WrongOrderFormatException {
-        order.setVertex(graph);
+        order.setNearestVertex(graph);
         if(orders.put(order.getId(), order)!= null) throw new WrongOrderFormatException("such Order already exists");
         orderIDs.add(order.getId());
     }
@@ -41,31 +70,5 @@ public class OrdersSchedule implements Schedule, Serializable {
             System.out.println("\nOrder: ");
             write2BestPathsFor(graph, o, fromVertices);
         }
-    }
-
-    public List<Vertex> writeBestPathFor(Graph graph, Order order, Vertex fromRestaurant) throws WrongOrderFormatException, ParseException {
-        return order.writeBestPath(graph, fromRestaurant);
-    }
-
-    public List<Vertex> writeBestPathFor(Graph graph, Order order, List<Vertex> fromRestaurants) throws WrongOrderFormatException, ParseException {
-        return order.writeBestPath(graph, fromRestaurants);
-    }
-
-    public List<Vertex> write2BestPathsFor(Graph graph, Order order, Vertex fromRestaurant) throws WrongOrderFormatException, ParseException {
-        List<Vertex> vert = new ArrayList<>(1);
-        vert.add(fromRestaurant);
-        return order.write2PathsAndTime(graph, vert);
-    }
-
-    public List<Vertex> write2BestPathsFor(Graph graph, Order order, List<Vertex> fromRestaurants) throws WrongOrderFormatException, ParseException {
-        return order.write2PathsAndTime(graph, fromRestaurants);
-    }
-
-    public Order getOrder(String orderID){
-        return orders.get(orderID);
-    }
-
-    public Order getOrder(int index){
-        return orders.get(orderIDs.get(index));
     }
 }

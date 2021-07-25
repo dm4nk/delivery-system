@@ -18,7 +18,7 @@ public class TestConsolidatedOrderSchedule {
     @Test
     public void testConsolidationOrAddOrder() throws WrongOrderFormatException, ParseException, org.json.simple.parser.ParseException, IOException, WrongGraphFormatException {
         String path = "src\\test\\resources\\";
-        NotSingletonGraph graph = new NotSingletonGraph();
+        NotSingletonGraph graph = NotSingletonGraph.create();
         graph.addVertex("0", 0, 0);
         graph.addVertex("1", 0.0001, 0.0001);
         graph.addVertex("2", 0.0002, 0.0002);
@@ -37,7 +37,7 @@ public class TestConsolidatedOrderSchedule {
         graph.addEdge(10000, "4", "5");
         graph.addEdge(5, "5", "6");
 
-        ConsolidatedOrderSchedule actual = new ConsolidatedOrderSchedule();
+        ConsolidatedOrderSchedule actual = ConsolidatedOrderSchedule.create();
         Parser parser = new OrdersParser();
         parser.parseTo(new File(path + "dataset\\TestConsOrders.json"), actual, graph);
 
