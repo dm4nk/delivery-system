@@ -1,5 +1,5 @@
 package com.company.model.schedules;
 
-public enum ScheduleType {
+public enum FactoryType {
     CONSOLIDATED, CONSISTENT
 }

@@ -9,22 +9,23 @@ import com.company.model.graph.Graph;
 import com.company.model.graph.Vertex;
 import com.company.model.schedules.Schedule;
 import com.company.model.schedules.ScheduleFactory;
-import com.company.model.schedules.ScheduleType;
-import com.company.model.schedules.raw.OrdersSchedule;
+import com.company.model.schedules.FactoryType;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainDataset {
     public static void main(String[] args) throws IOException, WrongGraphFormatException, ParseException, WrongOrderFormatException, org.json.simple.parser.ParseException {
+        Date start = new Date();
 
         String path = "src\\main\\resources\\dataset\\";
         Graph.getInstance().readGraphFromFile(new File(path + "nodes.csv"), new File(path + "edges.csv"));
 
-        //находим ближайшие рестораны
+        //find restaurant street
         Vertex NS = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(),  144.9836466, -37.7738026);
         Vertex TP = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(),144.905716, -37.8618349);
         Vertex BK = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), 145.04645, -37.8158343);
@@ -34,12 +35,15 @@ public class MainDataset {
         restaurants.add(TP);
         restaurants.add(BK);
 
-        ScheduleFactory factory = ScheduleFactory.create();
+        ScheduleFactory factory = ScheduleFactory.create(FactoryType.CONSISTENT);
         Schedule melbourneOrders = factory.createSchedule();
 
         Parser parser = new OrdersParser();
-        parser.parseTo(new File(path + "orders.json"), melbourneOrders, Graph.getInstance());
+        parser.parseTo(new File(path + "consOrders.json"), melbourneOrders, Graph.getInstance());
 
         melbourneOrders.writePaths(Graph.getInstance(), restaurants);
+
+        Date end = new Date();
+        System.out.println("\nTIME: " + (end.getTime() - start.getTime())/1000d);
     }
 }
