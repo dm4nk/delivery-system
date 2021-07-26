@@ -23,7 +23,7 @@ public class MainConsolidated {
         Date start = new Date();
 
         String path = "src\\main\\resources\\";
-        Graph.getInstance().readGraphFromFile(path + "dataset\\nodes.csv", path + "dataset\\edges.csv");
+        Graph.getInstance().readGraphFromFile(new File(path + "dataset\\nodes.csv"), new File(path + "dataset\\edges.csv"));
 
         Vertex NS = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(),  144.9836466, -37.7738026);
         Vertex TP = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(),144.905716, -37.8618349);
@@ -34,8 +34,7 @@ public class MainConsolidated {
         restaurants.add(TP);
         restaurants.add(BK);
 
-        ScheduleFactory factory = new ScheduleFactory();
-        factory.setFactoryType(ScheduleType.CONSOLIDATED);
+        ScheduleFactory factory = ScheduleFactory.create(ScheduleType.CONSOLIDATED);
         Schedule schedule = factory.createSchedule();
 
         Parser parser = new OrdersParser();

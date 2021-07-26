@@ -1,0 +1,16 @@
+{
+  "orders": [
+    {
+      "id": "too far away from map",
+      "date": "08-02-2018 09:10:59",
+      "lat": -40.807675,
+      "lon": 160.9558726
+    },
+    {
+      "id": "far from delivery zone, but in city",
+      "date": "08-02-2018 11:10:59",
+      "lat": -37.8588349,
+      "lon": 144.905716
+    }
+  ]
+}

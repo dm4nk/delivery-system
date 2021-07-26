@@ -1,12 +1,9 @@
 package com.company.model.graph;
 
-import com.github.davidmoten.rtree.Entry;
 import com.github.davidmoten.rtree.RTree;
 import com.github.davidmoten.rtree.geometry.Geometries;
 import com.github.davidmoten.rtree.geometry.Point;
-
 import java.util.NoSuchElementException;
-
 
 public final class RTreeAdapter {
     private RTree<String, Point> tree;

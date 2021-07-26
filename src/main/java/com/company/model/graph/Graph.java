@@ -6,6 +6,8 @@ import com.company.algorithms.GraphWriter;
 import com.company.model.schedules.Order;
 import com.company.algorithms.GraphReader;
 import com.company.algorithms.Dijkstra;
+
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -90,11 +92,11 @@ public class Graph {
         source.getEdges().removeIf(removed -> removed.getTargetVertex() == target);
     }
 
-    public void readGraphFromFile(String filename) throws IOException, WrongGraphFormatException {
-        GraphReader.readGraph(filename, this);
+    public void readGraphFromFile(File file) throws IOException, WrongGraphFormatException {
+        GraphReader.readGraph(file, this);
     }
 
-    public void readGraphFromFile(String nodes, String edges) throws IOException, WrongGraphFormatException {
+    public void readGraphFromFile(File nodes, File edges) throws IOException, WrongGraphFormatException {
         GraphReader.readGraph(nodes, edges, this);
     }
 

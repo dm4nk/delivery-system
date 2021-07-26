@@ -11,23 +11,15 @@ public class Vertex implements Comparable<Vertex> {
     private final double lat;
     private final double lon;
 
-    private Vertex(String name, double lon, double lat) {
+    public Vertex(String name, double lon, double lat) {
         this.name = name;
         this.edges = new ArrayList<>();
         this.lat = lat;
         this.lon = lon;
     }
 
-    private Vertex(String name) {
+    public Vertex(String name) {
         this(name, 180, 180);
-    }
-
-    public static Vertex create(String name, double lon, double lat){
-        return new Vertex(name, lon, lat);
-    }
-
-    public static Vertex create(String name){
-        return new Vertex(name);
     }
 
     public void validate(){
@@ -94,11 +86,13 @@ public class Vertex implements Comparable<Vertex> {
         priorityQueue.add(this);
 
         double minDistance;
+        Vertex vertex;
+        Vertex v;
         while (!priorityQueue.isEmpty()) {
-            Vertex vertex = priorityQueue.poll();
+            vertex = priorityQueue.poll();
 
             for (Edge edge : vertex.getEdges()) {
-                Vertex v = edge.getTargetVertex();
+                v = edge.getTargetVertex();
                 minDistance = vertex.getMinDistance() + edge.getWeight();
 
                 if (minDistance < v.getMinDistance()) {

@@ -4,7 +4,19 @@ import com.company.model.schedules.consolidated.ConsolidatedOrderSchedule;
 import com.company.model.schedules.raw.OrdersSchedule;
 
 public class ScheduleFactory {
-    public ScheduleType factoryType = ScheduleType.CONSISTENT;
+    public ScheduleType factoryType;
+
+    private ScheduleFactory(ScheduleType factoryType){
+        this.factoryType = factoryType;
+    }
+
+    public static ScheduleFactory create(ScheduleType factoryType){
+        return new ScheduleFactory(factoryType);
+    }
+
+    public static ScheduleFactory create(){
+        return new ScheduleFactory(ScheduleType.CONSISTENT);
+    }
 
     public void setFactoryType(ScheduleType factoryType){
         this.factoryType = factoryType;

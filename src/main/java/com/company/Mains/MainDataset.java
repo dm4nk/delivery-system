@@ -22,7 +22,7 @@ public class MainDataset {
     public static void main(String[] args) throws IOException, WrongGraphFormatException, ParseException, WrongOrderFormatException, org.json.simple.parser.ParseException {
 
         String path = "src\\main\\resources\\dataset\\";
-        Graph.getInstance().readGraphFromFile(path + "nodes.csv", path + "edges.csv");
+        Graph.getInstance().readGraphFromFile(new File(path + "nodes.csv"), new File(path + "edges.csv"));
 
         //находим ближайшие рестораны
         Vertex NS = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(),  144.9836466, -37.7738026);
@@ -34,12 +34,11 @@ public class MainDataset {
         restaurants.add(TP);
         restaurants.add(BK);
 
-        ScheduleFactory factory = new ScheduleFactory();
-        factory.setFactoryType(ScheduleType.CONSISTENT);
+        ScheduleFactory factory = ScheduleFactory.create();
         Schedule melbourneOrders = factory.createSchedule();
 
         Parser parser = new OrdersParser();
-        parser.parseTo(new File(path + "consOrders.json"), melbourneOrders, Graph.getInstance());
+        parser.parseTo(new File(path + "orders.json"), melbourneOrders, Graph.getInstance());
 
         melbourneOrders.writePaths(Graph.getInstance(), restaurants);
     }

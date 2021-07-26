@@ -16,13 +16,12 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class OrdersParser implements Parser {
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
+    static {formatter.setLenient(false);}
 
     @Override
     public<T extends Schedule> void parseTo(File file, T schedule, Graph graph) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongOrderFormatException {
         if(!file.getName().endsWith(".json")) throw new FileNotFoundException(file.getName() + " is not a json file");
-
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
-        formatter.setLenient(false);
 
         byte[] bytes = new byte[(int) file.length()];
         FileInputStream fis = new FileInputStream(file);

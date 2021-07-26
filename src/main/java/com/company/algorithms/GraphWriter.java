@@ -9,10 +9,9 @@ public class GraphWriter {
 
     public static void writeGraph(Graph graph){
         for(Vertex vertex : graph.getVertices().values())
-            for (Edge edge: vertex.getEdges()){
+            for (Edge edge: vertex.getEdges())
                 System.out.println(
                         edge.getStartVertex().getName() + " --" + edge.getWeight() + "-> " + edge.getTargetVertex().getName()
                 );
-            }
     }
 }

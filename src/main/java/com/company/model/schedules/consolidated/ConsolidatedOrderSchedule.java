@@ -33,6 +33,10 @@ public class ConsolidatedOrderSchedule implements Schedule {
         return new ConsolidatedOrderSchedule(graph, ordersSchedule);
     }
 
+    /**
+     * @return root with nearest last order
+     * or null if nearest order is more than 5km away
+     */
     private Route findMostSuitableRoot(Order order){
         double minDistance = Double.MAX_VALUE;
         Route minDistanceRoot = null;

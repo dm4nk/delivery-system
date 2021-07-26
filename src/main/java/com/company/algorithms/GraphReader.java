@@ -12,9 +12,8 @@ public class GraphReader {
 
     private GraphReader(){}
 
-    public static double[][]readGraph(String filename) throws IOException, WrongGraphFormatException {
+    public static double[][]readGraph(File file) throws IOException, WrongGraphFormatException {
         //позволяет считать числа, не зная их количество
-        File file = new File(filename);
         byte[] bytes = new byte[(int) file.length()];
         FileInputStream fis = new FileInputStream(file);
         fis.read(bytes);
@@ -39,8 +38,8 @@ public class GraphReader {
         return graph;
     }
 
-    public static void readGraph(String nodes, String edges, Graph graph) throws WrongGraphFormatException, IOException {
-        if(!nodes.endsWith(".csv") || !edges.endsWith(".csv"))
+    public static void readGraph(File nodes, File edges, Graph graph) throws WrongGraphFormatException, IOException {
+        if(!nodes.getName().endsWith(".csv") || !edges.getName().endsWith(".csv"))
             throw new FileNotFoundException("can only read from .csv files");
 
         try (CSVReader csvReader = new CSVReader(new FileReader(nodes))) {
@@ -62,8 +61,8 @@ public class GraphReader {
         }
     }
 
-    public static void readGraph(String filename, Graph graph) throws IOException, WrongGraphFormatException {
-        double[][] matrix = GraphReader.readGraph(filename);
+    public static void readGraph(File file, Graph graph) throws IOException, WrongGraphFormatException {
+        double[][] matrix = GraphReader.readGraph(file);
 
         for(int i = 0; i < matrix.length; ++i)
             graph.addVertex(Double.toString(i));
