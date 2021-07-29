@@ -3,8 +3,8 @@ package mains;
 import exceptions.WrongGraphFormatException;
 import exceptions.WrongOrderFormatException;
 import model.algorithms.Dijkstra;
-import model.algorithms.impl.OrdersParser;
 import model.algorithms.Parser;
+import model.algorithms.impl.OrdersParser;
 import model.graph.Graph;
 import model.graph.Vertex;
 import model.schedule.FactoryType;
@@ -26,8 +26,8 @@ public class Main {
         Graph.getInstance().readGraphFromFile(new File(path + "nodes.csv"), new File(path + "edges.csv"));
 
         //find restaurant street
-        Vertex NS = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(),  144.9836466, -37.7738026);
-        Vertex TP = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(),144.905716, -37.8618349);
+        Vertex NS = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), 144.9836466, -37.7738026);
+        Vertex TP = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), 144.905716, -37.8618349);
         Vertex BK = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), 145.04645, -37.8158343);
 
         List<Vertex> restaurants = new ArrayList<>(3);
@@ -44,6 +44,6 @@ public class Main {
         melbourneOrders.writePaths(Graph.getInstance(), restaurants);
 
         Date end = new Date();
-        System.out.println("\nTIME: " + (end.getTime() - start.getTime())/1000d);
+        System.out.println("\nTIME: " + (end.getTime() - start.getTime()) / 1000d);
     }
 }

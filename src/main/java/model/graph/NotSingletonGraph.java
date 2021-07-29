@@ -1,12 +1,12 @@
 package model.graph;
 
+import lombok.NoArgsConstructor;
+
 /**
  * Used for tests to avoid affecting main graph
  */
+@NoArgsConstructor
 public class NotSingletonGraph extends Graph {
-    private NotSingletonGraph() {
-    }
-
     public static NotSingletonGraph create() {
         return new NotSingletonGraph();
     }

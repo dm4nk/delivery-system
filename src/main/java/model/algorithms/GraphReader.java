@@ -68,7 +68,7 @@ public class GraphReader {
             String[] values;
             while ((values = csvReader.readNext()) != null) {
                 graph.addVertex(
-                        values[0],
+                        Long.parseLong(values[0]),
                         Double.parseDouble(values[2]),
                         Double.parseDouble(values[1])
                 );
@@ -78,7 +78,11 @@ public class GraphReader {
         try (CSVReader csvReader = new CSVReader(new FileReader(edges))) {
             String[] values;
             while ((values = csvReader.readNext()) != null) {
-                graph.addEdge(0.06 * Double.parseDouble(values[3]) / Double.parseDouble(values[5]), values[1], values[2]);
+                graph.addEdge(
+                        0.06 * Double.parseDouble(values[3]) / Double.parseDouble(values[5]),
+                        Long.parseLong(values[1]),
+                        Long.parseLong(values[2])
+                );
             }
         }
     }
@@ -96,11 +100,11 @@ public class GraphReader {
         double[][] matrix = GraphReader.readGraph(file);
 
         for (int i = 0; i < matrix.length; ++i)
-            graph.addVertex(Double.toString(i));
+            graph.addVertex(i);
 
         for (int i = 0; i < matrix.length; ++i)
             for (int j = 0; j < matrix.length; ++j)
                 if (matrix[i][j] != Double.MAX_VALUE)
-                    graph.addEdge(matrix[i][j], Double.toString(i), Double.toString(j));
+                    graph.addEdge(matrix[i][j], i, j);
     }
 }

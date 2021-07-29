@@ -18,7 +18,7 @@ public class GraphWriter {
         for (Vertex vertex : graph.getVertices().values())
             for (Edge edge : vertex.getEdges())
                 System.out.println(
-                        edge.getStartVertex().getName() + " --" + edge.getWeight() + "-> " + edge.getTargetVertex().getName()
+                        edge.getStartVertex().getId() + " --" + edge.getWeight() + "-> " + edge.getTargetVertex().getId()
                 );
     }
 }

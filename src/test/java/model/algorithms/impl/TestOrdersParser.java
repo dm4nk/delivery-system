@@ -3,7 +3,6 @@ package model.algorithms.impl;
 import exceptions.WrongGraphFormatException;
 import exceptions.WrongOrderFormatException;
 import model.algorithms.Parser;
-import model.algorithms.impl.OrdersParser;
 import model.graph.NotSingletonGraph;
 import model.schedule.impl.OrdersSchedule;
 import org.json.simple.parser.ParseException;
@@ -18,15 +17,17 @@ import java.util.Locale;
 public class TestOrdersParser {
     public static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
 
-    static {formatter.setLenient(false);}
+    static {
+        formatter.setLenient(false);
+    }
 
     @Test
     public void testParseTo() throws ParseException, java.text.ParseException, IOException, WrongOrderFormatException, WrongGraphFormatException {
         String path = "src\\test\\resources\\dataset\\";
 
         NotSingletonGraph graph = NotSingletonGraph.create();
-        graph.addVertex("1", 144.959719, -37.8007208);
-        graph.addVertex("2", 144.9794147, -37.8207999);
+        graph.addVertex(1, 144.959719, -37.8007208);
+        graph.addVertex(2, 144.9794147, -37.8207999);
 
         OrdersSchedule actual = OrdersSchedule.create();
 

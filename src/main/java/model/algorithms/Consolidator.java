@@ -1,6 +1,7 @@
 package model.algorithms;
 
 import exceptions.WrongOrderFormatException;
+import lombok.NonNull;
 import model.graph.Graph;
 import model.schedule.impl.ConsolidatedOrderSchedule;
 import model.schedule.impl.OrdersSchedule;
@@ -20,7 +21,7 @@ public class Consolidator {
      * @return new ConsolidatedOrderSchedule
      * @throws WrongOrderFormatException if somehow error occurred while adding orders from old schedule to a new one
      */
-    public static ConsolidatedOrderSchedule consolidate(Graph graph, OrdersSchedule schedule) throws WrongOrderFormatException {
+    public static ConsolidatedOrderSchedule consolidate(Graph graph, @NonNull OrdersSchedule schedule) throws WrongOrderFormatException {
         return ConsolidatedOrderSchedule.createAndConsolidate(graph, schedule);
     }
 }

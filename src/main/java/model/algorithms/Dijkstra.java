@@ -1,6 +1,6 @@
 package model.algorithms;
 
-import exceptions.WrongOrderFormatException;
+import lombok.NonNull;
 import model.graph.Graph;
 import model.graph.Vertex;
 
@@ -19,9 +19,7 @@ public class Dijkstra {
      *
      * @param sourceVertex - dispatch vertex
      */
-    public static void computePath(Vertex sourceVertex) throws WrongOrderFormatException {
-        if (sourceVertex == null) throw new WrongOrderFormatException("no such point");
-
+    public static void computePath(@NonNull Vertex sourceVertex) {
         sourceVertex.computeMinPaths();
     }
 
@@ -31,10 +29,7 @@ public class Dijkstra {
      * @param targetVertex - arrival vertex
      * @return inverted shortest path
      */
-    public static List<Vertex> getShortestPathTo(Vertex targetVertex) throws WrongOrderFormatException {
-
-        if (targetVertex == null) throw new WrongOrderFormatException("no such point");
-
+    public static List<Vertex> getShortestPathTo(@NonNull Vertex targetVertex) {
         List<Vertex> path = new ArrayList<>();
 
         path.add(targetVertex);
@@ -53,8 +48,8 @@ public class Dijkstra {
      * @return null, if point is 200 away from map
      */
     public static Vertex calculateNearestVertexFromLatLon(Graph graph, double lon, double lat) {
-        String nearestVertexName = graph.getTree().getNearestVertexName(lon, lat);
-        return graph.getVertices().get(nearestVertexName);
+        Long nearestVertexId = graph.getTree().getNearestVertexId(lon, lat);
+        return nearestVertexId == null ? null : graph.getVertex(nearestVertexId);
     }
 
     /**

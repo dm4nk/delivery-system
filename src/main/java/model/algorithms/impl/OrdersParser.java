@@ -1,6 +1,7 @@
 package model.algorithms.impl;
 
 import exceptions.WrongOrderFormatException;
+import lombok.NonNull;
 import model.algorithms.Parser;
 import model.graph.Graph;
 import model.schedule.Order;
@@ -41,7 +42,7 @@ public class OrdersParser implements Parser {
      * @throws WrongOrderFormatException             contains duplicates
      */
     @Override
-    public <T extends Schedule> void parseTo(File file, T Schedule, Graph graph) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongOrderFormatException {
+    public <T extends Schedule> void parseTo(@NonNull File file, @NonNull T Schedule, Graph graph) throws IOException, org.json.simple.parser.ParseException, ParseException, WrongOrderFormatException {
         if (!file.getName().endsWith(".json")) throw new FileNotFoundException(file.getName() + " is not a json file");
 
         byte[] bytes = new byte[(int) file.length()];
@@ -68,11 +69,11 @@ public class OrdersParser implements Parser {
 
             Schedule.addOrder(
                     graph,
-                    new Order(
+                    Order.create(
                             (String) temp.get("id"),
-                            date,
                             (Double) temp.get("lon"),
-                            (Double) temp.get("lat")
+                            (Double) temp.get("lat"),
+                            date
                     )
             );
         }

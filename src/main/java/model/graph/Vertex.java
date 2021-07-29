@@ -1,28 +1,39 @@
 package model.graph;
 
-import java.util.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * Represents vertex in graph
  */
+@Data(staticConstructor = "create")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Vertex implements Comparable<Vertex> {
-    private final String name;
-    private List<Edge> edges;
-    private boolean visited;
-    private Vertex previousVertex;
-    private double minDistance = Double.MAX_VALUE;
+    @EqualsAndHashCode.Include
+    private final long id;
+    @EqualsAndHashCode.Include
     private final double lat;
+    @EqualsAndHashCode.Include
     private final double lon;
+    private List<Edge> edges = new ArrayList<>();
+    private boolean visited;
+    /**
+     * Used after Dijksta algorithm to get shortest path
+     */
+    private Vertex previousVertex;
+    /**
+     * Used after Dijksta algorithm to get shortest path
+     */
+    private double minDistance = Double.MAX_VALUE;
 
-    public Vertex(String name, double lon, double lat) {
-        this.name = name;
-        this.edges = new ArrayList<>();
-        this.lat = lat;
-        this.lon = lon;
-    }
-
-    public Vertex(String name) {
-        this(name, 180, 180);
+    public static Vertex create(long id) {
+        return new Vertex(id, 180, 180);
     }
 
     /**
@@ -39,73 +50,14 @@ public class Vertex implements Comparable<Vertex> {
      *
      * @param edge between this vertex as source vertex and another vertex
      */
-    public void addNeighbour(Edge edge) {
+    public void addNeighbour(@NonNull Edge edge) {
         this.edges.add(edge);
-    }
-
-    /**
-     * @return list of all edges that go from this vertex
-     */
-    public List<Edge> getEdges() {
-        return edges;
-    }
-
-    public void setEdges(List<Edge> edges) {
-        this.edges = edges;
-    }
-
-    public boolean isVisited() {
-        return visited;
-    }
-
-    public void setVisited(boolean visited) {
-        this.visited = visited;
-    }
-
-    /**
-     * used after Dijksta algorithm to get shortest path
-     */
-    public Vertex getPreviousVertex() {
-        return previousVertex;
-    }
-
-    /**
-     * Used after Dijksta algorithm to get shortest path
-     */
-    public void setPreviousVertex(Vertex previousVertex) {
-        this.previousVertex = previousVertex;
-    }
-
-    /**
-     * Used after Dijksta algorithm to get shortest path
-     */
-    public double getMinDistance() {
-        return minDistance;
-    }
-
-    /**
-     * Used after Dijksta algorithm to get shortest path
-     */
-    public void setMinDistance(double minDistance) {
-        this.minDistance = minDistance;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public double getLon() {
-        return lon;
     }
 
     /**
      * Euclid length between 2 vertices
      */
-    public double getDistanceTo(Vertex vertex) {
+    public double getDistanceTo(@NonNull Vertex vertex) {
         return Math.sqrt(Math.pow((lon - vertex.getLon()), 2) + Math.pow((lat - vertex.getLat()), 2));
     }
 
@@ -137,7 +89,7 @@ public class Vertex implements Comparable<Vertex> {
         }
     }
 
-    public Iterator<Vertex> prevIterator(Vertex target) {
+    public Iterator<Vertex> prevIterator(@NonNull Vertex target) {
         return new Iterator<Vertex>() {
             Vertex next = target;
 
@@ -156,25 +108,11 @@ public class Vertex implements Comparable<Vertex> {
 
     @Override
     public String toString() {
-        return name;
+        return Long.toString(id);
     }
 
     @Override
-    public int compareTo(Vertex otherVertex) {
+    public int compareTo(@NonNull Vertex otherVertex) {
         return Double.compare(this.minDistance, otherVertex.minDistance);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Vertex vertex = (Vertex) o;
-        return visited == vertex.visited &&
-                Double.compare(vertex.minDistance, minDistance) == 0 &&
-                Double.compare(vertex.lat, lat) == 0 &&
-                Double.compare(vertex.lon, lon) == 0 &&
-                Objects.equals(name, vertex.name) &&
-                Objects.equals(edges, vertex.edges) &&
-                Objects.equals(previousVertex, vertex.previousVertex);
     }
 }

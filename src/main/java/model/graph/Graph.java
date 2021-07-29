@@ -1,7 +1,8 @@
 package model.graph;
 
 import exceptions.WrongGraphFormatException;
-import exceptions.WrongOrderFormatException;
+import lombok.Getter;
+import lombok.NonNull;
 import model.algorithms.Dijkstra;
 import model.algorithms.GraphReader;
 import model.algorithms.GraphWriter;
@@ -14,11 +15,13 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Graph {
-    private final Map<String, Vertex> vertices;
-    private final RTreeAdapter tree;
     private final static SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
     private final static int MILLISECONDS_IN_MINUTE = 60_000;
     private static Graph singleInstance = null;
+    @Getter
+    private final Map<Long, Vertex> vertices;
+    @Getter
+    private final RTreeAdapter tree;
 
     protected Graph() {
         vertices = new HashMap<>();
@@ -43,55 +46,41 @@ public class Graph {
     }
 
     /**
-     * @return map, which contains all Vertices in graph
-     */
-    public Map<String, Vertex> getVertices() {
-        return vertices;
-    }
-
-    /**
-     * @return R tree of this graph
-     */
-    public RTreeAdapter getTree() {
-        return tree;
-    }
-
-    /**
-     * @param name id of vertex
+     * @param id id of vertex
      * @throws WrongGraphFormatException if vertex with such name already exists
      */
-    public void addVertex(String name) throws WrongGraphFormatException {
-        if (vertices.put(name, new Vertex(name)) != null)
+    public void addVertex(long id) throws WrongGraphFormatException {
+        if (vertices.put(id, Vertex.create(id)) != null)
             throw new WrongGraphFormatException("such point already exists");
-        tree.add(name, 180, 180);
+        tree.add(id, 180, 180);
     }
 
     /**
-     * @param name id of vertex
-     * @param lon  longitude
-     * @param lat  latitude
+     * @param id  id of vertex
+     * @param lon longitude
+     * @param lat latitude
      * @throws WrongGraphFormatException if vertex with such name already exists
      */
-    public void addVertex(String name, double lon, double lat) throws WrongGraphFormatException {
-        if (vertices.put(name, new Vertex(name, lon, lat)) != null)
+    public void addVertex(long id, double lon, double lat) throws WrongGraphFormatException {
+        if (vertices.put(id, Vertex.create(id, lon, lat)) != null)
             throw new WrongGraphFormatException("such point already exists");
-        tree.add(name, lon, lat);
+        tree.add(id, lon, lat);
     }
 
-    public Vertex getVertex(String id) {
+    public Vertex getVertex(long id) {
         return vertices.getOrDefault(id, null);
     }
 
     /**
-     * @param name id of vertex
-     * @throws NoSuchElementException if graph does not contain vertex with such name
+     * @param id id of vertex
+     * @throws NoSuchElementException if graph does not contain vertex with such id
      */
-    public void removeVertex(String name) {
-        if (!vertices.containsKey(name)) throw new NoSuchElementException("no vertex with such name");
-        Vertex removed = vertices.get(name);
+    public void removeVertex(long id) {
+        if (!vertices.containsKey(id)) throw new NoSuchElementException("no vertex with such id");
+        Vertex removed = vertices.get(id);
         vertices.values().forEach(v -> v.getEdges().removeIf(e -> e.getTargetVertex() == removed));
-        tree.remove(name, removed.getLon(), removed.getLat());
-        vertices.remove(name);
+        tree.remove(id, removed.getLon(), removed.getLat());
+        vertices.remove(id);
     }
 
     /**
@@ -102,13 +91,13 @@ public class Graph {
      * @param targetVertex arrival vertex
      * @throws WrongGraphFormatException weight < 0 or source and target vertices are the same
      */
-    public void addEdge(double weight, String sourceVertex, String targetVertex) throws WrongGraphFormatException {
-        if (sourceVertex.equals(targetVertex))
+    public void addEdge(double weight, long sourceVertex, long targetVertex) throws WrongGraphFormatException {
+        if (sourceVertex == targetVertex)
             throw new WrongGraphFormatException("source vertex equals to target vertex");
         if (weight < 0) throw new WrongGraphFormatException("negative weight");
         try {
             vertices.get(sourceVertex).addNeighbour(
-                    new Edge(
+                    Edge.create(
                             weight,
                             vertices.get(sourceVertex),
                             vertices.get(targetVertex)
@@ -126,10 +115,10 @@ public class Graph {
      * @param targetVertex arrival vertex
      * @throws NoSuchElementException if there is no vertices with such names
      */
-    public void removeEdge(String sourceVertex, String targetVertex) {
+    public void removeEdge(long sourceVertex, long targetVertex) {
         Vertex target = vertices.getOrDefault(targetVertex, null);
         Vertex source = vertices.getOrDefault(sourceVertex, null);
-        if (target == null || source == null) throw new NoSuchElementException("no vertex with such name");
+        if (target == null || source == null) throw new NoSuchElementException("no vertex with such id");
         source.getEdges().removeIf(removed -> removed.getTargetVertex() == target);
     }
 
@@ -190,22 +179,21 @@ public class Graph {
      * @param toVertex     dispatch vertex
      * @param fromVertices arrival vertex
      * @return nearest vertex
-     * @throws WrongOrderFormatException if graph does not contain such vertices
      */
-    private Vertex getBestVertexToStartFrom(Vertex toVertex, List<Vertex> fromVertices) throws WrongOrderFormatException {
-        String fromStr = "";
+    private Vertex getBestVertexToStartFrom(Vertex toVertex, List<Vertex> fromVertices) {
+        long from = Long.MIN_VALUE;
         double minPath = Double.MAX_VALUE;
 
         for (Vertex tmp : fromVertices) {
             Dijkstra.computePath(tmp);
             if (toVertex.getMinDistance() <= minPath) {
-                fromStr = tmp.getName();
+                from = tmp.getId();
                 minPath = toVertex.getMinDistance();
             }
             validate();
         }
 
-        return vertices.getOrDefault(fromStr, null);
+        return vertices.getOrDefault(from, null);
     }
 
     /**
@@ -214,14 +202,10 @@ public class Graph {
      * @param order      which order to execute
      * @param fromVertex street to go from
      * @return inverted best path
-     * @throws WrongOrderFormatException if destination is more than 200 meters away from delivery zone
      */
-    public List<Vertex> writeBestPath(Order order, Vertex fromVertex) throws WrongOrderFormatException, ParseException {
+    public List<Vertex> writeBestPath(Order order, @NonNull Vertex fromVertex) throws ParseException {
         Vertex toVertex = order.getVertex();
 
-        if (fromVertex == null) throw new WrongOrderFormatException("no such points");
-        if (toVertex == null)
-            throw new WrongOrderFormatException("destination is more than 200 meters away from delivery zone");
         Dijkstra.computePath(fromVertex);
 
         System.out.println(order.getId() + ": ");
@@ -254,13 +238,9 @@ public class Graph {
      * @param order        which order to execute
      * @param fromVertices streets that we can go from
      * @return inverted best path
-     * @throws WrongOrderFormatException if list is empty or destination is more than 200 meters away from delivery zone
      */
-    public List<Vertex> writeBestPath(Order order, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
-        if (fromVertices.size() == 0) throw new WrongOrderFormatException("list is empty");
+    public List<Vertex> writeBestPath(Order order, @NonNull List<Vertex> fromVertices) throws ParseException {
         Vertex toVertex = order.getVertex();
-        if (toVertex == null)
-            throw new WrongOrderFormatException("destination is more than 200 meters away from delivery zone");
         Vertex fromVertex = getBestVertexToStartFrom(toVertex, fromVertices);
         if (fromVertex == null) {
             System.out.println("No such path");
@@ -275,10 +255,8 @@ public class Graph {
      * @param order        which order to execute
      * @param fromVertices streets that we can go from
      * @return inverted best alternative path, or inverted shortest path, if there is no alternative
-     * @throws WrongOrderFormatException if list is empty or destination is more than 200 meters away from delivery zone
      */
-    public List<Vertex> write2PathsAndTime(Order order, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
-        if (fromVertices.size() == 0) throw new WrongOrderFormatException("list is empty");
+    public List<Vertex> write2PathsAndTime(Order order, @NonNull List<Vertex> fromVertices) throws ParseException {
         List<Vertex> firstPath = writeBestPath(order, fromVertices);
         if (firstPath == null || firstPath.size() <= 10) return firstPath;
 

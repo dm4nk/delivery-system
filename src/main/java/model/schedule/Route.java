@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * Represents a single route for courier, containing 3 orders as maximum
  */
+
 public class Route {
     private final List<Order> route;
 
@@ -63,9 +64,8 @@ public class Route {
      *
      * @param fromVertices streets that ve can go from
      * @return inverted best path
-     * @throws WrongOrderFormatException if list is empty or destination is more than 200 meters away from delivery zone
      */
-    public List<Vertex> writeBestPath(Graph graph, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException {
+    public List<Vertex> writeBestPath(Graph graph, List<Vertex> fromVertices) throws ParseException {
         List<Vertex> path = new ArrayList<>(
                 route.get(0).writeBestPath(graph, fromVertices)
         );

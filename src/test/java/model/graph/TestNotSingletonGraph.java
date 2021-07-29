@@ -1,8 +1,6 @@
 package model.graph;
 
 import exceptions.WrongGraphFormatException;
-import model.graph.Graph;
-import model.graph.NotSingletonGraph;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -11,9 +9,10 @@ public class TestNotSingletonGraph {
     public void testNotSingletonGraph() throws WrongGraphFormatException {
         NotSingletonGraph actual = NotSingletonGraph.create();
 
-        actual.addVertex("testVertexThatShouldNotExistInRealGraph");
+        final long testVertexThatShouldNotExistInRealGraph = Long.MIN_VALUE;
+        actual.addVertex(testVertexThatShouldNotExistInRealGraph);
 
-        Assert.assertNull(Graph.getInstance().getVertices().getOrDefault("testVertexThatShouldNotExistInRealGraph", null));
+        Assert.assertNull(Graph.getInstance().getVertex(testVertexThatShouldNotExistInRealGraph));
 
         Assert.assertNotEquals(actual, Graph.getInstance());
     }

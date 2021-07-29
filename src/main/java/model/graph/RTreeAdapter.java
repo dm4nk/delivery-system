@@ -10,8 +10,8 @@ import java.util.NoSuchElementException;
  * Adapts com.github.davidmoten.rtree.RTree for certain needs - finding nearest point
  */
 public final class RTreeAdapter {
-    private RTree<String, Point> tree;
     private final static double MAX_DISTANCE = 0.002;//200 meters
+    private RTree<Long, Point> tree;
 
     private RTreeAdapter() {
         //as said in documentation, it is the most optimized way to create a tree for >10 000 elements
@@ -22,12 +22,12 @@ public final class RTreeAdapter {
         return new RTreeAdapter();
     }
 
-    public void add(String name, double lon, double lat) {
-        tree = tree.add(name, Geometries.pointGeographic(lon, lat));
+    public void add(long id, double lon, double lat) {
+        tree = tree.add(id, Geometries.pointGeographic(lon, lat));
     }
 
-    public void remove(String name, double lon, double lat) {
-        tree = tree.delete(name, Geometries.pointGeographic(lon, lat));
+    public void remove(long id, double lon, double lat) {
+        tree = tree.delete(id, Geometries.pointGeographic(lon, lat));
     }
 
     public int size() {
@@ -37,7 +37,7 @@ public final class RTreeAdapter {
     /**
      * @return nearest vertex name or null, if vertex if more than 200 meters away
      */
-    public String getNearestVertexName(double lon, double lat) {
+    public Long getNearestVertexId(double lon, double lat) {
         try {
             return tree
                     .nearest(Geometries.pointGeographic(lon, lat), MAX_DISTANCE, 1)
