@@ -1,6 +1,5 @@
 package model.schedule;
 
-import exceptions.WrongOrderFormatException;
 import model.graph.Graph;
 import model.graph.Vertex;
 

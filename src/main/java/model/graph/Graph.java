@@ -46,25 +46,21 @@ public class Graph {
     }
 
     /**
-     * @param id id of vertex
+     * Adds a vertex to graph with no edges
+     *
      * @throws WrongGraphFormatException if vertex with such name already exists
      */
-    public void addVertex(long id) throws WrongGraphFormatException {
-        if (vertices.put(id, Vertex.create(id)) != null)
+    public void addVertex(@NonNull Vertex vertex) throws WrongGraphFormatException {
+        if (vertices.put(vertex.getId(), vertex) != null)
             throw new WrongGraphFormatException("such point already exists");
-        tree.add(id, 180, 180);
+        tree.add(vertex.getId(), vertex.getLat(), vertex.getLon());
     }
 
-    /**
-     * @param id  id of vertex
-     * @param lon longitude
-     * @param lat latitude
-     * @throws WrongGraphFormatException if vertex with such name already exists
-     */
-    public void addVertex(long id, double lon, double lat) throws WrongGraphFormatException {
-        if (vertices.put(id, Vertex.create(id, lon, lat)) != null)
-            throw new WrongGraphFormatException("such point already exists");
-        tree.add(id, lon, lat);
+    public void addAllVertices(@NonNull List<Vertex> vertexList) throws WrongGraphFormatException {
+        for (Vertex v : vertexList) {
+            if (vertices.put(v.getId(), v) != null) throw new WrongGraphFormatException("such point already exists");
+            tree.add(v.getId(), v.getLat(), v.getLon());
+        }
     }
 
     public Vertex getVertex(long id) {
@@ -85,27 +81,16 @@ public class Graph {
 
     /**
      * makes edge between 2 vertices in graph
-     *
-     * @param weight       weight of an edge
-     * @param sourceVertex dispatch vertex
-     * @param targetVertex arrival vertex
-     * @throws WrongGraphFormatException weight < 0 or source and target vertices are the same
      */
-    public void addEdge(double weight, long sourceVertex, long targetVertex) throws WrongGraphFormatException {
-        if (sourceVertex == targetVertex)
-            throw new WrongGraphFormatException("source vertex equals to target vertex");
-        if (weight < 0) throw new WrongGraphFormatException("negative weight");
-        try {
-            vertices.get(sourceVertex).addNeighbour(
-                    Edge.create(
-                            weight,
-                            vertices.get(sourceVertex),
-                            vertices.get(targetVertex)
-                    )
-            );
-        } catch (NullPointerException e) {
-            throw new WrongGraphFormatException("no such points");
-        }
+    public void addEdge(@NonNull Edge edge) {
+        edge.getStartVertex().addNeighbour(edge);
+    }
+
+    /**
+     * makes edges between 2 vertices in graph
+     */
+    public void addAllEdges(@NonNull List<Edge> edgeList) {
+        edgeList.forEach(e -> e.getStartVertex().addNeighbour(e));
     }
 
     /**

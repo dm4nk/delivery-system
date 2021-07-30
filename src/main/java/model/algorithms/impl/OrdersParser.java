@@ -71,8 +71,8 @@ public class OrdersParser implements Parser {
                     graph,
                     Order.create(
                             (String) temp.get("id"),
-                            (Double) temp.get("lon"),
                             (Double) temp.get("lat"),
+                            (Double) temp.get("lon"),
                             date
                     )
             );

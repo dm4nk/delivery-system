@@ -3,6 +3,7 @@ package model.schedule.impl;
 import exceptions.WrongGraphFormatException;
 import exceptions.WrongOrderFormatException;
 import model.graph.NotSingletonGraph;
+import model.graph.Vertex;
 import model.schedule.Order;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,10 +15,10 @@ public class TestOrdersSchedule {
     public void testAddOrder() throws WrongOrderFormatException, WrongGraphFormatException {
         OrdersSchedule actual = OrdersSchedule.create();
         NotSingletonGraph graph = NotSingletonGraph.create();
-        graph.addVertex(1, -1, -1);
-        graph.addVertex(2, -4, -10);
+        graph.addVertex(Vertex.create(1, -1, -1));
+        graph.addVertex(Vertex.create(2, -4, -10));
 
-        actual.addOrder(graph, Order.create("1",  -1, -1, new Date()));
+        actual.addOrder(graph, Order.create("1", -1, -1, new Date()));
 
         Assert.assertThrows(WrongOrderFormatException.class, () -> actual.addOrder(graph, Order.create("1", -4, -10, new Date())));
         Assert.assertThrows(WrongOrderFormatException.class, () -> actual.addOrder(graph, Order.create("2", -4, -100, new Date())));

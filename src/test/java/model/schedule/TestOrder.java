@@ -14,8 +14,8 @@ public class TestOrder {
     public void testCalculateNearestVertex() throws WrongGraphFormatException, WrongOrderFormatException {
         NotSingletonGraph graph = NotSingletonGraph.create();
 
-        graph.addVertex(1, 53.253709, 50.209983);
-        graph.addVertex(2, 53.256407, 50.212732);
+        graph.addVertex(Vertex.create(1, 53.253709, 50.209983));
+        graph.addVertex(Vertex.create(2, 53.256407, 50.212732));
         Order order = Order.create("", 53.252608, 50.210996, new Date());
         Order wrong = Order.create("", 53.253554, 50.200895, new Date());
 

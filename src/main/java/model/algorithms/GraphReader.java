@@ -2,7 +2,9 @@ package model.algorithms;
 
 import com.opencsv.CSVReader;
 import exceptions.WrongGraphFormatException;
+import model.graph.Edge;
 import model.graph.Graph;
+import model.graph.Vertex;
 
 import java.io.*;
 
@@ -25,16 +27,13 @@ public class GraphReader {
      * @throws WrongGraphFormatException matrix is not n*n, contains characters other than positive doubles
      */
     public static double[][] readGraph(File file) throws IOException, WrongGraphFormatException {
-        //позволяет считать числа, не зная их количество
         byte[] bytes = new byte[(int) file.length()];
         FileInputStream fis = new FileInputStream(file);
         fis.read(bytes);
         fis.close();
 
-        //разбиваем строку на массив строк, в каждой их которых содержится 1 число
         String[] valueStr = new String(bytes).trim().split("\\s+");
 
-        //проверка на размер графа, должен быть n*n
         int graphSize = (int) sqrt(valueStr.length);
         if (sqrt(valueStr.length) != graphSize || graphSize < 2) {
             throw new WrongGraphFormatException("wrong Graph size:" + graphSize);
@@ -43,7 +42,7 @@ public class GraphReader {
         double[][] graph = new double[graphSize][graphSize];
         for (int i = 0; i < graphSize; ++i)
             for (int j = 0; j < graphSize; ++j) {
-                if ((graph[i][j] = Integer.parseInt(valueStr[i * graphSize + j])) < 0)//получаем доступ к i j элементу в строке...
+                if ((graph[i][j] = Integer.parseInt(valueStr[i * graphSize + j])) < 0)
                     throw new WrongGraphFormatException("negative value in Graph");
                 if (graph[i][j] == 0) graph[i][j] = Double.MAX_VALUE;
             }
@@ -68,9 +67,11 @@ public class GraphReader {
             String[] values;
             while ((values = csvReader.readNext()) != null) {
                 graph.addVertex(
-                        Long.parseLong(values[0]),
-                        Double.parseDouble(values[2]),
-                        Double.parseDouble(values[1])
+                        Vertex.create(
+                                Long.parseLong(values[0]),
+                                Double.parseDouble(values[1]),
+                                Double.parseDouble(values[2])
+                        )
                 );
             }
         }
@@ -79,9 +80,11 @@ public class GraphReader {
             String[] values;
             while ((values = csvReader.readNext()) != null) {
                 graph.addEdge(
-                        0.06 * Double.parseDouble(values[3]) / Double.parseDouble(values[5]),
-                        Long.parseLong(values[1]),
-                        Long.parseLong(values[2])
+                        Edge.create(
+                                0.06 * Double.parseDouble(values[3]) / Double.parseDouble(values[5]),
+                                graph.getVertex(Long.parseLong(values[1])),
+                                graph.getVertex(Long.parseLong(values[2]))
+                        )
                 );
             }
         }
@@ -100,11 +103,17 @@ public class GraphReader {
         double[][] matrix = GraphReader.readGraph(file);
 
         for (int i = 0; i < matrix.length; ++i)
-            graph.addVertex(i);
+            graph.addVertex(Vertex.create(i));
 
         for (int i = 0; i < matrix.length; ++i)
             for (int j = 0; j < matrix.length; ++j)
                 if (matrix[i][j] != Double.MAX_VALUE)
-                    graph.addEdge(matrix[i][j], i, j);
+                    graph.addEdge(
+                            Edge.create(
+                                    matrix[i][j],
+                                    graph.getVertex(i),
+                                    graph.getVertex(j)
+                            )
+                    );
     }
 }

@@ -23,7 +23,6 @@ public interface Schedule {
      *
      * @param graph        graph to work with
      * @param fromVertices vertices we can go from
-     * @throws WrongOrderFormatException if there is no such vertices in graph
      */
-    void writePaths(Graph graph, List<Vertex> fromVertices) throws WrongOrderFormatException, ParseException;
+    void writePaths(Graph graph, List<Vertex> fromVertices) throws ParseException;
 }

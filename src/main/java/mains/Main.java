@@ -26,9 +26,9 @@ public class Main {
         Graph.getInstance().readGraphFromFile(new File(path + "nodes.csv"), new File(path + "edges.csv"));
 
         //find restaurant street
-        Vertex NS = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), 144.9836466, -37.7738026);
-        Vertex TP = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), 144.905716, -37.8618349);
-        Vertex BK = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), 145.04645, -37.8158343);
+        Vertex NS = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), -37.7738026, 144.9836466);
+        Vertex TP = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), -37.8618349, 144.905716);
+        Vertex BK = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), -37.8158343, 145.04645);
 
         List<Vertex> restaurants = new ArrayList<>(3);
         restaurants.add(NS);

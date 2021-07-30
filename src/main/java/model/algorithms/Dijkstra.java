@@ -47,8 +47,8 @@ public class Dijkstra {
      *
      * @return null, if point is 200 away from map
      */
-    public static Vertex calculateNearestVertexFromLatLon(Graph graph, double lon, double lat) {
-        Long nearestVertexId = graph.getTree().getNearestVertexId(lon, lat);
+    public static Vertex calculateNearestVertexFromLatLon(Graph graph, double lat, double lon) {
+        Long nearestVertexId = graph.getTree().getNearestVertexId(lat, lon);
         return nearestVertexId == null ? null : graph.getVertex(nearestVertexId);
     }
 

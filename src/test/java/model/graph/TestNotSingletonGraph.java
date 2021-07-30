@@ -10,7 +10,7 @@ public class TestNotSingletonGraph {
         NotSingletonGraph actual = NotSingletonGraph.create();
 
         final long testVertexThatShouldNotExistInRealGraph = Long.MIN_VALUE;
-        actual.addVertex(testVertexThatShouldNotExistInRealGraph);
+        actual.addVertex(Vertex.create(testVertexThatShouldNotExistInRealGraph));
 
         Assert.assertNull(Graph.getInstance().getVertex(testVertexThatShouldNotExistInRealGraph));
 

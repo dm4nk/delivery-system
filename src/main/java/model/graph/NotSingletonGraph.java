@@ -5,9 +5,6 @@ import lombok.NoArgsConstructor;
 /**
  * Used for tests to avoid affecting main graph
  */
-@NoArgsConstructor
+@NoArgsConstructor(staticName = "create")
 public class NotSingletonGraph extends Graph {
-    public static NotSingletonGraph create() {
-        return new NotSingletonGraph();
-    }
 }

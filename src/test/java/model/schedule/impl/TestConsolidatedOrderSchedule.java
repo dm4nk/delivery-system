@@ -4,41 +4,62 @@ import exceptions.WrongGraphFormatException;
 import exceptions.WrongOrderFormatException;
 import model.algorithms.Parser;
 import model.algorithms.impl.OrdersParser;
+import model.graph.Edge;
 import model.graph.NotSingletonGraph;
+import model.graph.Vertex;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 
 public class TestConsolidatedOrderSchedule {
+
+    private static final String path = "src\\test\\resources\\";
+    private static final NotSingletonGraph graph = NotSingletonGraph.create();
+
+    static {
+        try {
+            graph.addAllVertices(List.of(
+                    Vertex.create(0, 0, 0),
+                    Vertex.create(1, 0.0001, 0.0001),
+                    Vertex.create(2, 0.0002, 0.0002),
+                    Vertex.create(3, 0.0003, 0.0003),
+                    Vertex.create(4, 1, 1),
+                    Vertex.create(5, 2, 2),
+                    Vertex.create(6, 2.0001, 2.0001)
+            ));
+
+            graph.addAllEdges(List.of(
+                    Edge.create(5, graph.getVertex(0), graph.getVertex(1)),
+                    Edge.create(5, graph.getVertex(0), graph.getVertex(3)),
+                    Edge.create(5, graph.getVertex(1), graph.getVertex(2)),
+                    Edge.create(1, graph.getVertex(2), graph.getVertex(3)),
+
+                    Edge.create(10_000, graph.getVertex(3), graph.getVertex(4)),
+                    Edge.create(10_000, graph.getVertex(4), graph.getVertex(5)),
+                    Edge.create(5, graph.getVertex(5), graph.getVertex(6))
+            ));
+        } catch (WrongGraphFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Test
-    public void testConsolidationOrAddOrder() throws WrongOrderFormatException, ParseException, org.json.simple.parser.ParseException, IOException, WrongGraphFormatException {
-        String path = "src\\test\\resources\\";
-        NotSingletonGraph graph = NotSingletonGraph.create();
-        graph.addVertex(0, 0, 0);
-        graph.addVertex(1, 0.0001, 0.0001);
-        graph.addVertex(2, 0.0002, 0.0002);
-        graph.addVertex(3, 0.0003, 0.0003);
-        graph.addVertex(4, 1, 1);
-        graph.addVertex(5, 2, 2);
-        graph.addVertex(6, 2.0001, 2.0001);
-
-        graph.addEdge(5, 0, 1);
-        graph.addEdge(5, 0, 2);
-        graph.addEdge(5, 0, 3);
-        graph.addEdge(5, 1, 2);
-        graph.addEdge(1, 2, 3);
-
-        graph.addEdge(10000, 3, 4);
-        graph.addEdge(10000, 4, 5);
-        graph.addEdge(5, 5, 6);
+    public void testConsolidationOrAddOrder() throws WrongOrderFormatException, ParseException, org.json.simple.parser.ParseException, IOException {
 
         ConsolidatedOrderSchedule actual = ConsolidatedOrderSchedule.create();
+
+        //let's say that parser is working ok
         Parser parser = new OrdersParser();
+
+        //parsing also uses AddOrder
         parser.parseTo(new File(path + "dataset\\TestConsOrders.json"), actual, graph);
 
+        //check size of the routes according ro graph
         Assert.assertEquals(3, actual.getRoute(0).size());
         Assert.assertEquals(1, actual.getRoute(1).size());
         Assert.assertEquals(1, actual.getRoute(2).size());

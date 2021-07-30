@@ -19,8 +19,8 @@ import java.util.List;
 public class Order implements Serializable {
     private static final double MILLISECONDS_IN_MINUTE = 60_000d;
     private final String id;
-    private final double lon;
     private final double lat;
+    private final double lon;
     @NonNull
     private Date dispatchTime;
     private Date arrivalTime;
@@ -54,7 +54,7 @@ public class Order implements Serializable {
      * @return nearest street to this order coordinates
      */
     private Vertex calculateNearestVertex(Graph graph) {
-        return Dijkstra.calculateNearestVertexFromLatLon(graph, lon, lat);
+        return Dijkstra.calculateNearestVertexFromLatLon(graph, lat, lon);
     }
 
     /**

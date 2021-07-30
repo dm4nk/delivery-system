@@ -4,6 +4,7 @@ import exceptions.WrongGraphFormatException;
 import exceptions.WrongOrderFormatException;
 import model.algorithms.Parser;
 import model.graph.NotSingletonGraph;
+import model.graph.Vertex;
 import model.schedule.impl.OrdersSchedule;
 import org.json.simple.parser.ParseException;
 import org.junit.Assert;
@@ -26,16 +27,18 @@ public class TestOrdersParser {
         String path = "src\\test\\resources\\dataset\\";
 
         NotSingletonGraph graph = NotSingletonGraph.create();
-        graph.addVertex(1, 144.959719, -37.8007208);
-        graph.addVertex(2, 144.9794147, -37.8207999);
+        graph.addVertex(Vertex.create(1, -37.8007208, 144.959719));
+        graph.addVertex(Vertex.create(2, -37.8207999, 144.9794147));
 
         OrdersSchedule actual = OrdersSchedule.create();
 
         Parser parser = new OrdersParser();
+        //parsing info to actual ordersSchedule
         parser.parseTo(new File(path + "testOrders.json"), actual, graph);
 
         Assert.assertEquals(2, actual.size());
 
+        //check all orders' fields
         Assert.assertEquals(formatter.parse("09-8-2018 15:16:03"), actual.getOrder("1").getDispatchTime());
         Assert.assertEquals(-37.8007208, actual.getOrder("1").getLat(), Double.MIN_VALUE);
         Assert.assertEquals(144.959719, actual.getOrder("1").getLon(), Double.MIN_VALUE);

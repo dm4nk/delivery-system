@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="14">
-      <module name="magenta_test" target="1.8" />
+      <module name="magenta_test" target="9" />
     </bytecodeTargetLevel>
   </component>
 </project>

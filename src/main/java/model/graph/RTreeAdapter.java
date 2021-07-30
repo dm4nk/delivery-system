@@ -22,12 +22,12 @@ public final class RTreeAdapter {
         return new RTreeAdapter();
     }
 
-    public void add(long id, double lon, double lat) {
-        tree = tree.add(id, Geometries.pointGeographic(lon, lat));
+    public void add(long id, double lat, double lon) {
+        tree = tree.add(id, Geometries.pointGeographic(lat, lon));
     }
 
-    public void remove(long id, double lon, double lat) {
-        tree = tree.delete(id, Geometries.pointGeographic(lon, lat));
+    public void remove(long id, double lat, double lon) {
+        tree = tree.delete(id, Geometries.pointGeographic(lat, lon));
     }
 
     public int size() {
@@ -37,10 +37,10 @@ public final class RTreeAdapter {
     /**
      * @return nearest vertex name or null, if vertex if more than 200 meters away
      */
-    public Long getNearestVertexId(double lon, double lat) {
+    public Long getNearestVertexId(double lat, double lon) {
         try {
             return tree
-                    .nearest(Geometries.pointGeographic(lon, lat), MAX_DISTANCE, 1)
+                    .nearest(Geometries.pointGeographic(lat, lon), MAX_DISTANCE, 1)
                     .toBlocking()
                     .single()
                     .value();
