@@ -90,7 +90,7 @@ public class Vertex implements Comparable<Vertex> {
     }
 
     public Iterator<Vertex> prevIterator(@NonNull Vertex target) {
-        return new Iterator<Vertex>() {
+        return new Iterator<>() {
             Vertex next = target;
 
             @Override
