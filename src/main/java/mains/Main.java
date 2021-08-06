@@ -2,9 +2,11 @@ package mains;
 
 import exceptions.WrongGraphFormatException;
 import exceptions.WrongOrderFormatException;
-import model.algorithms.Dijkstra;
 import model.algorithms.Parser;
 import model.algorithms.impl.OrdersParser;
+import model.dto.GraphDTO;
+import model.algorithms.EedgeParser;
+import model.algorithms.VertexParser;
 import model.graph.Graph;
 import model.graph.Vertex;
 import model.schedule.FactoryType;
@@ -18,17 +20,22 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static model.algorithms.Dijkstra.calculateNearestVertexFromLatLon;
+
 public class Main {
     public static void main(String[] args) throws IOException, WrongGraphFormatException, ParseException, WrongOrderFormatException, org.json.simple.parser.ParseException {
         Date start = new Date();
 
         String path = "src\\main\\resources\\dataset\\";
-        Graph.getInstance().readGraphFromFile(new File(path + "nodes.csv"), new File(path + "edges.csv"));
+        List<GraphDTO.vertex> vertices = VertexParser.parse(new File(path + "nodes.csv"));
+        List<GraphDTO.edge> edges = EedgeParser.parse(new File(path + "edges.csv"));
+
+        Graph.getInstance().readGraphFromDTOs(vertices, edges);
 
         //find restaurant street
-        Vertex NS = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), -37.7738026, 144.9836466);
-        Vertex TP = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), -37.8618349, 144.905716);
-        Vertex BK = Dijkstra.calculateNearestVertexFromLatLon(Graph.getInstance(), -37.8158343, 145.04645);
+        Vertex NS = calculateNearestVertexFromLatLon(Graph.getInstance(), -37.7738026, 144.9836466);
+        Vertex TP = calculateNearestVertexFromLatLon(Graph.getInstance(), -37.8618349, 144.905716);
+        Vertex BK = calculateNearestVertexFromLatLon(Graph.getInstance(), -37.8158343, 145.04645);
 
         List<Vertex> restaurants = new ArrayList<>(3);
         restaurants.add(NS);

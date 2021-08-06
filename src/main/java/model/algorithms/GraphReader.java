@@ -2,12 +2,16 @@ package model.algorithms;
 
 import com.opencsv.CSVReader;
 import exceptions.WrongGraphFormatException;
+import model.dto.GraphDTO;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Vertex;
 
 import java.io.*;
+import java.util.List;
 
+import static java.lang.Double.parseDouble;
+import static java.lang.Long.parseLong;
 import static java.lang.Math.sqrt;
 
 /**
@@ -68,9 +72,9 @@ public class GraphReader {
             while ((values = csvReader.readNext()) != null) {
                 graph.addVertex(
                         Vertex.create(
-                                Long.parseLong(values[0]),
-                                Double.parseDouble(values[1]),
-                                Double.parseDouble(values[2])
+                                parseLong(values[0]),
+                                parseDouble(values[1]),
+                                parseDouble(values[2])
                         )
                 );
             }
@@ -81,13 +85,32 @@ public class GraphReader {
             while ((values = csvReader.readNext()) != null) {
                 graph.addEdge(
                         Edge.create(
-                                0.06 * Double.parseDouble(values[3]) / Double.parseDouble(values[5]),
-                                graph.getVertex(Long.parseLong(values[1])),
-                                graph.getVertex(Long.parseLong(values[2]))
+                                0.06 * parseDouble(values[3]) / parseDouble(values[5]),
+                                graph.getVertex(parseLong(values[1])),
+                                graph.getVertex(parseLong(values[2]))
                         )
                 );
             }
         }
+    }
+
+    public static void readGraph(List<GraphDTO.vertex> vertices, List<GraphDTO.edge> edges, Graph graph) throws WrongGraphFormatException {
+        for(GraphDTO.vertex v : vertices)
+            graph.addVertex(
+                    Vertex.create(
+                            v.getId(),
+                            v.getLat(),
+                            v.getLon())
+            );
+
+        for(GraphDTO.edge e : edges)
+            graph.addEdge(
+                    Edge.create(
+                            e.getId(),
+                            graph.getVertex(e.getSourceVertex()),
+                            graph.getVertex(e.getTargetVertex())
+                    )
+            );
     }
 
     /**
@@ -100,7 +123,7 @@ public class GraphReader {
      * @throws WrongGraphFormatException matrix is not n*n, contains characters other than positive doubles
      */
     public static void readGraph(File file, Graph graph) throws IOException, WrongGraphFormatException {
-        double[][] matrix = GraphReader.readGraph(file);
+        double[][] matrix = readGraph(file);
 
         for (int i = 0; i < matrix.length; ++i)
             graph.addVertex(Vertex.create(i));

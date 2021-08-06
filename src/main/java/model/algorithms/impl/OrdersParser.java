@@ -1,11 +1,13 @@
 package model.algorithms.impl;
 
+import com.google.gson.Gson;
 import exceptions.WrongOrderFormatException;
 import lombok.NonNull;
 import model.algorithms.Parser;
 import model.graph.Graph;
 import model.schedule.Order;
 import model.schedule.Schedule;
+import model.schedule.impl.OrdersSchedule;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

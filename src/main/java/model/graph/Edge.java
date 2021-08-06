@@ -1,20 +1,27 @@
 package model.graph;
 
 import exceptions.WrongGraphFormatException;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 
 /**
  * Represents an edge between 2 vertices in graph
  */
-@Data()
+@EqualsAndHashCode
 public class Edge {
-    @NonNull
-    private double weight;
-    @NonNull
-    private Vertex startVertex;
-    @NonNull
-    private Vertex targetVertex;
+    @Getter
+    private final double weight;
+    @Getter
+    private final Vertex startVertex;
+    @Getter
+    private final Vertex targetVertex;
+
+    private Edge(double weight, Vertex startVertex, Vertex targetVertex) {
+        this.weight = weight;
+        this.startVertex = startVertex;
+        this.targetVertex = targetVertex;
+    }
 
     /**
      * @param weight       weight of an edge

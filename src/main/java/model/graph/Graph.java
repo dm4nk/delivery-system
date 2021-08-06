@@ -6,6 +6,7 @@ import lombok.NonNull;
 import model.algorithms.Dijkstra;
 import model.algorithms.GraphReader;
 import model.algorithms.GraphWriter;
+import model.dto.GraphDTO;
 import model.schedule.Order;
 
 import java.io.File;
@@ -116,22 +117,19 @@ public class Graph {
      * @throws IOException               error while reading file
      * @throws WrongGraphFormatException matrix is not n*n, contains characters other than positive doubles
      */
-    public void readGraphFromFile(File file) throws IOException, WrongGraphFormatException {
+    public void readGraphFromDTOs(File file) throws IOException, WrongGraphFormatException {
         GraphReader.readGraph(file, this);
     }
 
     /**
      * reads nodes and edges to this graph
      *
-     * @param nodes .csv file with nodes.
-     *              format: id, latitude, longitude
-     * @param edges .csv file with edges
-     *              format: id, id of source vertex, id of target vertex, length in meters, type of street according to speed limit, speed limit
-     * @throws IOException               error while opening or reading file
-     * @throws WrongGraphFormatException if files contain duplicates
+     * @param vertices list of vertex dtos
+     * @param edges list of edge dtos
+     * @throws WrongGraphFormatException if lists contain duplicates
      */
-    public void readGraphFromFile(File nodes, File edges) throws IOException, WrongGraphFormatException {
-        GraphReader.readGraph(nodes, edges, this);
+    public void readGraphFromDTOs(List<GraphDTO.vertex> vertices, List<GraphDTO.edge> edges) throws WrongGraphFormatException {
+        GraphReader.readGraph(vertices, edges, this);
     }
 
     /**
