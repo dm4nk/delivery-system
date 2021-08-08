@@ -6,7 +6,7 @@ import lombok.NonNull;
 import model.algorithms.Dijkstra;
 import model.algorithms.GraphReader;
 import model.algorithms.GraphWriter;
-import model.dto.GraphDTO;
+import model.dto.DTO;
 import model.schedule.Order;
 
 import java.io.File;
@@ -117,7 +117,7 @@ public class Graph {
      * @throws IOException               error while reading file
      * @throws WrongGraphFormatException matrix is not n*n, contains characters other than positive doubles
      */
-    public void readGraphFromDTOs(File file) throws IOException, WrongGraphFormatException {
+    public void readGraphFromTXT(@NonNull File file) throws IOException, WrongGraphFormatException {
         GraphReader.readGraph(file, this);
     }
 
@@ -125,10 +125,10 @@ public class Graph {
      * reads nodes and edges to this graph
      *
      * @param vertices list of vertex dtos
-     * @param edges list of edge dtos
+     * @param edges    list of edge dtos
      * @throws WrongGraphFormatException if lists contain duplicates
      */
-    public void readGraphFromDTOs(List<GraphDTO.vertex> vertices, List<GraphDTO.edge> edges) throws WrongGraphFormatException {
+    public void readGraphFromDTOs(@NonNull List<DTO.vertex> vertices, @NonNull List<DTO.edge> edges) throws WrongGraphFormatException {
         GraphReader.readGraph(vertices, edges, this);
     }
 
@@ -163,7 +163,7 @@ public class Graph {
      * @param fromVertices arrival vertex
      * @return nearest vertex
      */
-    private Vertex getBestVertexToStartFrom(Vertex toVertex, List<Vertex> fromVertices) {
+    private Vertex getBestVertexToStartFrom(@NonNull Vertex toVertex, @NonNull List<Vertex> fromVertices) {
         long from = Long.MIN_VALUE;
         double minPath = Double.MAX_VALUE;
 
@@ -186,7 +186,7 @@ public class Graph {
      * @param fromVertex street to go from
      * @return inverted best path
      */
-    public List<Vertex> writeBestPath(Order order, @NonNull Vertex fromVertex) throws ParseException {
+    public List<Vertex> writeBestPath(@NonNull Order order, @NonNull Vertex fromVertex) throws ParseException {
         Vertex toVertex = order.getVertex();
 
         Dijkstra.computePath(fromVertex);
@@ -222,7 +222,7 @@ public class Graph {
      * @param fromVertices streets that we can go from
      * @return inverted best path
      */
-    public List<Vertex> writeBestPath(Order order, @NonNull List<Vertex> fromVertices) throws ParseException {
+    public List<Vertex> writeBestPath(@NonNull Order order, @NonNull List<Vertex> fromVertices) throws ParseException {
         Vertex toVertex = order.getVertex();
         Vertex fromVertex = getBestVertexToStartFrom(toVertex, fromVertices);
         if (fromVertex == null) {
@@ -239,7 +239,7 @@ public class Graph {
      * @param fromVertices streets that we can go from
      * @return inverted best alternative path, or inverted shortest path, if there is no alternative
      */
-    public List<Vertex> write2PathsAndTime(Order order, @NonNull List<Vertex> fromVertices) throws ParseException {
+    public List<Vertex> write2PathsAndTime(@NonNull Order order, @NonNull List<Vertex> fromVertices) throws ParseException {
         List<Vertex> firstPath = writeBestPath(order, fromVertices);
         if (firstPath == null || firstPath.size() <= 10) return firstPath;
 

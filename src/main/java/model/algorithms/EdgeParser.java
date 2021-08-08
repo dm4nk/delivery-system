@@ -12,34 +12,36 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VertexParser {
-
-    private VertexParser() {
+public class EdgeParser {
+    private EdgeParser() {
 
     }
 
     /**
-     * Creates a list with vertex dtos
+     * Creates a list with edges dtos
      *
-     * @param file csv file with nodes.
-     *             format: id, latitude, longitude
-     * @return list with vertex dtos
+     * @param file .csv file with edges
+     *             format: id, id of source vertex, id of target vertex, length in meters, type of street according to speed limit, speed limit
+     * @return list of edge dtos
      * @throws IOException error while opening or reading file
      */
-    public static List<DTO.vertex> parse(@NonNull File file) throws IOException {
+    public static List<DTO.edge> parse(@NonNull File file) throws IOException {
         if (!file.getName().endsWith(".csv")) throw new FileNotFoundException(file.getName() + " is not a .csv format");
-        List<DTO.vertex> vertices = new ArrayList<>();
+        List<DTO.edge> edges = new ArrayList<>();
 
         FileReader fileReader = new FileReader(file);
         CSVReader csvReader = new CSVReaderBuilder(fileReader).withSkipLines(1).build();
 
         String[] values;
         while ((values = csvReader.readNext()) != null) {
-            vertices.add(
-                    DTO.vertex.create(
+            edges.add(
+                    DTO.edge.create(
                             values[0],
                             values[1],
-                            values[2]
+                            values[2],
+                            values[3],
+                            values[4],
+                            values[5]
                     )
             );
         }
@@ -47,6 +49,6 @@ public class VertexParser {
         csvReader.close();
         fileReader.close();
 
-        return vertices;
+        return edges;
     }
 }

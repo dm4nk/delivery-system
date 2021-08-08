@@ -1,6 +1,7 @@
 package model.algorithms;
 
 import exceptions.WrongGraphFormatException;
+import model.dto.DTO;
 import model.graph.Edge;
 import model.graph.NotSingletonGraph;
 import model.graph.Vertex;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 public class TestGraphReader {
     private static final String path = "src\\test\\resources\\";
@@ -28,7 +30,10 @@ public class TestGraphReader {
     @Test
     public void testReadGraph3arg() throws WrongGraphFormatException, IOException {
         NotSingletonGraph actual = NotSingletonGraph.create();
-        GraphReader.readGraph(new File(path + "dataset/testNodes.csv"), new File(path + "dataset/testEdges.csv"), actual);
+        List<DTO.vertex> vertices = VertexParser.parse(new File(path + "dataset/testNodes.csv"));
+        List<DTO.edge> edges = EdgeParser.parse(new File(path + "dataset/testEdges.csv"));
+
+        actual.readGraphFromDTOs(vertices, edges);
 
         //making graph and compare it with read one
         NotSingletonGraph expected = NotSingletonGraph.create();
@@ -46,14 +51,14 @@ public class TestGraphReader {
             for (int i = 0; i < expected.getVertex(st).getEdges().size(); ++i) {
                 Edge actualEdge = actual.getVertex(st).getEdges().get(i);
                 Edge expectedEdge = expected.getVertex(st).getEdges().get(i);
-                Assert.assertEquals(expectedEdge, actualEdge);
+                Assert.assertEquals(expectedEdge.getWeight() + " " + actualEdge.getWeight(), expectedEdge, actualEdge);
             }
 
             Assert.assertEquals(expected.getVertex(st), actual.getVertex(st));
         }
 
-        Assert.assertThrows(FileNotFoundException.class, () -> GraphReader.readGraph(new File(path + "dataset/testNodes.txt"), new File(path + "dataset/testEdges.csv"), actual));
-        Assert.assertThrows(FileNotFoundException.class, () -> GraphReader.readGraph(new File(path + "dataset/testNodes.csv"), new File(path + "dataset/testEdges.txt"), actual));
+        Assert.assertThrows(FileNotFoundException.class, () -> VertexParser.parse(new File(path + "dataset/testNodes.txt")));
+        Assert.assertThrows(FileNotFoundException.class, () -> EdgeParser.parse(new File(path + "dataset/testEdges.txt")));
 
     }
 }

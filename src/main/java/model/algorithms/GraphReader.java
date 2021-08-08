@@ -1,13 +1,15 @@
 package model.algorithms;
 
-import com.opencsv.CSVReader;
 import exceptions.WrongGraphFormatException;
-import model.dto.GraphDTO;
+import model.dto.DTO;
 import model.graph.Edge;
 import model.graph.Graph;
 import model.graph.Vertex;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import static java.lang.Double.parseDouble;
@@ -54,61 +56,28 @@ public class GraphReader {
     }
 
     /**
-     * reads nodes and edges to graph
+     * Fills graph with vertices from DTO lists.
      *
-     * @param nodes .csv file with nodes.
-     *              format: id, latitude, longitude
-     * @param edges .csv file with edges
-     *              format: id, id of source vertex, id of target vertex, length in meters, type of street according to speed limit, speed limit
-     * @throws IOException               error while opening or reading file
-     * @throws WrongGraphFormatException if files contain duplicates
+     * @param vertices list of DTO.vertex
+     * @param edges    list of DTO.edge
+     * @param graph    graph to work with
+     * @throws WrongGraphFormatException if list of vertices contains duplicates
      */
-    public static void readGraph(File nodes, File edges, Graph graph) throws WrongGraphFormatException, IOException {
-        if (!nodes.getName().endsWith(".csv") || !edges.getName().endsWith(".csv"))
-            throw new FileNotFoundException("can only read from .csv files");
-
-        try (CSVReader csvReader = new CSVReader(new FileReader(nodes))) {
-            String[] values;
-            while ((values = csvReader.readNext()) != null) {
-                graph.addVertex(
-                        Vertex.create(
-                                parseLong(values[0]),
-                                parseDouble(values[1]),
-                                parseDouble(values[2])
-                        )
-                );
-            }
-        }
-
-        try (CSVReader csvReader = new CSVReader(new FileReader(edges))) {
-            String[] values;
-            while ((values = csvReader.readNext()) != null) {
-                graph.addEdge(
-                        Edge.create(
-                                0.06 * parseDouble(values[3]) / parseDouble(values[5]),
-                                graph.getVertex(parseLong(values[1])),
-                                graph.getVertex(parseLong(values[2]))
-                        )
-                );
-            }
-        }
-    }
-
-    public static void readGraph(List<GraphDTO.vertex> vertices, List<GraphDTO.edge> edges, Graph graph) throws WrongGraphFormatException {
-        for(GraphDTO.vertex v : vertices)
+    public static void readGraph(List<DTO.vertex> vertices, List<DTO.edge> edges, Graph graph) throws WrongGraphFormatException {
+        for (DTO.vertex v : vertices)
             graph.addVertex(
                     Vertex.create(
-                            v.getId(),
-                            v.getLat(),
-                            v.getLon())
+                            parseLong(v.getId()),
+                            parseDouble(v.getLat()),
+                            parseDouble(v.getLon()))
             );
 
-        for(GraphDTO.edge e : edges)
+        for (DTO.edge e : edges)
             graph.addEdge(
                     Edge.create(
-                            e.getId(),
-                            graph.getVertex(e.getSourceVertex()),
-                            graph.getVertex(e.getTargetVertex())
+                            0.06 * parseDouble(e.getLength()) / parseDouble(e.getMaxSpeed()),
+                            graph.getVertex(parseLong(e.getSourceVertex())),
+                            graph.getVertex(parseLong(e.getTargetVertex()))
                     )
             );
     }
@@ -123,6 +92,7 @@ public class GraphReader {
      * @throws WrongGraphFormatException matrix is not n*n, contains characters other than positive doubles
      */
     public static void readGraph(File file, Graph graph) throws IOException, WrongGraphFormatException {
+        if (!file.getName().endsWith(".txt")) throw new FileNotFoundException(file.getName() + " is not a .txt format");
         double[][] matrix = readGraph(file);
 
         for (int i = 0; i < matrix.length; ++i)

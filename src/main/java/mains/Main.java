@@ -2,11 +2,10 @@ package mains;
 
 import exceptions.WrongGraphFormatException;
 import exceptions.WrongOrderFormatException;
-import model.algorithms.Parser;
-import model.algorithms.impl.OrdersParser;
-import model.dto.GraphDTO;
-import model.algorithms.EedgeParser;
+import model.algorithms.EdgeParser;
+import model.algorithms.OrdersParser;
 import model.algorithms.VertexParser;
+import model.dto.DTO;
 import model.graph.Graph;
 import model.graph.Vertex;
 import model.schedule.FactoryType;
@@ -27,8 +26,8 @@ public class Main {
         Date start = new Date();
 
         String path = "src\\main\\resources\\dataset\\";
-        List<GraphDTO.vertex> vertices = VertexParser.parse(new File(path + "nodes.csv"));
-        List<GraphDTO.edge> edges = EedgeParser.parse(new File(path + "edges.csv"));
+        List<DTO.vertex> vertices = VertexParser.parse(new File(path + "nodes.csv"));
+        List<DTO.edge> edges = EdgeParser.parse(new File(path + "edges.csv"));
 
         Graph.getInstance().readGraphFromDTOs(vertices, edges);
 
@@ -45,8 +44,8 @@ public class Main {
         ScheduleFactory factory = ScheduleFactory.create(FactoryType.CONSOLIDATED);
         Schedule melbourneOrders = factory.createSchedule();
 
-        Parser parser = new OrdersParser();
-        parser.parseTo(new File(path + "consOrders.json"), melbourneOrders, Graph.getInstance());
+        List<DTO.order> lis = OrdersParser.parse(new File(path + "consOrders.json"));
+        melbourneOrders.readFromDTO(Graph.getInstance(), lis);
 
         melbourneOrders.writePaths(Graph.getInstance(), restaurants);
 

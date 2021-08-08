@@ -2,8 +2,8 @@ package model.schedule.impl;
 
 import exceptions.WrongGraphFormatException;
 import exceptions.WrongOrderFormatException;
-import model.algorithms.Parser;
-import model.algorithms.impl.OrdersParser;
+import model.algorithms.OrdersParser;
+import model.dto.DTO;
 import model.graph.Edge;
 import model.graph.NotSingletonGraph;
 import model.graph.Vertex;
@@ -54,10 +54,10 @@ public class TestConsolidatedOrderSchedule {
         ConsolidatedOrderSchedule actual = ConsolidatedOrderSchedule.create();
 
         //let's say that parser is working ok
-        Parser parser = new OrdersParser();
+        List<DTO.order> lst = OrdersParser.parse(new File(path + "dataset\\TestConsOrders.json"));
 
         //parsing also uses AddOrder
-        parser.parseTo(new File(path + "dataset\\TestConsOrders.json"), actual, graph);
+        actual.readFromDTO(graph, lst);
 
         //check size of the routes according ro graph
         Assert.assertEquals(3, actual.getRoute(0).size());

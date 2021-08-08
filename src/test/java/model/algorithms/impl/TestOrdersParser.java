@@ -2,7 +2,8 @@ package model.algorithms.impl;
 
 import exceptions.WrongGraphFormatException;
 import exceptions.WrongOrderFormatException;
-import model.algorithms.Parser;
+import model.algorithms.OrdersParser;
+import model.dto.DTO;
 import model.graph.NotSingletonGraph;
 import model.graph.Vertex;
 import model.schedule.impl.OrdersSchedule;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 
 public class TestOrdersParser {
@@ -32,9 +34,9 @@ public class TestOrdersParser {
 
         OrdersSchedule actual = OrdersSchedule.create();
 
-        Parser parser = new OrdersParser();
         //parsing info to actual ordersSchedule
-        parser.parseTo(new File(path + "testOrders.json"), actual, graph);
+        List<DTO.order> lst = OrdersParser.parse(new File(path + "testOrders.json"));
+        actual.readFromDTO(graph, lst);
 
         Assert.assertEquals(2, actual.size());
 
