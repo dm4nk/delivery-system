@@ -35,7 +35,7 @@ public class GraphReader {
     public static double[][] readGraph(File file) throws IOException, WrongGraphFormatException {
         byte[] bytes = new byte[(int) file.length()];
         FileInputStream fis = new FileInputStream(file);
-        fis.read(bytes);
+        if(fis.read(bytes) == -1) throw new FileNotFoundException();
         fis.close();
 
         String[] valueStr = new String(bytes).trim().split("\\s+");
@@ -96,7 +96,7 @@ public class GraphReader {
         double[][] matrix = readGraph(file);
 
         for (int i = 0; i < matrix.length; ++i)
-            graph.addVertex(Vertex.create(i));
+            graph.addVertex(model.graph.Vertex.create(i));
 
         for (int i = 0; i < matrix.length; ++i)
             for (int j = 0; j < matrix.length; ++j)

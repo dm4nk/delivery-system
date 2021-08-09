@@ -49,7 +49,7 @@ public class TestConsolidatedOrderSchedule {
 
 
     @Test
-    public void testConsolidationOrAddOrder() throws WrongOrderFormatException, ParseException, org.json.simple.parser.ParseException, IOException {
+    public void testConsolidationOrAddOrder() throws WrongOrderFormatException, ParseException, IOException {
 
         ConsolidatedOrderSchedule actual = ConsolidatedOrderSchedule.create();
 

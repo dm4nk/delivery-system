@@ -11,6 +11,7 @@ import model.schedule.impl.OrdersSchedule;
  */
 public class Consolidator {
     private Consolidator() {
+
     }
 
     /**

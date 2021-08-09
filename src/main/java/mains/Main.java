@@ -22,7 +22,7 @@ import java.util.List;
 import static model.algorithms.Dijkstra.calculateNearestVertexFromLatLon;
 
 public class Main {
-    public static void main(String[] args) throws IOException, WrongGraphFormatException, ParseException, WrongOrderFormatException, org.json.simple.parser.ParseException {
+    public static void main(String[] args) throws IOException, WrongGraphFormatException, ParseException, WrongOrderFormatException {
         Date start = new Date();
 
         String path = "src\\main\\resources\\dataset\\";
@@ -44,8 +44,8 @@ public class Main {
         ScheduleFactory factory = ScheduleFactory.create(FactoryType.CONSOLIDATED);
         Schedule melbourneOrders = factory.createSchedule();
 
-        List<DTO.order> lis = OrdersParser.parse(new File(path + "consOrders.json"));
-        melbourneOrders.readFromDTO(Graph.getInstance(), lis);
+        List<DTO.order> listOfOrdersDTO = OrdersParser.parse(new File(path + "consOrders.json"));
+        melbourneOrders.readFromDTO(Graph.getInstance(), listOfOrdersDTO);
 
         melbourneOrders.writePaths(Graph.getInstance(), restaurants);
 

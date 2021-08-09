@@ -30,7 +30,7 @@ public class Dijkstra {
      * @return inverted shortest path
      */
     public static List<Vertex> getShortestPathTo(@NonNull Vertex targetVertex) {
-        List<Vertex> path = new ArrayList<>();
+        List<model.graph.Vertex> path = new ArrayList<>();
 
         path.add(targetVertex);
 

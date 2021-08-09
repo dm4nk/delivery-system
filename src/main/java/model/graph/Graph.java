@@ -18,6 +18,7 @@ import java.util.*;
 public class Graph {
     private final static SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH);
     private final static int MILLISECONDS_IN_MINUTE = 60_000;
+
     private static Graph singleInstance = null;
     @Getter
     private final Map<Long, Vertex> vertices;

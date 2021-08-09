@@ -11,21 +11,21 @@ public class TestGraph {
     @Test
     public void testAddVertex() throws WrongGraphFormatException {
         NotSingletonGraph actual = NotSingletonGraph.create();
-        actual.addVertex(Vertex.create(1));
-        actual.addVertex(Vertex.create(2));
+        actual.addVertex(model.graph.Vertex.create(1));
+        actual.addVertex(model.graph.Vertex.create(2));
 
         Assert.assertEquals(2, actual.getVertices().size());
 
         //should not add vertex with already existing id
-        Assert.assertThrows(WrongGraphFormatException.class, () -> actual.addVertex(Vertex.create(2)));
+        Assert.assertThrows(WrongGraphFormatException.class, () -> actual.addVertex(model.graph.Vertex.create(2)));
     }
 
     @Test
     public void testRemoveVertex() throws WrongGraphFormatException {
         NotSingletonGraph actual = NotSingletonGraph.create();
-        actual.addVertex(Vertex.create(1, 1, 1));
-        actual.addVertex(Vertex.create(2, 1, 1));
-        actual.addVertex(Vertex.create(3, 1, 1));
+        actual.addVertex(model.graph.Vertex.create(1, 1, 1));
+        actual.addVertex(model.graph.Vertex.create(2, 1, 1));
+        actual.addVertex(model.graph.Vertex.create(3, 1, 1));
 
         actual.removeVertex(1);
 
@@ -40,8 +40,8 @@ public class TestGraph {
     @Test
     public void testAddEdge() throws WrongGraphFormatException {
         NotSingletonGraph actual = NotSingletonGraph.create();
-        actual.addVertex(Vertex.create(1));
-        actual.addVertex(Vertex.create(2));
+        actual.addVertex(model.graph.Vertex.create(1));
+        actual.addVertex(model.graph.Vertex.create(2));
 
         //negative weight is not allowed
         Assert.assertThrows(WrongGraphFormatException.class, () -> actual.addEdge(Edge.create(-1, actual.getVertex(1), actual.getVertex(2))));
@@ -56,9 +56,9 @@ public class TestGraph {
     @Test
     public void testRemoveEdge() throws WrongGraphFormatException {
         NotSingletonGraph actual = NotSingletonGraph.create();
-        actual.addVertex(Vertex.create(1));
-        actual.addVertex(Vertex.create(2));
-        actual.addVertex(Vertex.create(3));
+        actual.addVertex(model.graph.Vertex.create(1));
+        actual.addVertex(model.graph.Vertex.create(2));
+        actual.addVertex(model.graph.Vertex.create(3));
 
         actual.addEdge(Edge.create(11, actual.getVertex(1), actual.getVertex(2)));
         actual.addEdge(Edge.create(23, actual.getVertex(1), actual.getVertex(3)));

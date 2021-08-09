@@ -10,19 +10,21 @@ public enum DTO {
 
     @Value(staticConstructor = "create")
     public static class vertex {
-        String id;
-        String lat;
-        String lon;
+        String
+                id,
+                lat,
+                lon;
     }
 
     @Value(staticConstructor = "create")
     public static class edge {
-        String id;
-        String sourceVertex;
-        String targetVertex;
-        String length;
-        String streetType;
-        String maxSpeed;
+        String
+                id,
+                sourceVertex,
+                targetVertex,
+                length,
+                streetType,
+                maxSpeed;
     }
 
     @Value(staticConstructor = "create")

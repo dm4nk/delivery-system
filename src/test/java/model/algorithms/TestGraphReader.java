@@ -4,7 +4,6 @@ import exceptions.WrongGraphFormatException;
 import model.dto.DTO;
 import model.graph.Edge;
 import model.graph.NotSingletonGraph;
-import model.graph.Vertex;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -37,9 +36,9 @@ public class TestGraphReader {
 
         //making graph and compare it with read one
         NotSingletonGraph expected = NotSingletonGraph.create();
-        expected.addVertex(Vertex.create(1, -37.8152153, 144.9749471));
-        expected.addVertex(Vertex.create(2, -37.807675, 144.9558726));
-        expected.addVertex(Vertex.create(3, -37.8070943, 144.9559785));
+        expected.addVertex(model.graph.Vertex.create(1, -37.8152153, 144.9749471));
+        expected.addVertex(model.graph.Vertex.create(2, -37.807675, 144.9558726));
+        expected.addVertex(model.graph.Vertex.create(3, -37.8070943, 144.9559785));
         expected.addEdge(Edge.create(0.06 * 58 / 15, expected.getVertex(1), expected.getVertex(2)));
         expected.addEdge(Edge.create(0.06 * 15 / 20, expected.getVertex(1), expected.getVertex(3)));
 

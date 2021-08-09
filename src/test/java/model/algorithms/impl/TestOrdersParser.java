@@ -7,12 +7,12 @@ import model.dto.DTO;
 import model.graph.NotSingletonGraph;
 import model.graph.Vertex;
 import model.schedule.impl.OrdersSchedule;
-import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +25,7 @@ public class TestOrdersParser {
     }
 
     @Test
-    public void testParseTo() throws ParseException, java.text.ParseException, IOException, WrongOrderFormatException, WrongGraphFormatException {
+    public void testParseTo() throws IOException, WrongOrderFormatException, WrongGraphFormatException, ParseException {
         String path = "src\\test\\resources\\dataset\\";
 
         NotSingletonGraph graph = NotSingletonGraph.create();
