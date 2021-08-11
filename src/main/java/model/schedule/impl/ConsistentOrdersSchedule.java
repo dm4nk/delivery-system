@@ -19,7 +19,7 @@ import java.util.Map;
  * Represents consistent schedule
  */
 @NoArgsConstructor(staticName = "create")
-public class OrdersSchedule implements Schedule, Serializable {
+public class ConsistentOrdersSchedule implements Schedule, Serializable {
     private final Map<String, Order> orders = new HashMap<>();
     private final List<String> orderIDs = new ArrayList<>();
 

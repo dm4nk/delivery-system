@@ -10,10 +10,10 @@ import org.junit.Test;
 
 import java.util.Date;
 
-public class TestOrdersSchedule {
+public class TestConsistentOrdersSchedule {
     @Test
     public void testAddOrder() throws WrongOrderFormatException, WrongGraphFormatException {
-        OrdersSchedule actual = OrdersSchedule.create();
+        ConsistentOrdersSchedule actual = ConsistentOrdersSchedule.create();
         NotSingletonGraph graph = NotSingletonGraph.create();
         graph.addVertex(Vertex.create(1, -1, -1));
         graph.addVertex(Vertex.create(2, -4, -10));

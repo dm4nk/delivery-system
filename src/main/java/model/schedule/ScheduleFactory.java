@@ -1,7 +1,7 @@
 package model.schedule;
 
 import model.schedule.impl.ConsolidatedOrderSchedule;
-import model.schedule.impl.OrdersSchedule;
+import model.schedule.impl.ConsistentOrdersSchedule;
 
 /**
  * Factory to create schedules
@@ -31,7 +31,7 @@ public class ScheduleFactory {
     public Schedule createSchedule() {
         switch (factoryType) {
             case CONSISTENT:
-                return OrdersSchedule.create();
+                return ConsistentOrdersSchedule.create();
             case CONSOLIDATED:
                 return ConsolidatedOrderSchedule.create();
             default:

@@ -18,13 +18,13 @@ public class ConsolidatedOrderSchedule implements Schedule {
     private static final double MAX_DISTANCE_FOR_CONSOLIDATION = 0.05;//5 km
     private final List<Route> routes = new LinkedList<>();
 
-    private ConsolidatedOrderSchedule(Graph graph, @NonNull OrdersSchedule ordersSchedule) throws WrongOrderFormatException {
-        for (int i = 0; i < ordersSchedule.size(); ++i)
-            addOrder(graph, ordersSchedule.getOrder(i));
+    private ConsolidatedOrderSchedule(Graph graph, @NonNull ConsistentOrdersSchedule consistentOrdersSchedule) throws WrongOrderFormatException {
+        for (int i = 0; i < consistentOrdersSchedule.size(); ++i)
+            addOrder(graph, consistentOrdersSchedule.getOrder(i));
     }
 
-    public static ConsolidatedOrderSchedule createAndConsolidate(Graph graph, @NonNull OrdersSchedule ordersSchedule) throws WrongOrderFormatException {
-        return new ConsolidatedOrderSchedule(graph, ordersSchedule);
+    public static ConsolidatedOrderSchedule createAndConsolidate(Graph graph, @NonNull ConsistentOrdersSchedule consistentOrdersSchedule) throws WrongOrderFormatException {
+        return new ConsolidatedOrderSchedule(graph, consistentOrdersSchedule);
     }
 
     /**

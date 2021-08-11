@@ -6,7 +6,7 @@ import model.algorithms.OrdersParser;
 import model.dto.DTO;
 import model.graph.NotSingletonGraph;
 import model.graph.Vertex;
-import model.schedule.impl.OrdersSchedule;
+import model.schedule.impl.ConsistentOrdersSchedule;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,7 +32,7 @@ public class TestOrdersParser {
         graph.addVertex(Vertex.create(1, -37.8007208, 144.959719));
         graph.addVertex(Vertex.create(2, -37.8207999, 144.9794147));
 
-        OrdersSchedule actual = OrdersSchedule.create();
+        ConsistentOrdersSchedule actual = ConsistentOrdersSchedule.create();
 
         //parsing info to actual ordersSchedule
         List<DTO.order> lst = OrdersParser.parse(new File(path + "testOrders.json"));
